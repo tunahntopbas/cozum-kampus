@@ -28,7 +28,9 @@ Task 9 tamam. Task 10 kod kısmı tamam: PR #5 (Dockerfile, `render.yaml`, GitHu
 
 ## Engeller
 
-Yok.
+- 2026-10-27 Codex bağlantı kontrolü: Supabase MCP çalışıyor; proje ACTIVE_HEALTHY, 14 bildirim, 5 birim, 8 bina doğrulandı.
+- Render MCP araçları görünmesine rağmen `list_workspaces`, `get_selected_workspace`, `list_services` çağrıları `Unknown tool` döndürüyor. Vercel MCP araçları bu oturumda görünmüyor. Dağıtım yapılmadı; bağlantı yetkilendirmeleri yenilenince tekrar kontrol edilmeli.
+- Yerelde `apps/web` altında izlenmeyen `… 2` kopyaları mevcut; kullanıcı dosyaları olduğu için değiştirilmedi ve commit edilmedi.
 
 ## Bilinen eksikler (sonraki planlar)
 
