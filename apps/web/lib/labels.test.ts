@@ -29,3 +29,14 @@ describe("labels", () => {
     expect(initials("  ")).toBe("?");
   });
 });
+
+describe("unitForCategory", () => {
+  it("mirrors the AI service routing", async () => {
+    const { unitForCategory } = await import("./labels");
+    expect(unitForCategory("internet_ag", false)).toBe("bilgi_islem");
+    expect(unitForCategory("temizlik", false)).toBe("temizlik");
+    expect(unitForCategory("guvenlik", false)).toBe("guvenlik");
+    expect(unitForCategory("aydinlatma", false)).toBe("yapi_isleri");
+    expect(unitForCategory("aydinlatma", true)).toBe("guvenlik");
+  });
+});

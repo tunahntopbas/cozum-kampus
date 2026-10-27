@@ -1,6 +1,6 @@
 # Proje durumu (genel bakış)
 
-Son güncelleme: 2026-10-27
+Son güncelleme: 2026-10-27 (akşam)
 
 Aktif plan: `docs/superpowers/plans/2026-10-27-temel-ve-bildirim-hatti.md` (Plan 1 / 6)
 
@@ -9,10 +9,10 @@ Aktif plan: `docs/superpowers/plans/2026-10-27-temel-ve-bildirim-hatti.md` (Plan
 | Hat | Dal | Task'lar | Sorumlu | Durum dosyası | Durum |
 |---|---|---|---|---|---|
 | Temel | `main` | 1 | tunahan | bu dosya | Tamamlandı |
-| DB | `hat/db` | 2 | ? | [db.md](db.md) | Başlamadı |
-| AI servisi | `hat/ai` | 3, 4, 5 | ? | [ai.md](ai.md) | Başlamadı |
+| DB | `hat/db` | 2 | tunahan | [db.md](db.md) | Tamamlandı, `main`de |
+| AI servisi | `hat/ai` | 3, 4, 5 | tunahan | [ai.md](ai.md) | Tamamlandı, `main`de |
 | Web | `hat/web` | 6, 7, 8 | tunahan | [web.md](web.md) | Kod tamam; elle doğrulama Supabase bekliyor |
-| Birleşme | `hat/entegrasyon` | 9, 10 | herkes | [entegrasyon.md](entegrasyon.md) | Bekliyor (DB, AI, Web bitince) |
+| Birleşme | `hat/entegrasyon` | 9, 10 | tunahan | [entegrasyon.md](entegrasyon.md) | Task 9 tamam, Task 10 sırada |
 
 ## Bağımlılıklar
 
@@ -22,9 +22,17 @@ Aktif plan: `docs/superpowers/plans/2026-10-27-temel-ve-bildirim-hatti.md` (Plan
 
 ## Ortak kaynaklar
 
-- Supabase projesi: henüz açılmadı (DB hattı açar, URL ve anahtarları ekibe güvenli kanaldan iletir, depoya yazmaz).
-- DeepSeek API anahtarı: AI hattında, `.env` içinde.
-- GitHub deposu: henüz yok.
+- Supabase projesi `cozumkampus` (ref `owvzlonnpiuigrstsean`). Claude oturumlarında Supabase MCP bağlı. Anahtarlar yalnızca `.env`'de; ekibe güvenli kanaldan.
+- Yapay zeka: Google Gemini (`gemini-3.5-flash`), OpenAI uyumlu uç nokta; anahtar `.env` `LLM_API_KEY`.
+- Demo hesapları: `ogrenci@`, `personel@`, `yonetim@`, `guvenlik@demo.cozumkampus.app`, şifre `.env` `DEMO_PASSWORD`.
+- GitHub: https://github.com/tunahntopbas/cozum-kampus (private).
+- Tasarımlar: `docs/tasarim/*.dc.html` (kaynak: claude.ai tasarım tuvali "Çözüm Kampüs: Ekran Tasarımları"). Arayüz bu dosyalara birebir uyulmalı.
+
+## Yerelde çalıştırma
+
+- Web: `pnpm dev:web` -> http://localhost:3100
+- AI: `cd services/ai && uv run uvicorn app.main:app --reload --port 8000`
+- `apps/web/.env.local` = kök `.env` içindeki `NEXT_PUBLIC_*` satırları.
 
 ## Sonraki planlar
 

@@ -72,3 +72,15 @@ export function initials(name: string): string {
   const picked = words.length === 1 ? [words[0]] : [words[0], words[words.length - 1]];
   return picked.map((w) => w[0].toLocaleUpperCase("tr")).join("");
 }
+
+// Same routing as services/ai/app/schemas/report.py unit_for().
+const CATEGORY_TO_UNIT: Partial<Record<Category, UnitSlug>> = {
+  internet_ag: "bilgi_islem",
+  temizlik: "temizlik",
+  guvenlik: "guvenlik",
+};
+
+export function unitForCategory(category: Category, isSensitive: boolean): UnitSlug {
+  if (isSensitive) return "guvenlik";
+  return CATEGORY_TO_UNIT[category] ?? "yapi_isleri";
+}
