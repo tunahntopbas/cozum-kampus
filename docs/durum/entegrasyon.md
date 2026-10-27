@@ -11,7 +11,7 @@ Task 9 tamam. Task 10 kod kısmı tamam: PR #5 (Dockerfile, `render.yaml`, GitHu
 ## Sıradaki adım
 
 1. `git checkout main && git pull`, sonra yeni dal (ör. `hat/dagitim`) aç.
-2. Task 10 Step 3 panel kısmı (kullanıcı yapar): Render'da "New > Blueprint" ile depoyu bağla (`render.yaml` okunur), gizli değerleri gir (`LLM_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_URL`, `ALLOWED_ORIGIN` = Vercel alan adı). Vercel'de depoyu içe aktar, Root Directory `apps/web`, `NEXT_PUBLIC_*` değerlerini gir (`NEXT_PUBLIC_AI_API_URL` = Render adresi).
+2. Render tamam. Vercel web dağıtımı: Root Directory `apps/web`; `NEXT_PUBLIC_AI_API_URL=https://cozum-kampus-ai.onrender.com`, diğer `NEXT_PUBLIC_*` yerel `.env`den. Sonra Render `ALLOWED_ORIGIN` değerini gerçek Vercel alan adına güncelle (şu an localhost:3100). Vercel MCP aracı bu oturumda görünmüyor, CLI logged out; kullanıcı girişi gerekli.
 3. Task 10 Step 4: Supabase Auth > URL Configuration'a Vercel alan adını ekle; canlıda Task 9 senaryo 1 ve 2'yi tekrarla.
 4. Planın son tüm dal incelemesi, sonra Plan 2.
 
@@ -29,7 +29,7 @@ Task 9 tamam. Task 10 kod kısmı tamam: PR #5 (Dockerfile, `render.yaml`, GitHu
 ## Engeller
 
 - 2026-10-27 Codex bağlantı kontrolü: Supabase MCP çalışıyor; proje ACTIVE_HEALTHY, 14 bildirim, 5 birim, 8 bina doğrulandı.
-- Render MCP yeniden çalışır durumda: çalışma alanı `My Workspace` (`tea-dbgeuuon74is739civo0`), servis listesi boş. `cozum-kampus-ai` (Docker, ücretsiz, Frankfurt, main) oluşturma denemesi özel GitHub deposu erişilemediği için reddedildi (`repository URL is invalid or unfetchable`). Kullanıcı Render GitHub bağlantısına `tunahntopbas/cozum-kampus` deposu erişimini eklemeli; sonra tekrar oluştur. Servis henüz oluşmadı. Vercel MCP araçları hâlâ görünmüyor; CLI kontrolü `Logged out` döndü. Canlı dağıtım yapılmadı.
+- Render dağıtımı tamam (2026-10-27): servis `srv-dbgf487b9u1s73c617rg`, URL `https://cozum-kampus-ai.onrender.com`, ücretsiz Frankfurt. Deploy `dep-dbgf4p0m7kps73890u50` LIVE, commit `da3bc41`. İlk deploy dört eksik ayar yüzünden çöktü; `.env` içindeki sunucu ayarları MCP ile aktarıldı (değerler depoya yazılmadı). `/health` 200; demo öğrenciyle Supabase Auth girişi + canlı analiz 7,6 sn, `aydinlatma`, `yapi_isleri`, `ai_pending=false`. Vercel ve canlı web testi henüz tamamlanmadı.
 - Yerelde `apps/web` altında izlenmeyen `… 2` kopyaları mevcut; kullanıcı dosyaları olduğu için değiştirilmedi ve commit edilmedi.
 
 ## Bilinen eksikler (sonraki planlar)
