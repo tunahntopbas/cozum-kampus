@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { AiRequestError, analyzeReport, verifyResolution } from "./ai";
+import { AiRequestError, analyzeReport, draftReply, verifyResolution } from "./ai";
 
 const OK = {
   title: "Koridor lambası yanmıyor",
@@ -103,5 +103,23 @@ describe("verifyResolution", () => {
     await expect(
       verifyResolution(input, "tok", { fetchImpl: async () => new Response("", { status: 403 }) }),
     ).rejects.toBeInstanceOf(AiRequestError);
+  });
+});
+
+describe("draftReply", () => {
+  const input = { title: "Kütüphane açık kalsın", body: "", category: "Kütüphane", votes: 412, status: "planlandi" as const };
+
+  it("sends the suggestion and returns the draft", async () => {
+    const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ reply: "Planladık.", ai_pending: false })));
+    const r = await draftReply(input, "tok", { fetchImpl: fetchImpl as unknown as typeof fetch, baseUrl: "http://ai" });
+    expect(r).toEqual({ reply: "Planladık.", ai_pending: false });
+    const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe("http://ai/ai/draft-reply");
+    expect(JSON.parse(init.body as string)).toEqual(input);
+  });
+
+  it("degrades to an empty pending draft when the service is down", async () => {
+    const r = await draftReply(input, "tok", { fetchImpl: async () => new Response("", { status: 502 }) });
+    expect(r).toEqual({ reply: "", ai_pending: true });
   });
 });

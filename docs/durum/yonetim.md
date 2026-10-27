@@ -1,26 +1,29 @@
 # Hat: Yönetim
 
-Dal: `hat/yonetim`
+Dal: `hat/yonetim` (birleşti), `hat/yonetim-2`
 Sorumlu: tunahan
 Kapsam: Plan 4, yönetim paneli (proje rehberi "Yönetim" ekranları: `/yonetim`, `/yonetim/bildirimler`, `/yonetim/birimler`, `/yonetim/kampus-sesi`).
 
 ## Son durum
 
-Birinci parça bitti: Genel bakış ve Bildirimler gerçek veriyle çalışıyor. Birimler ve Kampüs sesi hâlâ demo (`components/admin-demo/{Units,CampusVoice}`); "Demo verileri" etiketi artık yalnızca bu iki ekranda.
+Yönetim panelinin dört ekranı da gerçek veriyle çalışıyor: Genel bakış, Bildirimler, Birimler, Kampüs sesi. `components/admin-demo` altında yalnızca ortak kabuk, `ui.tsx` ve stil dosyası kaldı.
 
 ## Sıradaki adım
 
-1. Bu dalın PR'ı CI yeşil olunca kullanıcı onayıyla `main`e birleşir.
-2. İkinci parça (`hat/yonetim-2`):
-   - `/yonetim/birimler`: birim kartları `unitPerformance` ile; ekip `profiles` (role `staff`) ve `assignments`'tan; "İş ata" `admin_update_report` ile (yalnızca personeli değiştirerek). Malzeme taleplerini onaylama burada: `material_requests` için yönetim güncelleme politikası ya da RPC gerekli (şu an yalnızca okuma var).
-   - `/yonetim/kampus-sesi`: `suggestions` (şu an 0 kayıt, `/oneriler` hâlâ demo) ve `suggestion_replies`. Yönetimin `suggestions` güncelleme ve `suggestion_replies` ekleme politikaları hazır. Yapay zeka taslağı için AI servisinde uç nokta yok.
-3. Ardından birleştirme (`parent_report_id`) ve gerçek yapay zeka haftalık özeti.
+1. `hat/yonetim-2` PR'ı CI yeşil olunca kullanıcı onayıyla `main`e birleşir.
+2. Birleşmeden sonra Render'da AI servisinin yeni sürümü yayında mı kontrol et (`/ai/draft-reply`); otomatik dağıtım yoksa elle deploy tetiklenmeli. Üretimde taslak düğmesi o zamana kadar "taslak yazamadı" der.
+3. Kalanlar: öğrenci tarafı `/oneriler` hâlâ demo (öneri ekleme, oy, yönetim yanıtını gösterme); bildirim merkezi `/bildirimler` demo (yönetim yanıtı `notifications` tablosuna `oneri_yaniti` olarak yazılıyor). Bildirim birleştirme ve yapay zeka haftalık özeti.
 
 ## Yapılanlar
 
 - 2026-10-28 Migration `20261028000009_admin_reports.sql`: `report_notes` (iç not; öğrencinin okuyabildiği `report_events` dışında tutulur, yönetim ve ilgili birim okur) ve `admin_update_report(rid, to_unit, to_urgency, to_status, to_staff, note)`. Tek işlemde birim, aciliyet, durum (`cozuldu`'da `resolved_at`), tek teknisyen ataması ve not; birim değişince `devredildi`, durum değişince `durum` olayı yazar. MCP ile uygulandı; geri alınan işlemde öğrenci reddedildi, başka birimin personeli reddedildi, öğrenci notları göremedi.
 - 2026-10-28 Web: `lib/admin.ts` (dönem başlangıcı, hedef süre ve gecikme, KPI'lar, doğrulanmadan kapatılan işler, birim performansı, filtreler, kurala dayalı haftalık özet) + testleri. `app/yonetim/data.ts` ortak sunucu yükleyicisi. `components/admin/{OverviewView,ReportsView,types,fixtures}` demo tasarımıyla aynı düzende. Isı haritası gerçek MapLibre haritası (binalara göre açık bildirim sayısı, kırmızı nokta acil). `MapCanvas` kap boyutu değişince yeniden ölçeklenir (ResizeObserver). Demo `Overview`/`Reports` ve testleri silindi. Testler 141/141.
 - 2026-10-28 Tarayıcı doğrulaması (yönetim hesabı): Genel bakış 13 açık, 3 acil bildirim gösterdi; "İncele" acil filtresine götürdü; #3 Yapı İşleri'ne yönlendirildi, teknisyen atandı, iç not eklendi; veritabanında `devredildi` olayı, atama ve not görüldü. Ardından #3 geri alındı.
+
+- 2026-10-28 Migration `20261028000010_admin_units_voice.sql`: `set_material_request_status` (yalnızca yönetim; `hazir` stoktan düşer, yetersizse reddeder; bitmiş talep değişmez), `publish_suggestion_reply` (yanıt, durum ve isteğe bağlı olarak öneri sahibi ile oy verenlere `notifications`), `suggestion_votes` için oy sayısı tetikleyicisi, demo öğrenci adına 6 örnek öneri. MCP ile uygulandı; geri alınan işlemde personel ve öğrenci reddedildi, stok 6'dan 4'e düştü, fazla talep reddedildi, bildirim yazıldı.
+- 2026-10-28 AI servisi: `/ai/draft-reply` (yalnızca yönetim, kişisel veri maskelenir, hata olursa boş taslak, `ai_runs` kaydı) + 4 test; pytest 68/68. Web: `lib/ai.ts` `draftReply`.
+- 2026-10-28 Web: `components/admin/{UnitsView,CampusVoiceView}`; `app/yonetim/staff.ts` ortak personel ve atama yükleyicisi. Birimler: birim kartları, ekip (atanmış süren işi olan "Sahada"), atanmamış işi personele atama, birimin bekleyen malzeme talepleri (Hazırla, Hazır, Reddet). Kampüs sesi: filtre ve sıralama, yapay zeka taslağı, yanıt yayınlama. Demo `Units`, `CampusVoice`, `data.ts` ve testleri silindi. Testler 145/145.
+- 2026-10-28 Tarayıcı doğrulaması (yönetim hesabı): Birimler gerçek birimleri ve Demo Personel'i gösterdi; Kampüs sesi'nde yerel AI servisiyle Gemini Türkçe taslak yazdı, yayınlama 1 kişiye bildirim gönderdi. Test yanıtı ve bildirimi silindi.
 
 ## Engeller
 
@@ -34,6 +37,8 @@ Yok.
 - Haftalık özet yapay zeka değil, kurallarla derleniyor.
 - Panel son 500 bildirimi yükler; sayfalama yok.
 - Birleştirme yok.
+- Personel durumu yalnızca atamaya göre: "İzinli" bilgisi tutulmuyor.
+- Örnek önerilerin oy sayıları seed değeri; gerçek oy kaydı yok. Oy verenlere bildirim yalnızca gerçek `suggestion_votes` kayıtlarına gider.
 
 ## Alınan kararlar
 
