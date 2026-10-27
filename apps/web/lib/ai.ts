@@ -67,20 +67,51 @@ export async function analyzeReport(
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
     body: JSON.stringify(body),
   });
+  const res = await withTimeout(request, timeoutMs);
+  if (res === "unavailable") return pendingAnalysis(input.text);
+  if (!res.ok) throw new AiRequestError(res.status);
+  return (await res.json()) as ReportAnalysis;
+}
+
+// Timeouts, network errors and 5xx all mean "the AI service is not available right now".
+async function withTimeout(request: Promise<Response>, timeoutMs: number): Promise<Response | "unavailable"> {
   let timer: ReturnType<typeof setTimeout> | undefined;
   const timeout = new Promise<"timeout">((resolve) => {
     timer = setTimeout(() => resolve("timeout"), timeoutMs);
   });
-
-  let res: Response | "timeout";
   try {
-    res = await Promise.race([request, timeout]);
+    const res = await Promise.race([request, timeout]);
+    return res === "timeout" || res.status >= 500 ? "unavailable" : res;
   } catch {
-    return pendingAnalysis(input.text);
+    return "unavailable";
   } finally {
     clearTimeout(timer);
   }
-  if (res === "timeout" || res.status >= 500) return pendingAnalysis(input.text);
+}
+
+export type VerifyInput = { beforePath: string; afterPath: string; category?: string };
+export type VerifyResult = { resolved: boolean; confidence: number; note: string; ai_pending: boolean };
+
+const PENDING_VERIFY: VerifyResult = {
+  resolved: false,
+  confidence: 0,
+  note: "Doğrulama şu an yapılamadı, kayıt elle incelenecek.",
+  ai_pending: true,
+};
+
+// Same contract as analyzeReport: an unavailable service never blocks the technician from finishing the job.
+export async function verifyResolution(
+  input: VerifyInput,
+  accessToken: string,
+  { timeoutMs = DEFAULT_TIMEOUT_MS, fetchImpl = fetch, baseUrl = process.env.NEXT_PUBLIC_AI_API_URL ?? "" }: Options = {},
+): Promise<VerifyResult> {
+  const request = fetchImpl(`${baseUrl}/ai/verify-resolution`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ before_path: input.beforePath, after_path: input.afterPath, category: input.category }),
+  });
+  const res = await withTimeout(request, timeoutMs);
+  if (res === "unavailable") return PENDING_VERIFY;
   if (!res.ok) throw new AiRequestError(res.status);
-  return (await res.json()) as ReportAnalysis;
+  return (await res.json()) as VerifyResult;
 }

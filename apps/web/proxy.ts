@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { requiredRole, type Role } from "@/lib/auth";
+import { homeFor, requiredRole, type Role } from "@/lib/auth";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase/env";
 
 export async function proxy(request: NextRequest) {
@@ -40,7 +40,8 @@ export async function proxy(request: NextRequest) {
 
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
   const role = (profile?.role ?? "student") as Role;
-  if (!roles.includes(role)) return redirectTo(new URL("/", request.url));
+  if (!roles.includes(role)) return redirectTo(new URL(homeFor(role), request.url));
+  if (pathname === "/" && homeFor(role) !== "/") return redirectTo(new URL(homeFor(role), request.url));
 
   return response;
 }

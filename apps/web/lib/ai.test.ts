@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { AiRequestError, analyzeReport } from "./ai";
+import { AiRequestError, analyzeReport, verifyResolution } from "./ai";
 
 const OK = {
   title: "Koridor lambası yanmıyor",
@@ -73,5 +73,35 @@ describe("analyzeReport", () => {
       fetchImpl: async () => new Response("", { status: 500 }),
     });
     expect(r.title).toBe("Yeni bildirim");
+  });
+});
+
+describe("verifyResolution", () => {
+  const input = { beforePath: "a/before.jpg", afterPath: "b/after.jpg", category: "aydinlatma" };
+
+  it("sends both paths and returns the verdict", async () => {
+    const fetchImpl = vi.fn(
+      async () => new Response(JSON.stringify({ resolved: true, confidence: 0.9, note: "Lamba yanıyor", ai_pending: false })),
+    );
+    const r = await verifyResolution(input, "tok", { fetchImpl: fetchImpl as unknown as typeof fetch, baseUrl: "http://ai" });
+    expect(r).toEqual({ resolved: true, confidence: 0.9, note: "Lamba yanıyor", ai_pending: false });
+    const [url, init] = fetchImpl.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe("http://ai/ai/verify-resolution");
+    expect(JSON.parse(init.body as string)).toEqual({
+      before_path: "a/before.jpg",
+      after_path: "b/after.jpg",
+      category: "aydinlatma",
+    });
+  });
+
+  it("degrades to a pending verdict when the service is down", async () => {
+    const r = await verifyResolution(input, "tok", { fetchImpl: async () => new Response("", { status: 502 }) });
+    expect(r).toMatchObject({ resolved: false, ai_pending: true });
+  });
+
+  it("throws on client errors such as a missing staff role", async () => {
+    await expect(
+      verifyResolution(input, "tok", { fetchImpl: async () => new Response("", { status: 403 }) }),
+    ).rejects.toBeInstanceOf(AiRequestError);
   });
 });
