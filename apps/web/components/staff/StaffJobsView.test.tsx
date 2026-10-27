@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { AiRequestError } from "@/lib/ai";
 import type { StaffJob } from "./types";
 
 const refresh = vi.fn();
@@ -19,13 +20,17 @@ vi.mock("@/lib/supabase/client", () => ({
   }),
 }));
 
+const attach = vi.fn();
+vi.mock("@/lib/submit", () => ({ attachReportPhoto: (...args: unknown[]) => attach(...args) }));
+
 const verify = vi.fn();
 vi.mock("@/lib/ai", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/ai")>()),
   verifyResolution: (...args: unknown[]) => verify(...args),
 }));
 vi.mock("@/lib/image", () => ({ prepareImage: async (f: File) => f }));
-vi.mock("@/lib/upload", () => ({ uploadReportImage: async () => "staff/after.jpg" }));
+const upload = vi.fn();
+vi.mock("@/lib/upload", () => ({ uploadReportImage: (...args: unknown[]) => upload(...args) }));
 
 const { StaffJobsView } = await import("./StaffJobsView");
 
@@ -58,8 +63,8 @@ function job(over: Partial<StaffJob>): StaffJob {
   };
 }
 
-function renderView(jobs: StaffJob[]) {
-  return render(
+function viewElement(jobs: StaffJob[]) {
+  return (
     <StaffJobsView
       staffId="staff"
       staffName="Mehmet Aksoy"
@@ -71,8 +76,12 @@ function renderView(jobs: StaffJob[]) {
         { id: 2, name: "Temizlik" },
       ]}
       ownUnitId={1}
-    />,
+    />
   );
+}
+
+function renderView(jobs: StaffJob[]) {
+  return render(viewElement(jobs));
 }
 
 describe("StaffJobsView", () => {
@@ -81,20 +90,20 @@ describe("StaffJobsView", () => {
     update.mockReset().mockResolvedValue({ error: null });
     insert.mockReset().mockResolvedValue({ error: null });
     rpc.mockReset().mockResolvedValue({ data: true, error: null });
+    attach.mockReset().mockResolvedValue(1);
     verify.mockReset();
+    upload.mockReset().mockResolvedValue("staff/after.jpg");
   });
 
   it("moves a job forward and records the status event", async () => {
     renderView([job({})]);
     fireEvent.click(screen.getByRole("button", { name: "Yola çık" }));
     await waitFor(() => expect(refresh).toHaveBeenCalled());
-    expect(update).toHaveBeenCalledWith("reports", { status: "atandi" }, 1);
-    expect(insert).toHaveBeenCalledWith("report_events", {
-      report_id: 1,
-      type: "durum",
-      actor_id: "staff",
-      payload: { to: "atandi" },
+    expect(rpc).toHaveBeenCalledWith("staff_update_report_status", {
+      rid: 1, expected_status: "yonlendirildi", to_status: "atandi", work_note: null, ai_verdict: null, solution_path: null,
     });
+    expect(update).not.toHaveBeenCalled();
+    expect(insert).not.toHaveBeenCalled();
   });
 
   it("needs a solution photo before completing", () => {
@@ -108,7 +117,7 @@ describe("StaffJobsView", () => {
     const file = new File(["x"], "after.jpg", { type: "image/jpeg" });
     fireEvent.change(screen.getByLabelText(/Çözüm fotoğrafı yükle/), { target: { files: [file] } });
     expect(await screen.findByText(/Yapay zeka sorunun giderildiğini doğruladı \(%91\)/)).toBeInTheDocument();
-    expect(insert).toHaveBeenCalledWith("report_media", { report_id: 1, kind: "sonra", storage_path: "staff/after.jpg" });
+    expect(attach).toHaveBeenCalledWith(expect.anything(), 1, "staff/after.jpg", "sonra");
     expect(verify).toHaveBeenCalledWith(
       { beforePath: "student/before.jpg", afterPath: "staff/after.jpg", category: "aydinlatma" },
       "tok",
@@ -120,12 +129,56 @@ describe("StaffJobsView", () => {
     fireEvent.change(screen.getByLabelText("Yapılan işlem"), { target: { value: "Tüp değişti" } });
     fireEvent.click(screen.getByRole("button", { name: "İşi tamamla" }));
     await waitFor(() => expect(refresh).toHaveBeenCalled());
-    const [, patch] = update.mock.calls[0];
-    expect(patch).toMatchObject({ status: "cozuldu" });
-    expect(insert).toHaveBeenCalledWith(
-      "report_events",
-      expect.objectContaining({ payload: { to: "cozuldu", note: "Tüp değişti", ai: null } }),
-    );
+    expect(rpc).toHaveBeenCalledWith("staff_update_report_status", expect.objectContaining({
+      to_status: "cozuldu", work_note: "Tüp değişti", ai_verdict: null,
+    }));
+  });
+
+  it("only sends a verdict for the exact persisted solution path, including refreshed props", async () => {
+    const result = { resolved: true, confidence: 0.91, note: "Verified", ai_pending: false };
+    verify.mockResolvedValue(result);
+    const current = job({ status: "islemde", afterPath: "staff/old.jpg", afterUrl: "https://x/old.jpg" });
+    const { rerender } = renderView([current]);
+    fireEvent.change(screen.getByLabelText(/Çözüm fotoğrafı yükle/), { target: { files: [new File(["x"], "after.jpg", { type: "image/jpeg" })] } });
+    await screen.findByText(/Verified/);
+    fireEvent.click(screen.getByRole("button", { name: "İşi tamamla" }));
+    await waitFor(() => expect(rpc).toHaveBeenCalledWith("staff_update_report_status", expect.objectContaining({ ai_verdict: result, solution_path: "staff/after.jpg" })));
+    await waitFor(() => expect(screen.getByRole("button", { name: "İşi tamamla" })).toBeEnabled());
+    rerender(viewElement([{ ...current, afterPath: "staff/after.jpg" }]));
+    expect(screen.getByText(/Verified/)).toBeInTheDocument();
+    rerender(viewElement([{ ...current, afterPath: "staff/other.jpg" }]));
+    expect(screen.queryByText(/Verified/)).not.toBeInTheDocument();
+    rpc.mockClear();
+    fireEvent.click(screen.getByRole("button", { name: "İşi tamamla" }));
+    await waitFor(() => expect(rpc).toHaveBeenCalledWith("staff_update_report_status", expect.objectContaining({ ai_verdict: null, solution_path: "staff/other.jpg" })));
+  });
+
+  it.each([{ data: false, error: null }, { data: null, error: { message: "event failed" } }])("rejects stale or failed atomic status writes: %j", async (result) => {
+    rpc.mockResolvedValue(result);
+    renderView([job({})]);
+    fireEvent.click(screen.getByRole("button", { name: "Yola çık" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Durum güncellenemedi");
+    expect(refresh).not.toHaveBeenCalled();
+    expect(update).not.toHaveBeenCalled();
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it.each([new Error("verify failed"), new AiRequestError(403)])("drops a previous verdict and refreshes persisted replacement media when verification fails: %s", async (failure) => {
+    upload.mockResolvedValueOnce("staff/first.jpg").mockResolvedValueOnce("staff/replacement.jpg");
+    verify.mockResolvedValueOnce({ resolved: true, confidence: 0.91, note: "İlk fotoğraf", ai_pending: false });
+    verify.mockRejectedValueOnce(failure);
+    renderView([job({ status: "islemde", afterUrl: "https://x/old.jpg" })]);
+    const file = new File(["x"], "after.jpg", { type: "image/jpeg" });
+    fireEvent.change(screen.getByLabelText(/Çözüm fotoğrafı yükle/), { target: { files: [file] } });
+    await screen.findByText(/İlk fotoğraf/);
+    await waitFor(() => expect(screen.getByLabelText(/Çözüm fotoğrafı yükle/)).toBeEnabled());
+    refresh.mockClear();
+    fireEvent.change(screen.getByLabelText(/Çözüm fotoğrafı yükle/), { target: { files: [file] } });
+    await screen.findByRole("alert");
+    expect(refresh).toHaveBeenCalled();
+    expect(screen.queryByText(/İlk fotoğraf/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "İşi tamamla" }));
+    await waitFor(() => expect(rpc).toHaveBeenCalledWith("staff_update_report_status", expect.objectContaining({ ai_verdict: null, solution_path: "staff/replacement.jpg" })));
   });
 
   it("hands a job off to another unit with a reason", async () => {

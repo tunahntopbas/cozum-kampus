@@ -122,3 +122,31 @@ def test_prompt_allows_incidental_bystanders():
     from app.prompts.analyze_report import SYSTEM
 
     assert "tesadüfen görünen insanlar engel değildir" in SYSTEM
+
+
+def test_contradictory_moderation_cannot_approve(client, fake_llm):
+    fake_llm.responses.append({**VALID, "moderation": {"ok": True, "reasons": ["Portre fotoğrafı"]}})
+    assert post(client).json()["moderation"]["ok"] is False
+
+
+def test_string_approval_is_not_a_valid_verdict(client, fake_llm):
+    fake_llm.responses.append({**VALID, "moderation": {"ok": "true", "reasons": []}})
+    body = post(client).json()
+    assert body["ai_pending"] is True
+    assert body["moderation"]["ok"] is False
+
+
+def test_model_failure_does_not_approve_images(client, fake_llm):
+    fake_llm.responses.append(LLMError("unavailable"))
+    body = post(client, image_paths=["u-1/synthetic.jpg"]).json()
+    assert body["moderation"]["ok"] is False
+
+
+def test_obvious_profanity_is_blocked_even_if_model_approves(client, fake_llm):
+    fake_llm.responses.append(VALID)
+    assert post(client, text="Lamba yanmıyor amk").json()["moderation"]["ok"] is False
+
+
+def test_non_profane_turkish_words_are_not_blocked(client, fake_llm):
+    fake_llm.responses.append(VALID)
+    assert post(client, text="Sistemde sıkıntı var").json()["moderation"]["ok"] is True

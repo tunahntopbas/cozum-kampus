@@ -1,4 +1,4 @@
-import type { Category, UnitSlug, Urgency } from "./labels";
+import { CATEGORIES, type Category, type UnitSlug, type Urgency } from "./labels";
 
 // Mirrors services/ai/app/schemas/report.py ReportAnalysis.
 export type ReportAnalysis = {
@@ -42,14 +42,13 @@ export function pendingAnalysis(text: string): ReportAnalysis {
     summary: "",
     materials: [],
     is_sensitive: false,
-    moderation: { ok: true, reasons: [] },
+    moderation: { ok: false, reasons: ["İçerik denetimi tamamlanamadı."] },
     confidence: 0,
     ai_pending: true,
   };
 }
 
-// The AI service may be asleep (Render free tier) or slow; the student can always submit,
-// so timeouts, network errors and 5xx degrade to a pending analysis. Client errors are real errors.
+// Availability failures produce an unapproved pending result, never permission to publish.
 export async function analyzeReport(
   input: AnalyzeInput,
   accessToken: string,
@@ -70,7 +69,27 @@ export async function analyzeReport(
   const res = await withTimeout(request, timeoutMs);
   if (res === "unavailable") return pendingAnalysis(input.text);
   if (!res.ok) throw new AiRequestError(res.status);
-  return (await res.json()) as ReportAnalysis;
+  try {
+    const result: unknown = await res.json();
+    return isReportAnalysis(result) ? result : pendingAnalysis(input.text);
+  } catch {
+    return pendingAnalysis(input.text);
+  }
+}
+
+// Validate the wire response rather than treating a TypeScript cast as validation.
+function isReportAnalysis(value: unknown): value is ReportAnalysis {
+  if (!value || typeof value !== "object") return false;
+  const a = value as ReportAnalysis;
+  return typeof a.title === "string" && a.title.trim().length > 0 &&
+    CATEGORIES.includes(a.category) && ["dusuk", "orta", "acil"].includes(a.urgency) &&
+    ["yapi_isleri", "bilgi_islem", "temizlik", "yemekhane", "guvenlik"].includes(a.unit) &&
+    typeof a.summary === "string" && Array.isArray(a.materials) && a.materials.every((m) => typeof m === "string") &&
+    typeof a.is_sensitive === "boolean" && typeof a.ai_pending === "boolean" &&
+    typeof a.confidence === "number" && Number.isFinite(a.confidence) && a.confidence >= 0 && a.confidence <= 1 &&
+    !!a.moderation && typeof a.moderation.ok === "boolean" && Array.isArray(a.moderation.reasons) &&
+    a.moderation.reasons.every((r) => typeof r === "string") &&
+    !(a.moderation.ok && a.moderation.reasons.length > 0);
 }
 
 // Timeouts, network errors and 5xx all mean "the AI service is not available right now".

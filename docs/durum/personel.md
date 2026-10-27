@@ -48,3 +48,14 @@ Yok.
 ## Diğer hatlara notlar
 
 - Yönetim paneli "doğrulanamadı ama tamamlandı" işleri `report_events` içinde `type = 'durum' and payload->>'to' = 'cozuldu' and payload->'ai'->>'resolved' = 'false'` ile bulabilir.
+
+
+## 2026-10-28 staff audit düzeltmeleri (commit yok, uygulanmadı)
+
+- F1: `staff_update_report_status` RPC: birim/admin yetkisi, row lock, beklenen durum, izinli geçiş; durum + olay + mevcut trigger bildirimi tek transaction. `false` istemcide açık hata.
+- F5: malzeme talepleri güncel sunucu props + başarılı yerel eklemelerden türetiliyor; aynı ID için sunucu öncelikli.
+- F6: replacement başlangıcında karar temizlenir; karar tam medya yoluna bağlanır; kalıcı medya eklendikten sonra AI başarısız olsa da refresh yapılır. Faraday'ın `attachReportPhoto` akışı korunmuştur.
+- CLI `migration new staff_atomic_status` ile üretilen dosya, gerçek saat eski olduğundan kullanıcı isteğiyle `20261028000013_staff_atomic_status.sql` olarak sıralandı; publication `00012` ayrı tutuldu. Migration uygulanmadı.
+- Güven sınırı: browser `ai_verdict` güvenilir değildir; RPC bunu olayın AI kararı olarak kaydetmez (`ai: null`). Authoritative verify sonucunu exact media row'a servis yazmadan güvenilir AI sonucu kaydı eklenmemeli. Faraday ile bu sözleşme koordine edilmeli.
+- Doğrulama: önce regresyonlar 6 hata verdi; sonraki koşu 13/13 geçti; `tsc --noEmit` ve hedefli ESLint geçti. İzole PGlite testi yetki, stale/missing, geçiş, fotoğraf bağı ve event/notification rollback senaryolarını geçti. Son eklenen 403/rerender testleri, null-unit yetki sıkılaştırması ve AI-input güven sınırı değişikliği kullanıcı bellek/swap talimatıyla tekrar koşturulmadı.
+- Commit, dal değişimi, push ve dış veritabanı yazımı yapılmadı. Sıradaki adım: bellek uygun olduğunda son test değişikliklerini doğrula; authoritative verify persistence entegrasyonunu tamamla.

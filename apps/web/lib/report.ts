@@ -14,6 +14,7 @@ export type ReportForm = {
 export type ReportInsert = {
   reporter_id: string;
   is_anonymous: boolean;
+  is_hidden: boolean;
   title: string;
   description: string | null;
   category: string;
@@ -35,9 +36,13 @@ export function buildReportInsert(
   userId: string,
   unitIdBySlug: Record<string, number>,
 ): ReportInsert {
-  const analysed = !a.ai_pending;
+  const analysed = a.ai_pending === false && a.moderation?.ok === true &&
+    Array.isArray(a.moderation.reasons) && a.moderation.reasons.length === 0;
   return {
     reporter_id: userId,
+    // alindi is publicly listed too. Never rely on the DB's default false for unmoderated rows.
+    // This is defense in depth, not authorization: direct REST inserts still need DB enforcement.
+    is_hidden: !analysed,
     is_anonymous: form.isAnonymous,
     title: a.title,
     description: form.text.trim() || null,
@@ -65,7 +70,10 @@ export function canSubmit(
   if (form.buildingId == null && form.lat == null) {
     return { ok: false, message: "Sorunun nerede olduğunu seç." };
   }
-  if (a && !a.moderation.ok) {
+  if (!a || a.ai_pending !== false) {
+    return { ok: false, message: "İçerik denetimi henüz tamamlanmadı. Lütfen biraz bekleyip yeniden dene." };
+  }
+  if (a.moderation?.ok !== true || !Array.isArray(a.moderation.reasons) || a.moderation.reasons.length > 0) {
     return {
       ok: false,
       message: "Bu içerik paylaşılamıyor. Fotoğrafın ve açıklamanın kampüsteki sorunu gösterdiğinden emin ol.",

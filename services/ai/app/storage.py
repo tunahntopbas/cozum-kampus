@@ -1,4 +1,5 @@
 import base64
+import re
 import time
 from collections.abc import Awaitable, Callable
 from typing import Annotated
@@ -23,6 +24,10 @@ def _service_headers(settings: Settings) -> dict[str, str]:
 
 def _path_owner(path: str) -> str | None:
     """Returns the owner folder of a '<user_id>/<file>' path, or None if the path has any other shape."""
+    # Paths are identifiers, never URLs. Encoded separators, query strings and backslashes
+    # would make the HTTP fetch resolve a different object than the ownership check saw.
+    if not re.fullmatch(r"[A-Za-z0-9_-]+/[A-Za-z0-9_.-]+", path):
+        return None
     parts = path.split("/")
     if len(parts) != 2 or not parts[0] or not parts[1] or {".", ".."} & set(parts):
         return None

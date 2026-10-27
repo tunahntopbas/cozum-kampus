@@ -128,6 +128,22 @@ describe("MyReportsView", () => {
     expect(within(detail).getByRole("heading", { name: "Asansör kapısı kapanmıyor" })).toBeInTheDocument();
   });
 
+  it("selects a resolved notification target and keeps it selected in the closed filter", () => {
+    renderView({ newId: 2 });
+    const detail = screen.getByRole("region", { name: "Seçili bildirim" });
+    expect(within(detail).getByRole("heading", { name: "Yemekhane girişinde su birikintisi" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Yemekhane girişinde su birikintisi/ })).toHaveAttribute("aria-pressed", "true");
+    fireEvent.click(screen.getByRole("button", { name: "Çözüldü" }));
+    expect(within(detail).getByRole("heading", { name: "Yemekhane girişinde su birikintisi" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Koridor lambası yanmıyor/ })).not.toBeInTheDocument();
+  });
+
+  it("selects a withdrawn notification target in the default all filter", () => {
+    renderView({ mine: [...mine, item({ id: 4, title: "Geri çekilmiş bildirim", status: "geri_cekildi" })], newId: 4 });
+    const detail = screen.getByRole("region", { name: "Seçili bildirim" });
+    expect(within(detail).getByRole("heading", { name: "Geri çekilmiş bildirim" })).toBeInTheDocument();
+  });
+
   it("shows real event times on the timeline", () => {
     renderView({
       mine: [

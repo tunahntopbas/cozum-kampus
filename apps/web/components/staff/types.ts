@@ -6,5 +6,6 @@ export type StaffJob = MapReport & {
   buildingLng: number | null;
   beforePath: string | null;
   beforeUrl: string | null;
+  afterPath?: string | null;
   afterUrl: string | null;
 };

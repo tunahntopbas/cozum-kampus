@@ -185,9 +185,10 @@ function ReportDetail({
     e.preventDefault();
     setBusy(true);
     setError("");
+    onSaved("");
     // Routing an unrouted report moves it forward, as in the design.
     const nextStatus = unit && status === "alindi" ? "yonlendirildi" : status;
-    const { error: err } = await createClient().rpc("admin_update_report", {
+    const { data, error: err } = await createClient().rpc("admin_update_report", {
       rid: report.id,
       to_unit: unit ? Number(unit) : null,
       to_urgency: urgency,
@@ -196,7 +197,7 @@ function ReportDetail({
       note: note.trim() || null,
     });
     setBusy(false);
-    if (err) {
+    if (err || data !== true) {
       setError("Değişiklikler kaydedilemedi. Tekrar dene.");
       return;
     }

@@ -53,6 +53,7 @@ async function Jobs() {
       buildingLng: b?.lng ?? r.lng,
       beforePath: before,
       beforeUrl: before ? (url.get(before) ?? null) : null,
+      afterPath: after,
       afterUrl: after ? (url.get(after) ?? null) : null,
     };
   });

@@ -49,6 +49,22 @@ describe("MaterialsView", () => {
     expect(screen.getByRole("button", { name: "Talepler iletildi" })).toBeDisabled();
   });
 
+  it("reconciles fresh server statuses while keeping successful requests absent from stale props", async () => {
+    insert.mockResolvedValue({ data: [{ id: 10, item_id: 1, qty: 2, note: null, status: "onay_bekliyor", created_at: pending.createdAt }], error: null });
+    const { rerender } = view([pending]);
+    fireEvent.click(screen.getByRole("button", { name: "Eksikleri depodan iste" }));
+    await screen.findByText("LED tüp 18 W × 2");
+    const props = { staffId: "u1", stock, needed, activeJobs: 3 };
+    rerender(<MaterialsView {...props} initialRequests={[{ ...pending, status: "hazir" }]} />);
+    expect(screen.getByText("Hazır")).toBeInTheDocument();
+    expect(screen.getByText("LED tüp 18 W × 2")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Talepler iletildi" })).toBeDisabled();
+    rerender(<MaterialsView {...props} initialRequests={[{ ...pending, status: "hazir" }, { ...pending, id: 10, itemId: 1, qty: 2, status: "reddedildi" }]} />);
+    expect(screen.getByText("Reddedildi")).toBeInTheDocument();
+    expect(screen.getAllByText("LED tüp 18 W × 2")).toHaveLength(1);
+    expect(screen.getByRole("button", { name: "Eksikleri depodan iste" })).toBeEnabled();
+  });
+
   it("validates and sends a new request", async () => {
     insert.mockResolvedValue({ data: null, error: { message: "denied" } });
     view();

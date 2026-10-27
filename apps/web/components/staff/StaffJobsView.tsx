@@ -11,6 +11,7 @@ import { categoryLabel, urgencyLabel } from "@/lib/labels";
 import { JOB_STEPS, completedSteps, nextAction } from "@/lib/staff";
 import { statusMeta, type ReportStatus } from "@/lib/status";
 import { createClient } from "@/lib/supabase/client";
+import { attachReportPhoto } from "@/lib/submit";
 import { uploadReportImage } from "@/lib/upload";
 import s from "@/components/staff-demo/Staff.module.css";
 import type { StaffJob } from "./types";
@@ -33,7 +34,8 @@ const TODAY = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", 
 export function StaffJobsView({ staffId, staffName, unitName, jobs, completedToday, units, ownUnitId }: Props) {
   const router = useRouter();
   const [selectedId, setSelectedId] = useState<number | null>(jobs[0]?.id ?? null);
-  const [verdicts, setVerdicts] = useState<Record<number, VerifyResult>>({});
+  const [verdicts, setVerdicts] = useState<Record<number, { path: string; result: VerifyResult } | undefined>>({});
+  const [solutionPaths, setSolutionPaths] = useState<Record<number, { path: string; previous: string | null | undefined }>>({});
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +46,15 @@ export function StaffJobsView({ staffId, staffName, unitName, jobs, completedTod
   const [note, setNote] = useState("");
 
   const job = jobs.find((j) => j.id === selectedId) ?? jobs[0];
-  const verdict = job ? verdicts[job.id] : undefined;
+  const solutionPathFor = (j: StaffJob) => {
+    const local = solutionPaths[j.id];
+    return local && (j.afterPath === local.previous || j.afterPath === local.path) ? local.path : j.afterPath;
+  };
+  const verdictFor = (j: StaffJob) => {
+    const bound = verdicts[j.id];
+    return bound && bound.path === solutionPathFor(j) ? bound.result : undefined;
+  };
+  const verdict = job ? verdictFor(job) : undefined;
   const action = job ? nextAction(job.status) : null;
 
   function select(id: number) {
@@ -74,23 +84,29 @@ export function StaffJobsView({ staffId, staffName, unitName, jobs, completedTod
     }
   }
 
-  async function setStatus(j: StaffJob, to: ReportStatus, payload: Record<string, unknown> = {}) {
-    const supabase = createClient();
-    const patch = to === "cozuldu" ? { status: to, resolved_at: new Date().toISOString() } : { status: to };
-    const { error: updateError } = await supabase.from("reports").update(patch).eq("id", j.id);
-    if (updateError) return "Durum güncellenemedi.";
-    await supabase.from("report_events").insert({ report_id: j.id, type: "durum", actor_id: staffId, payload: { to, ...payload } });
+  async function setStatus(j: StaffJob, to: ReportStatus) {
+    const { data, error: rpcError } = await createClient().rpc("staff_update_report_status", {
+      rid: j.id,
+      expected_status: j.status,
+      to_status: to,
+      work_note: to === "cozuldu" ? note.trim() || null : null,
+      ai_verdict: to === "cozuldu" ? verdictFor(j) ?? null : null,
+      solution_path: to === "cozuldu" ? solutionPathFor(j) ?? null : null,
+    });
+    if (rpcError || data !== true) return "Durum güncellenemedi. İşin durumu değişmiş olabilir, sayfayı yenile.";
     return null;
   }
 
   function uploadSolution(j: StaffJob, file: File) {
+    setVerdicts((v) => ({ ...v, [j.id]: undefined }));
     run(async () => {
       const supabase = createClient();
       const path = await uploadReportImage(staffId, await prepareImage(file));
-      const { error: mediaError } = await supabase.from("report_media").insert({ report_id: j.id, kind: "sonra", storage_path: path });
-      if (mediaError) return "Fotoğraf bildirime eklenemedi.";
+      const approvedPath = await attachReportPhoto(supabase, j.id, path, "sonra");
+      setSolutionPaths((v) => ({ ...v, [j.id]: { path: approvedPath, previous: j.afterPath } }));
+      router.refresh();
       if (!j.beforePath) {
-        setVerdicts((v) => ({ ...v, [j.id]: { resolved: false, confidence: 0, note: "Öğrencinin fotoğrafı yok, karşılaştırma yapılmadı.", ai_pending: true } }));
+        setVerdicts((v) => ({ ...v, [j.id]: { path: approvedPath, result: { resolved: false, confidence: 0, note: "Öğrencinin fotoğrafı yok, karşılaştırma yapılmadı.", ai_pending: true } } }));
         return null;
       }
       const { data } = await supabase.auth.getSession();
@@ -99,7 +115,7 @@ export function StaffJobsView({ staffId, staffName, unitName, jobs, completedTod
           { beforePath: j.beforePath, afterPath: path, category: j.category },
           data.session?.access_token ?? "",
         );
-        setVerdicts((v) => ({ ...v, [j.id]: result }));
+        setVerdicts((v) => ({ ...v, [j.id]: { path: approvedPath, result } }));
       } catch (e) {
         if (e instanceof AiRequestError && e.status === 403) return "Bu işlem yalnızca birim personeli içindir.";
         throw e;
@@ -110,7 +126,7 @@ export function StaffJobsView({ staffId, staffName, unitName, jobs, completedTod
 
   function complete(j: StaffJob) {
     run(
-      () => setStatus(j, "cozuldu", { note: note.trim() || undefined, ai: verdicts[j.id] ?? null }),
+      () => setStatus(j, "cozuldu"),
       "İş tamamlandı. Öğrenci bildiriminde durum Çözüldü olarak görünür.",
     );
   }

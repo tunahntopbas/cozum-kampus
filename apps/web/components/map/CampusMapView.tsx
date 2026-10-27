@@ -38,11 +38,35 @@ type Props = {
 };
 
 export function CampusMapView({ userId, buildings, reports: initialReports, unitNames, votedIds }: Props) {
-  const [reports, setReports] = useState(initialReports);
   const [filters, setFilters] = useState<MapFilters>({ query: "", filter: "Tümü", category: "", status: "" });
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [expanded, setExpanded] = useState<number | null>(null);
-  const [votes, setVotes] = useState(() => new Set(votedIds));
+  // undefined follows the selection automatically; null explicitly closes the accordion.
+  const [expanded, setExpanded] = useState<number | null | undefined>(undefined);
+  const [localVotes, setLocalVotes] = useState({
+    source: votedIds,
+    overrides: new Map<number, boolean>(),
+  });
+  // Retire acknowledged changes so later server-side vote changes remain authoritative.
+  if (localVotes.source !== votedIds) {
+    const serverVotes = new Set(votedIds);
+    setLocalVotes({
+      source: votedIds,
+      overrides: new Map([...localVotes.overrides].filter(([id, supported]) => serverVotes.has(id) !== supported)),
+    });
+  }
+  const votes = new Set(votedIds);
+  for (const [id, supported] of localVotes.overrides) {
+    if (supported) votes.add(id);
+    else votes.delete(id);
+  }
+  const reports = useMemo(() => {
+    const serverVotes = new Set(votedIds);
+    return initialReports.map((r) => {
+      const supported = localVotes.overrides.get(r.id);
+      const delta = supported === undefined ? 0 : Number(supported) - Number(serverVotes.has(r.id));
+      return delta === 0 ? r : { ...r, voteCount: Math.max(r.voteCount + delta, 0) };
+    });
+  }, [initialReports, votedIds, localVotes.overrides]);
   const [voteBusy, setVoteBusy] = useState(false);
   const [voteError, setVoteError] = useState<string | null>(null);
   const [emergency, setEmergency] = useState(false);
@@ -58,7 +82,8 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
     groups.find((g) => g.building.id === expanded) ??
     groups[0];
   const selected = selectedGroup?.reports.find((r) => r.id === selectedId) ?? selectedGroup?.reports[0];
-  const openBuilding = groups.some((g) => g.building.id === expanded) ? expanded : (selectedGroup?.building.id ?? null);
+  const openBuilding =
+    expanded === null ? null : groups.some((g) => g.building.id === expanded) ? expanded : (selectedGroup?.building.id ?? null);
   const openCount = reports.filter((r) => r.status !== "cozuldu" && r.status !== "geri_cekildi").length;
 
   const set = (patch: Partial<MapFilters>) => setFilters((f) => ({ ...f, ...patch }));
@@ -82,15 +107,12 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
       setVoteError("Desteğin kaydedilemedi. Bağlantını kontrol edip yeniden dene.");
       return;
     }
-    setVotes((prev) => {
-      const next = new Set(prev);
-      if (had) next.delete(report.id);
-      else next.add(report.id);
-      return next;
+    setLocalVotes((prev) => {
+      const overrides = new Map(prev.overrides);
+      if (prev.source.includes(report.id) === !had) overrides.delete(report.id);
+      else overrides.set(report.id, !had);
+      return { ...prev, overrides };
     });
-    setReports((prev) =>
-      prev.map((r) => (r.id === report.id ? { ...r, voteCount: Math.max(r.voteCount + (had ? -1 : 1), 0) } : r)),
-    );
   }
 
   return (
@@ -169,7 +191,7 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
                   type="button"
                   className={`${s.item} !p-2`}
                   aria-expanded={open}
-                  onClick={() => (open ? setExpanded(-1) : selectBuilding(building.id))}
+                  onClick={() => (open ? setExpanded(null) : selectBuilding(building.id))}
                 >
                   <span className={s.itemBody}>
                     <span className="font-medium">{building.name}</span>

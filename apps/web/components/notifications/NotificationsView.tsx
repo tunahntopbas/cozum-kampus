@@ -1,7 +1,8 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { BellIcon, ChatCircleTextIcon } from "@phosphor-icons/react";
 import { PageContent } from "@/components/layout/PageContent";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -31,7 +32,10 @@ const DATE = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short", 
 
 function action(n: AppNotification): { href: string; label: string } | null {
   if (n.type === "oneri_yaniti" && n.payload.suggestion_id != null) return { href: `/oneriler#oneri-${n.payload.suggestion_id}`, label: "Yanıtı oku" };
-  if (n.type === "durum") return { href: "/bildirimlerim", label: "Bildirimi aç" };
+  if (n.type === "durum") return {
+    href: n.payload.report_id != null ? `/bildirimlerim?yeni=${encodeURIComponent(String(n.payload.report_id))}` : "/bildirimlerim",
+    label: "Bildirimi aç",
+  };
   return null;
 }
 
@@ -44,31 +48,80 @@ export function NotificationsView({
   notifications: AppNotification[];
   prefTypes: Record<string, unknown>;
 }) {
+  const router = useRouter();
   const tabsId = useId();
   const [now] = useState(() => new Date());
-  const [items, setItems] = useState(notifications);
+  // Server props own the list; local read actions survive an older refresh response.
+  const [localReads, setLocalReads] = useState<Record<number, string>>({});
+  const items = notifications.map((n) => ({ ...n, readAt: n.readAt ?? localReads[n.id] ?? null }));
   const [tab, setTab] = useState("Tümü");
   const [type, setType] = useState("Hepsi");
-  const [statusOn, setStatusOn] = useState(prefTypes.durum !== false);
+  const serverStatusOn = prefTypes.durum !== false;
+  const [statusPreference, setStatusPreference] = useState<{ server: boolean; local: boolean | null }>({ server: serverStatusOn, local: null });
+  if (statusPreference.server !== serverStatusOn) {
+    setStatusPreference({ server: serverStatusOn, local: statusPreference.local === serverStatusOn ? null : statusPreference.local });
+  }
+  const statusOn = statusPreference.local ?? serverStatusOn;
+  const preferencePending = useRef(false);
+  const [savingPreference, setSavingPreference] = useState(false);
   const [prefsMessage, setPrefsMessage] = useState("");
+  const [readMessage, setReadMessage] = useState("");
+
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState === "visible") router.refresh();
+    };
+    const timer = window.setInterval(refresh, 30_000);
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, [router]);
 
   const visible = items.filter((n) => (tab === "Tümü" || !n.readAt) && (type === "Hepsi" || TYPES[n.type] === type));
   const unread = items.filter((n) => !n.readAt).length;
 
   async function markRead(ids: number[]) {
+    ids = ids.filter((id) => items.some((n) => n.id === id && !n.readAt));
     if (!ids.length) return;
     const at = new Date().toISOString();
-    setItems((prev) => prev.map((n) => (ids.includes(n.id) ? { ...n, readAt: n.readAt ?? at } : n)));
-    await createClient().from("notifications").update({ read_at: at }).in("id", ids).is("read_at", null);
+    setReadMessage("");
+    setLocalReads((prev) => ({ ...prev, ...Object.fromEntries(ids.map((id) => [id, at])) }));
+    try {
+      const { error } = await createClient().from("notifications").update({ read_at: at }).in("id", ids).is("read_at", null);
+      if (error) throw error;
+    } catch {
+      setLocalReads((prev) => {
+        const next = { ...prev };
+        for (const id of ids) if (next[id] === at) delete next[id];
+        return next;
+      });
+      setReadMessage("Okundu bilgisi kaydedilemedi. Tekrar dene.");
+    }
   }
 
   async function toggleStatus(on: boolean) {
-    setStatusOn(on);
-    const { error } = await createClient()
-      .from("notification_prefs")
-      .upsert({ user_id: userId, types: { ...prefTypes, durum: on } }, { onConflict: "user_id" });
-    setPrefsMessage(error ? "Tercih kaydedilemedi." : on ? "Durum bildirimleri açıldı." : "Durum bildirimleri kapatıldı.");
-    if (error) setStatusOn(!on);
+    if (preferencePending.current) return;
+    preferencePending.current = true;
+    setSavingPreference(true);
+    setPrefsMessage("");
+    setStatusPreference((prev) => ({ ...prev, local: on }));
+    try {
+      const { error } = await createClient()
+        .from("notification_prefs")
+        .upsert({ user_id: userId, types: { ...prefTypes, durum: on } }, { onConflict: "user_id" });
+      if (error) throw error;
+      setPrefsMessage(on ? "Durum bildirimleri açıldı." : "Durum bildirimleri kapatıldı.");
+    } catch {
+      setStatusPreference((prev) => ({ ...prev, local: null }));
+      setPrefsMessage("Tercih kaydedilemedi.");
+    } finally {
+      preferencePending.current = false;
+      setSavingPreference(false);
+    }
   }
 
   return (
@@ -77,6 +130,7 @@ export function NotificationsView({
         <PageHeader title="Bildirimler" description="Bildirimlerinin durumu ve önerilerine gelen yönetim yanıtları burada toplanır." />
         <div className={s.columns}>
           <Glass className={`${s.panel} !p-4`}>
+            {readMessage && <p role="alert" className="text-danger">{readMessage}</p>}
             <div className={s.between}>
               <Tabs id={tabsId} label="Bildirim görünümü" options={TABS} value={tab} onChange={setTab} />
               <span className={s.badge}>{unread} okunmamış</span>
@@ -158,7 +212,9 @@ export function NotificationsView({
                 <p className="font-semibold">Durum değişimleri</p>
                 <p className={s.small}>Bildirimlerinin her adımında</p>
               </div>
-              <Switch label="Durum değişimleri" hideLabel checked={statusOn} onChange={toggleStatus} />
+              <fieldset disabled={savingPreference} className="contents">
+                <Switch label="Durum değişimleri" hideLabel checked={statusOn} onChange={toggleStatus} />
+              </fieldset>
             </div>
             <p className={s.small}>Tek bir bildirimi sessize almak için Bildirimlerim sayfasını kullan. Önerine gelen yanıtlar her zaman bildirilir.</p>
             {prefsMessage && (

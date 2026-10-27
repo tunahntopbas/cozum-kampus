@@ -9,6 +9,7 @@ import { floorLabel, relativeTime } from "@/lib/campus";
 import { prepareImage } from "@/lib/image";
 import { MY_FILTERS, MY_TABS, filterMyReports, myStats, type MyFilter, type MyTab } from "@/lib/my-reports";
 import { createClient } from "@/lib/supabase/client";
+import { attachReportPhoto } from "@/lib/submit";
 import { uploadReportImage } from "@/lib/upload";
 import s from "@/components/student-demo/StudentDemo.module.css";
 import { MyReportDetail } from "./MyReportDetail";
@@ -97,9 +98,7 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
     run(async () => {
       const supabase = createClient();
       const path = await uploadReportImage(userId, await prepareImage(file));
-      const { error } = await supabase.from("report_media").insert({ report_id: id, kind: "ek", storage_path: path });
-      if (error) return "Fotoğraf bildirime eklenemedi.";
-      await supabase.from("report_events").insert({ report_id: id, type: "ek_fotograf", actor_id: userId, payload: {} });
+      await attachReportPhoto(supabase, id, path, "ek");
       return null;
     });
   }

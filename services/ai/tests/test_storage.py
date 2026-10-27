@@ -47,3 +47,9 @@ async def test_fetch_images_missing_file_is_400():
     with pytest.raises(HTTPException) as e:
         await fetch_images(["u-1/a.jpg"], get_settings(), http)
     assert e.value.status_code == 400
+
+
+@pytest.mark.parametrize("path", ["u-1/%2e%2e%2fu-2.jpg", "u-1/a.jpg?x=1", "u-1/a.jpg#x", "u-1/a\\b.jpg"])
+def test_photo_owner_cannot_be_bypassed_with_url_metacharacters(path):
+    with pytest.raises(HTTPException):
+        validate_image_paths([path], "u-1")

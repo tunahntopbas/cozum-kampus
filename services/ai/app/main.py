@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.routers import analyze, draft, verify
+from app.routers import analyze, draft, reports, verify
 
 app = FastAPI(title="Çözüm Kampüs AI")
 
@@ -14,6 +14,7 @@ app.add_middleware(
 )
 
 app.include_router(analyze.router)
+app.include_router(reports.router)
 app.include_router(verify.router)
 app.include_router(draft.router)
 

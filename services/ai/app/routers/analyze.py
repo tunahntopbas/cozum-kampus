@@ -1,6 +1,7 @@
 import asyncio
 import hashlib
 import json
+import re
 import time
 from typing import Annotated
 
@@ -9,7 +10,7 @@ from pydantic import ValidationError
 
 from app.auth import CurrentUser, get_current_user
 from app.config import Settings, get_settings
-from app.fallback import rule_based_analysis
+from app.fallback import rule_based_analysis, tr_lower
 from app.llm import get_llm
 from app.llm.base import LLMError, LLMProvider
 from app.privacy import mask_pii
@@ -68,6 +69,11 @@ async def analyze_report(
         result = normalize_model_output(raw)
     except (LLMError, ValidationError, TimeoutError):
         result = rule_based_analysis(text)
+
+    # A small high-confidence deny rule supplements model moderation; it is not a complete profanity detector.
+    if re.search(r"\b(amk|aq|siktir|orospu|yarrak)\b", tr_lower(req.text)):
+        result.moderation.ok = False
+        result.moderation.reasons.append("Metin küfür içeriyor.")
 
     input_hash = hashlib.sha256(json.dumps([user_text, req.image_paths]).encode()).hexdigest()
     await record(

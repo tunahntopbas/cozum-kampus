@@ -40,4 +40,4 @@ def test_rule_based_shape():
     assert a.ai_pending is True
     assert a.title == "Yeni bildirim"
     assert a.confidence == 0
-    assert a.moderation.ok is True
+    assert a.moderation.ok is False

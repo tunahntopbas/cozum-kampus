@@ -60,7 +60,7 @@ export function AnalysisPanel({ state, analysis, onCategoryChange }: Props) {
       )}
 
       {analysis && pending && (
-        <p className="text-sm text-muted">Yapay zeka analizi bekleniyor. Bildirimini yine de gönderebilirsin.</p>
+        <p className="text-sm text-muted">İçerik denetimi tamamlanamadı. Bildirim henüz paylaşılamaz. Biraz bekleyip açıklamayı düzenleyerek yeniden dene.</p>
       )}
 
       {analysis && (

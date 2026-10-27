@@ -1,33 +1,61 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { ReportAnalysis } from "./ai";
-import { buildReportInsert, type ReportForm } from "./report";
+import { canSubmit, type ReportForm } from "./report";
 
-// Report row first, then its photos and the first timeline event (RLS lets the reporter write all three).
+type Options = { fetchImpl?: typeof fetch; baseUrl?: string };
+
+// The browser never publishes a report or attaches media directly. The server authenticates the
+// caller, reanalyses the exact inputs and commits through a service-only transactional function.
+async function trustedRequest(
+  db: SupabaseClient,
+  path: string,
+  body: unknown,
+  { fetchImpl = fetch, baseUrl = process.env.NEXT_PUBLIC_AI_API_URL ?? "" }: Options,
+): Promise<{ id: number; storage_path?: string }> {
+  const { data, error } = await db.auth.getSession();
+  if (error || !data.session) throw new Error("Lütfen yeniden giriş yap.");
+  const res = await fetchImpl(`${baseUrl}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${data.session.access_token}` },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) throw new Error("İçerik denetlenemedi veya paylaşıma uygun değil. Lütfen yeniden dene.");
+  const result: unknown = await res.json();
+  if (!result || typeof result !== "object" || !("id" in result) ||
+      typeof result.id !== "number" || !Number.isSafeInteger(result.id) || result.id <= 0) {
+    throw new Error("Bildirim işlemi tamamlanamadı.");
+  }
+  return result as { id: number; storage_path?: string };
+}
+
 export async function submitReport(
   db: SupabaseClient,
   form: ReportForm,
   analysis: ReportAnalysis,
-  userId: string,
-  unitIdBySlug: Record<string, number>,
+  _userId: string,
+  _unitIdBySlug: Record<string, number>,
+  options: Options = {},
 ): Promise<number> {
-  const { data, error } = await db
-    .from("reports")
-    .insert(buildReportInsert(form, analysis, userId, unitIdBySlug))
-    .select("id")
-    .single();
-  if (error || !data) throw new Error("Bildirim kaydedilemedi");
-  const reportId = (data as { id: number }).id;
+  // Retain the old call signature so stale callers cannot accidentally regain direct-write behavior.
+  const check = canSubmit(analysis, form);
+  if (!check.ok) throw new Error(check.message);
+  return (await trustedRequest(db, "/reports/submit", {
+    text: form.text, image_paths: form.imagePaths, is_anonymous: form.isAnonymous,
+    building_id: form.buildingId, place_id: form.placeId, floor: form.floor,
+    lat: form.lat, lng: form.lng, category: analysis.category,
+  }, options)).id;
+}
 
-  if (form.imagePaths.length) {
-    await db
-      .from("report_media")
-      .insert(form.imagePaths.map((path) => ({ report_id: reportId, kind: "once", storage_path: path })));
+export async function attachReportPhoto(
+  db: SupabaseClient,
+  reportId: number,
+  imagePath: string,
+  kind: "ek" | "sonra",
+  options: Options = {},
+): Promise<string> {
+  const result = await trustedRequest(db, `/reports/${reportId}/media`, { image_path: imagePath, kind }, options);
+  if (typeof result.storage_path !== "string" || !/^moderated\/[0-9a-f-]{36}\.jpg$/.test(result.storage_path)) {
+    throw new Error("Fotoğraf işlemi tamamlanamadı.");
   }
-  await db.from("report_events").insert({
-    report_id: reportId,
-    type: "olusturuldu",
-    actor_id: userId,
-    payload: { category: analysis.category, urgency: analysis.urgency, ai_pending: analysis.ai_pending },
-  });
-  return reportId;
+  return result.storage_path;
 }

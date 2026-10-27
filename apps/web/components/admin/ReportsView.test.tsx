@@ -48,7 +48,7 @@ describe("ReportsView", () => {
   });
 
   it("routes an unrouted report and saves through the admin function", async () => {
-    rpc.mockResolvedValue({ error: null });
+    rpc.mockResolvedValue({ data: true, error: null });
     view({ initialFilter: "Yönlendirilmedi" });
     fireEvent.change(screen.getByLabelText("Sorumlu birim"), { target: { value: "1" } });
     fireEvent.change(screen.getByLabelText("Atanan teknisyen"), { target: { value: "s1" } });
@@ -71,6 +71,40 @@ describe("ReportsView", () => {
     view();
     fireEvent.click(screen.getByRole("button", { name: "Değişiklikleri kaydet" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("kaydedilemedi");
+    expect(refresh).not.toHaveBeenCalled();
+  });
+
+  it("retains the report draft when the RPC returns false", async () => {
+    rpc.mockResolvedValue({ data: false, error: null });
+    view({ initialFilter: "Yönlendirilmedi" });
+    fireEvent.change(screen.getByLabelText("Sorumlu birim"), { target: { value: "1" } });
+    fireEvent.change(screen.getByLabelText("Atanan teknisyen"), { target: { value: "s1" } });
+    fireEvent.change(screen.getByLabelText("Aciliyet"), { target: { value: "orta" } });
+    fireEvent.change(screen.getByLabelText("İç not"), { target: { value: " Taslağı koru " } });
+    fireEvent.click(screen.getByRole("button", { name: "Değişiklikleri kaydet" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("kaydedilemedi");
+    expect(screen.getByLabelText("Sorumlu birim")).toHaveValue("1");
+    expect(screen.getByLabelText("Atanan teknisyen")).toHaveValue("s1");
+    expect(screen.getByLabelText("Aciliyet")).toHaveValue("orta");
+    expect(screen.getByLabelText("İç not")).toHaveValue(" Taslağı koru ");
+    expect(screen.getByRole("button", { name: "Değişiklikleri kaydet" })).toBeEnabled();
+    expect(screen.getByRole("status")).not.toHaveTextContent("kaydedildi");
+    expect(refresh).not.toHaveBeenCalled();
+  });
+
+  it("clears a previous success message when a later save returns false", async () => {
+    rpc.mockResolvedValueOnce({ data: true, error: null }).mockResolvedValueOnce({ data: false, error: null });
+    view();
+    fireEvent.click(screen.getByRole("button", { name: "Değişiklikleri kaydet" }));
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("#1 kaydedildi."));
+    refresh.mockClear();
+    fireEvent.change(screen.getByLabelText("İç not"), { target: { value: "Yeni not" } });
+    fireEvent.click(screen.getByRole("button", { name: "Değişiklikleri kaydet" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("kaydedilemedi");
+    expect(screen.getByRole("status")).not.toHaveTextContent("kaydedildi");
+    expect(screen.getByLabelText("İç not")).toHaveValue("Yeni not");
     expect(refresh).not.toHaveBeenCalled();
   });
 });

@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { EyeSlash, PaperPlaneTilt, ShieldCheck } from "@phosphor-icons/react";
 import { Switch } from "@/components/ui/Switch";
-import { AiRequestError, analyzeReport, pendingAnalysis, type ReportAnalysis } from "@/lib/ai";
+import { AiRequestError, analyzeReport, type ReportAnalysis } from "@/lib/ai";
 import { prepareImage } from "@/lib/image";
 import { unitForCategory, type Category } from "@/lib/labels";
 import { canSubmit, type ReportForm } from "@/lib/report";
@@ -57,6 +57,7 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
   const [message, setMessage] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const requestSeq = useRef(0);
+  const [analysisKey, setAnalysisKey] = useState<string | null>(null);
 
   const buildingName = useMemo(
     () => qrPlace?.buildingName ?? buildings.find((b) => b.id === location.buildingId)?.name,
@@ -64,16 +65,19 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
   );
   const photoPaths = photos.map((p) => p.path).join("|");
   const hasInput = Boolean(photoPaths || text.trim());
+  const inputKey = JSON.stringify([text, photoPaths]);
+  // A render with edited input must stop using the old verdict even before the effect runs.
+  const currentAnalysis = analysisKey === inputKey ? analysis : null;
 
   // Re-analyse whenever the photos or (after a pause) the text change.
   useEffect(() => {
     const paths = photoPaths ? photoPaths.split("|") : [];
-    if (!paths.length && !text.trim()) return;
     const seq = ++requestSeq.current;
+    if (!paths.length && !text.trim()) return;
     const timer = setTimeout(async () => {
       setAnalysisState("loading");
-      const { data } = await createClient().auth.getSession();
       try {
+        const { data } = await createClient().auth.getSession();
         const result = await analyzeReport(
           {
             text,
@@ -86,18 +90,22 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
         );
         if (seq !== requestSeq.current) return;
         setAnalysis(result);
+        setAnalysisKey(inputKey);
         setMessage(null);
       } catch (e) {
         if (seq !== requestSeq.current) return;
         setAnalysis(null);
-        setMessage(e instanceof AiRequestError ? (AI_ERRORS[e.status] ?? null) : null);
+        setMessage(e instanceof AiRequestError ? (AI_ERRORS[e.status] ?? "İçerik denetlenemedi. Açıklamayı düzenleyip yeniden dene.") : "İçerik denetlenemedi. Açıklamayı düzenleyip yeniden dene.");
       }
       setAnalysisState("done");
     }, TEXT_DEBOUNCE_MS);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      requestSeq.current = seq + 1;
+    };
     // Location is sent as context only; moving the pin does not need a new analysis.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photoPaths, text]);
+  }, [photoPaths, text, inputKey]);
 
   useEffect(() => () => stopDictation.current?.(), []);
 
@@ -178,7 +186,8 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
       lat: location.lat,
       lng: location.lng,
     };
-    const current = hasInput ? analysis : null;
+    if (uploading || submitting) return;
+    const current = hasInput ? currentAnalysis : null;
     const check = canSubmit(current, form);
     if (!check.ok) {
       setMessage(check.message);
@@ -187,10 +196,10 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
     setSubmitting(true);
     setMessage(null);
     try {
-      const id = await submitReport(createClient(), form, current ?? pendingAnalysis(text), userId, unitIdBySlug);
+      const id = await submitReport(createClient(), form, current!, userId, unitIdBySlug);
       router.push(`/bildirimlerim?yeni=${id}`);
-    } catch {
-      setMessage("Bildirim gönderilemedi. Bağlantını kontrol edip yeniden dene.");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Bildirim gönderilemedi. Lütfen yeniden dene.");
       setSubmitting(false);
     }
   }
@@ -206,7 +215,7 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
           <PhotoPicker
             photos={photos}
             uploading={uploading}
-            aiLabel={analysis && !analysis.ai_pending ? analysis.title : undefined}
+            aiLabel={currentAnalysis && !currentAnalysis.ai_pending ? currentAnalysis.title : undefined}
             onAdd={addPhotos}
             onRemove={removePhoto}
           />
@@ -256,7 +265,7 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
             </div>
             <button
               type="submit"
-              disabled={submitting || uploading}
+              disabled={submitting || uploading || !currentAnalysis || currentAnalysis.ai_pending || currentAnalysis.moderation.ok !== true}
               className="btn-ink t flex items-center justify-center gap-2 rounded-lg border-0 bg-ink px-3 py-2 text-base font-semibold text-white disabled:opacity-50"
             >
               <PaperPlaneTilt size={20} weight="fill" aria-hidden />
@@ -268,8 +277,8 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
 
       <div className="flex flex-col gap-4">
         <AnalysisPanel
-          state={hasInput ? analysisState : "idle"}
-          analysis={hasInput ? analysis : null}
+          state={hasInput ? (currentAnalysis ? analysisState : "loading") : "idle"}
+          analysis={hasInput ? currentAnalysis : null}
           onCategoryChange={changeCategory}
         />
         <SafetyCard location={securityLocation} />
