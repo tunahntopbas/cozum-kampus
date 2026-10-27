@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Glass } from "@/components/ui/Glass";
 import { Button } from "@/components/ui/Button";
 import { units, peopleForUnit, reports } from "./data";
-import { Badge, Kpis } from "./ui";
+import { Badge, DemoNote, Kpis } from "./ui";
 import s from "./admin.module.css";
 
 type Staff = { name: string; unit: string; state: string; job: string; load: number; count: number };
@@ -22,6 +22,7 @@ export function Units() {
   const team = staff.filter((person) => person.unit === selected);
   const availableJobs = reports.filter((report) => report.unit === selected && !report.person && report.status !== "Çözüldü" && !assignments.includes(report.id));
   return <>
+    <DemoNote />
     <PageHeader title="Birimler" description="Birim yükü, performans ve ekip durumu." />
     <Kpis items={[
       { label: "Aktif birim", value: units.length, hint: "Kampüs genelinde" },

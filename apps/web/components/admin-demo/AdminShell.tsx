@@ -24,7 +24,6 @@ export function AdminShell({ children }: { children: ReactNode }) {
       {tabs.map(({ href, label, icon: Icon }) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} className="ghost t text-muted"><Icon size={16} aria-hidden />{label}</Link>)}
     </nav>
     <PageContent>
-      <p className={styles.demo}><strong>Demo verileri</strong> · Örnek kampüs kayıtları. Bu ekrandaki değişiklikler sayfa/sekme değişiminde sıfırlanır. Veritabanına yazılmaz.</p>
       {children}
     </PageContent>
   </div>;
