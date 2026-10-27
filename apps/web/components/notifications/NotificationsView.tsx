@@ -11,6 +11,7 @@ import { Chips, TabPanels, Tabs } from "@/components/student-demo/Common";
 import s from "@/components/student-demo/StudentDemo.module.css";
 import { dayGroup, type DayGroup } from "@/lib/campus-voice";
 import { createClient } from "@/lib/supabase/client";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export type AppNotification = {
   id: number;
@@ -91,9 +92,12 @@ export function NotificationsView({
             <Chips label="Bildirim türü" options={["Hepsi", ...Object.values(TYPES)]} value={type} onChange={setType} />
             <TabPanels id={tabsId} options={TABS} value={tab}>
               {!visible.length && (
-                <p className="p-4 text-muted" role="status">
-                  {tab === "Okunmamış" ? "Okunmamış bildirim yok." : items.length ? "Bu filtreye uygun bildirim yok." : "Henüz bildirimin yok."}
-                </p>
+                <EmptyState
+                  icon={<BellIcon size={22} />}
+                  title={tab === "Okunmamış" ? "Okunmamış bildirim yok." : items.length ? "Bu filtreye uygun bildirim yok." : "Henüz bildirimin yok."}
+                  hint={items.length ? undefined : "Bildirimlerinin durumu değişince ve önerine yanıt gelince burada görürsün."}
+                  action={items.length ? undefined : { href: "/bildir", label: "Sorun bildir" }}
+                />
               )}
               {GROUPS.map((group) => {
                 const grouped = visible.filter((n) => dayGroup(n.createdAt, now) === group);

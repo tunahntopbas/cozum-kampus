@@ -16,6 +16,8 @@ import { statusMeta } from "@/lib/status";
 import { createClient } from "@/lib/supabase/client";
 import type { StaffMember } from "./ReportsView";
 import type { AdminData, PanelReport } from "./types";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { UsersThree as UsersThreeIcon_, Package as PackageIcon_ } from "@phosphor-icons/react";
 
 export type UnitRequest = {
   id: number;
@@ -208,7 +210,7 @@ export function UnitsView({
             </article>
           ))
         ) : (
-          <p className={s.empty}>Bu birimde kayıtlı personel yok.</p>
+          <EmptyState icon={<UsersThreeIcon_ size={22} />} title="Bu birimde kayıtlı personel yok." hint="Personel hesabı bu birime bağlanınca ekip burada görünür." />
         )}
         {assigning && (
           <form aria-label="İş ataması" className={`${s.note} ${s.stack}`} onSubmit={assign}>
@@ -284,7 +286,7 @@ export function UnitsView({
             ))}
           </ul>
         ) : (
-          <p className={s.empty}>Bekleyen malzeme talebi yok.</p>
+          <EmptyState icon={<PackageIcon_ size={22} />} title="Bekleyen malzeme talebi yok." hint="Personel depodan malzeme isteyince onayın burada beklenir." />
         )}
       </Glass>
     </>

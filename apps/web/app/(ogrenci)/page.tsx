@@ -50,7 +50,13 @@ async function CampusMap() {
 
 export default function MapPage() {
   return (
-    <Suspense fallback={<p className="relative z-10 p-8 text-sm text-muted">Harita yükleniyor</p>}>
+    <Suspense
+      fallback={
+        <div role="status" className="fixed inset-0 grid place-items-center bg-[#eef1f5] motion-safe:animate-pulse">
+          <span className="rounded-full border border-hairline bg-white px-4 py-2 text-sm font-medium text-muted">Harita yükleniyor</span>
+        </div>
+      }
+    >
       <CampusMap />
     </Suspense>
   );

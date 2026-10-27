@@ -2,7 +2,7 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { CaretUpIcon, SparkleIcon } from "@phosphor-icons/react";
+import { CaretUpIcon, LightbulbIcon, SparkleIcon } from "@phosphor-icons/react";
 import { PageContent } from "@/components/layout/PageContent";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
@@ -12,6 +12,7 @@ import { Chips, TabPanels, Tabs } from "@/components/student-demo/Common";
 import s from "@/components/student-demo/StudentDemo.module.css";
 import { findSimilar } from "@/lib/campus-voice";
 import { createClient } from "@/lib/supabase/client";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export type StudentSuggestion = {
   id: number;
@@ -142,9 +143,7 @@ export function SuggestionsView({
             <Chips label="Öneri kategorileri" options={["Tümü", ...CATEGORIES]} value={filter} onChange={setFilter} />
             <TabPanels id={tabsId} options={TABS} value={tab}>
               {!visible.length && (
-                <p className="p-4 text-muted" role="status">
-                  Bu kategoride öneri yok. İlk öneriyi sen yazabilirsin.
-                </p>
+                <EmptyState icon={<LightbulbIcon size={22} />} title="Bu kategoride öneri yok." hint="İlk öneriyi sen yaz; diğer öğrenciler oy verebilir." />
               )}
               {visible.map((r) => (
                 <article

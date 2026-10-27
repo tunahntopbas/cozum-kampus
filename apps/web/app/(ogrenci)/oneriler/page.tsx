@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { SuggestionsView, type CampusScorecard, type StudentSuggestion } from "@/components/campus-voice/SuggestionsView";
 import { createServerClient } from "@/lib/supabase/server";
 
@@ -71,7 +72,7 @@ async function Suggestions() {
 
 export default function SuggestionsPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Öneriler yükleniyor" variant="split" standalone />}>
       <Suggestions />
     </Suspense>
   );

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { StaffJobsView } from "@/components/staff/StaffJobsView";
 import type { StaffJob } from "@/components/staff/types";
 import { floorLabel, toMapReport, type ReportRow } from "@/lib/campus";
@@ -76,7 +77,7 @@ async function Jobs() {
 
 export default function StaffJobsPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="İşler yükleniyor" stats={4} variant="split" />}>
       <Jobs />
     </Suspense>
   );

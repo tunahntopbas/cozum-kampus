@@ -14,6 +14,8 @@ import { createClient } from "@/lib/supabase/client";
 import { uploadReportImage } from "@/lib/upload";
 import s from "@/components/staff-demo/Staff.module.css";
 import type { StaffJob } from "./types";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { CheckCircle as CheckCircleIcon_ } from "@phosphor-icons/react";
 
 type Props = {
   staffId: string;
@@ -153,9 +155,7 @@ export function StaffJobsView({ staffId, staffName, unitName, jobs, completedTod
               <h2>Rota sırası</h2>
             </div>
             {!jobs.length && (
-              <p role="status" className="p-3 text-muted">
-                Biriminde açık iş yok.
-              </p>
+              <EmptyState icon={<CheckCircleIcon_ size={22} />} title="Biriminde açık iş yok." hint="Yeni bildirim birimine yönlendirilince burada sıraya girer." />
             )}
             <ol className={s.list} aria-label="Bugünkü işler">
               {jobs.map((j, index) => (

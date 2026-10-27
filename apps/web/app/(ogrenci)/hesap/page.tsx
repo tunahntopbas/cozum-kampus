@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { PageContent } from "@/components/layout/PageContent";
 import { PageHeader } from "@/components/layout/PageHeader";
 import type { Role } from "@/lib/auth";
@@ -96,7 +97,7 @@ export default function AccountPage() {
   return (
     <PageContent>
       <PageHeader title="Hesabım" description="Profil bilgilerin ve hesabınla ilgili işlemler." />
-      <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+      <Suspense fallback={<PageSkeleton label="Hesabın yükleniyor" variant="form" />}>
         <Account />
       </Suspense>
     </PageContent>

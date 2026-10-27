@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { PageContent } from "@/components/layout/PageContent";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { MyReportsView } from "@/components/my-reports/MyReportsView";
@@ -100,7 +101,7 @@ export default function MyReportsPage({ searchParams }: PageProps<"/bildirimleri
     <div className={s.root}>
       <PageContent>
         <PageHeader title="Bildirimlerim" description="Açtığın ve desteklediğin bildirimlerin durumu, çözülene kadar burada." />
-        <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+        <Suspense fallback={<PageSkeleton label="Bildirimlerin yükleniyor" stats={3} variant="split" standalone />}>
           <MyReports searchParams={searchParams} />
         </Suspense>
       </PageContent>

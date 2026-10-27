@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { MaterialsView } from "@/components/staff/MaterialsView";
 import { isActiveJob, neededMaterials, REQUEST_COLUMNS, toRequest, type RequestRow, type StockItem } from "@/lib/staff";
 import type { ReportStatus } from "@/lib/status";
@@ -37,7 +38,7 @@ async function Materials() {
 
 export default function StaffMaterialsPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Malzeme yükleniyor" stats={4} variant="split" />}>
       <Materials />
     </Suspense>
   );

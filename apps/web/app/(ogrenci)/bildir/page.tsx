@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { PageContent } from "@/components/layout/PageContent";
 import { PageHeader } from "@/components/layout/PageHeader";
 import type { QrPlace } from "@/components/report/LocationPicker";
@@ -46,7 +47,7 @@ export default function ReportPage({ searchParams }: PageProps<"/bildir">) {
         title="Sorun bildir"
         description="Bir fotoğraf yeterli. Kategoriyi, aciliyeti ve sorumlu birimi yapay zeka belirler."
       />
-      <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+      <Suspense fallback={<PageSkeleton label="Form hazırlanıyor" variant="form" />}>
         <Composer searchParams={searchParams} />
       </Suspense>
     </PageContent>
