@@ -337,7 +337,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   ```
 - [x] **Step 2:** `pnpm --filter web test` → FAIL.
 - [x] **Step 3:** Yaz. `/giris`: e-posta alanı, `isAllowedEmail` başarısızsa "Okul e-posta adresinle giriş yapabilirsin." ; `signInWithOtp({ email, options: { emailRedirectTo: <origin>/auth/callback?next=... } })`; ardından 6 haneli kod alanı (`verifyOtp`, type `email`). Demo hesapları (`demo.cozumkampus.app`) arayüz kontrolünü geçemez; onlar için `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS`'e yerelde `demo.cozumkampus.app` eklenir (veritabanı tarafı `allowed_emails` ile zaten izinli).
-- [ ] **Step 4:** (Testler PASS; elle doğrulama Supabase projesi açılınca bekliyor) Testler PASS. Elle doğrula: okul e-postasıyla kod gelir, giriş sonrası `/hesap` adı gösterir; öğrenci hesabıyla `/yonetim` → `/`'e döner; çıkışta `/giris`.
+- [x] **Step 4:** Testler PASS. Elle doğrula: okul e-postasıyla kod gelir, giriş sonrası `/hesap` adı gösterir; öğrenci hesabıyla `/yonetim` → `/`'e döner; çıkışta `/giris`.
 - [x] **Step 5:** Commit: `feat(web): Supabase auth with school email OTP and role-gated routes`
 
 ---
