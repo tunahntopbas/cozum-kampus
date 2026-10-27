@@ -25,3 +25,10 @@ export function requiredRole(pathname: string): Role[] | null {
   if (under(pathname, "/personel")) return ["staff", "admin"];
   return ALL_ROLES;
 }
+
+// Staff and admin have their own shells; the student map at "/" is not their home.
+export function homeFor(role: Role): string {
+  if (role === "staff") return "/personel";
+  if (role === "admin") return "/yonetim";
+  return "/";
+}

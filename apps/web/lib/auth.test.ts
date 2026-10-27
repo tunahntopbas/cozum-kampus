@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { isAllowedEmail, requiredRole } from "./auth";
+import { homeFor, isAllowedEmail, requiredRole } from "./auth";
 
 const D = "ogr.sakarya.edu.tr,sakarya.edu.tr";
 
@@ -59,5 +59,14 @@ describe("requiredRole", () => {
 
   it("does not treat lookalike prefixes as admin pages", () => {
     expect(requiredRole("/yonetimx")).toEqual(["student", "staff", "admin", "security"]);
+  });
+});
+
+describe("homeFor", () => {
+  it("sends each role to its own start page", () => {
+    expect(homeFor("staff")).toBe("/personel");
+    expect(homeFor("admin")).toBe("/yonetim");
+    expect(homeFor("student")).toBe("/");
+    expect(homeFor("security")).toBe("/");
   });
 });
