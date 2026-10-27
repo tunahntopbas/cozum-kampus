@@ -9,7 +9,7 @@ export default function LoginPage() {
       <Glass className="w-full max-w-sm p-8">
         <Logo />
         <h1 className="mt-6 text-xl font-semibold">Giriş yap</h1>
-        <p className="mt-1 text-sm text-muted">Okul e-posta adresine tek kullanımlık bir kod göndereceğiz.</p>
+        <p className="mt-1 text-sm text-muted">Okul e-posta adresinle giriş yap.</p>
         <Suspense>
           <LoginForm />
         </Suspense>

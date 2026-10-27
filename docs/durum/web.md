@@ -20,6 +20,8 @@ Web hattı (Task 6, 7, 8) kod olarak tamam. Elle doğrulamalar (Task 7 giriş, T
 
 - 2026-10-27 Task 6: Next.js 16.4 + Tailwind v4 iskeleti, `@theme` token'ları, Glass/Button/StatusPill/Switch/Logo, öğrenci üst menüsü, tüm rotalar için yer tutucu sayfalar. Testler: `pnpm --filter web test` 6/6.
 - 2026-10-27 Task 7: Supabase istemcileri (`lib/supabase/{client,server,env}.ts`), `proxy.ts` (oturum yenileme + rol kontrolü), `/giris` (OTP kod + bağlantı), `/auth/callback`, `/hesap` (profil + çıkış), `safeNext` (açık yönlendirme koruması). Testler 20/20.
+- 2026-10-27 Port 3100 (3000 başka bir projede kullanılıyordu): `pnpm dev:web` artık `http://localhost:3100`.
+- 2026-10-27 `/giris` e-posta + şifre ile giriş (varsayılan) + e-posta koduyla giriş (ikincil). Test: `app/giris/LoginForm.test.tsx`. Testler 30/30.
 - 2026-10-27 Task 8: `lib/image.ts` (`fitWithin`, `isSupportedImageType`, `prepareImage`: 1600 px'e küçültme + canvas ile yeniden kodlama, EXIF silinir), `lib/upload.ts` (`uploadReportImage`, bucket `report-media`, yol `{userId}/{uuid}.jpg`). Testler 26/26.
 
 ## Engeller
@@ -39,11 +41,13 @@ Web hattı (Task 6, 7, 8) kod olarak tamam. Elle doğrulamalar (Task 7 giriş, T
 - Next 16'da `middleware.ts` yerine `proxy.ts` kullanılıyor (aynı işlev, yeni ad).
 - Rol kontrolü proxy'de `profiles.role` sorgusuyla yapılıyor (sayfa başına bir ek sorgu). Profil satırı yoksa `student` sayılır.
 - `isSupportedImageType` eklendi: yalnızca JPEG/PNG/WebP. HEIC reddedilir (iOS Safari dosya seçicide zaten JPEG'e çevirir).
+- Şifreli giriş eklendi: Supabase'in yerleşik e-posta servisi yeni projelerde yalnızca ekip üyelerine posta gönderiyor ve demo adresleri gerçek değil; OTP demo için güvenilir değil. Demo hesapları SQL ile şifreli oluşturuldu (bkz. db.md). Öğrenci kendi kaydı için ileride özel SMTP gerekiyor.
+- Geliştirme portu 3100.
 - `/giris` hem 6 haneli kod hem e-posta bağlantısını destekliyor.
 
 ## Diğer hatlara notlar
 
 (Arayüz değişiklikleri, ihtiyaçlar)
 
-- DB hattı: Supabase Auth > Email Templates > Magic Link şablonuna `{{ .Token }}` ekleyin ki e-postada 6 haneli kod da gelsin. Auth > URL Configuration'a `http://localhost:3000/auth/callback` ekleyin.
+- DB hattı: Supabase Auth > Email Templates > Magic Link şablonuna `{{ .Token }}` ekleyin ki e-postada 6 haneli kod da gelsin. Auth > URL Configuration'a `http://localhost:3100/auth/callback` ekleyin (yalnızca kodla/bağlantıyla giriş için gerekli).
 - Tüm hatlar: pnpm workspace kökte; `apps/web` içinde ayrı `pnpm-workspace.yaml` yok, bağımlılıkları kökten `pnpm --filter web add ...` ile ekleyin.
