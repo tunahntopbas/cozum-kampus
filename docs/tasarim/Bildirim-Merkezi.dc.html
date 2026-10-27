@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Bildirimler</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app *{box-sizing:border-box}
+.app{font-family:'Geist',system-ui,sans-serif;color:#0F2A5C;-webkit-font-smoothing:antialiased}
+.app p,.app h1,.app h2,.app h3{margin:0;text-wrap:pretty}
+.app button,.app textarea,.app input{font-family:inherit}
+.app button{cursor:pointer}
+.app a{text-decoration:none}
+.app ol,.app ul,.app dl{list-style:none;margin:0;padding:0}
+.app dd{margin:0}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(15,42,92,0.12);border-radius:16px;box-shadow:0 8px 32px rgba(15,42,92,0.14)}
+.t{transition:background-color 300ms cubic-bezier(0.22,1,0.36,1),transform 300ms cubic-bezier(0.22,1,0.36,1),opacity 300ms cubic-bezier(0.22,1,0.36,1)}
+.t:active{transform:scale(0.98)}
+.btn-ink:hover{background:#1B3F85 !important}
+.ghost:hover{background:#E8EFFA !important}
+.item:hover{background:#F7FAFE !important}
+.app :focus-visible{outline:2px solid #1F5FD6;outline-offset:2px}
+.field:focus-within{outline:2px solid #1F5FD6;outline-offset:2px}
+.skip{position:absolute;left:16px;top:-48px;z-index:20;padding:8px 12px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500;border-radius:8px}
+.skip:focus{top:16px}
+.pill{padding:2px 8px;border-radius:9999px;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.lbl{font-size:14px;line-height:20px;font-weight:600}
+@media (prefers-reduced-motion:reduce){.t{transition:none}.t:active{transform:none}}
+@media (max-width:960px){
+.stage{display:none}
+.topbar{position:static !important;transform:none !important;margin:16px !important;flex-wrap:wrap}
+.content{padding-top:0 !important}
+.cols{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div class="app" style="position:relative;width:100%;min-height:1240px;overflow:hidden;background:#E9EEF5">
+  <a class="skip" href="#icerik">Ana içeriğe geç</a>
+  <div class="stage" aria-hidden="true" style="position:absolute;top:0;left:50%;margin-left:-720px;width:1440px;height:1240px;overflow:hidden">
+    <svg width="1440" height="1240" viewBox="0 0 1440 1240" style="display:block">
+      <rect width="1440" height="1240" fill="#E9EEF5"/>
+      <rect x="40" y="880" width="380" height="240" rx="16" fill="#D9E8DF"/>
+      <rect x="1140" y="100" width="260" height="180" rx="12" fill="#D9E8DF"/>
+      <g fill="none" stroke="#D2DBE8" stroke-width="20" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 780 C400 768 900 794 1460 756"/><path d="M470 -20 C462 300 482 740 470 1260"/><path d="M780 -20 C772 220 796 740 786 1260"/><path d="M1100 -20 C1092 300 1112 740 1100 1260"/></g>
+      <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 780 C400 768 900 794 1460 756"/><path d="M470 -20 C462 300 482 740 470 1260"/><path d="M780 -20 C772 220 796 740 786 1260"/><path d="M1100 -20 C1092 300 1112 740 1100 1260"/></g>
+      <g fill="#DAE2EE" stroke="#BAC7DA" stroke-width="1"><rect x="510" y="50" width="120" height="80" rx="4"/><rect x="660" y="60" width="90" height="70" rx="4"/><rect x="830" y="60" width="130" height="90" rx="4"/><rect x="990" y="70" width="80" height="70" rx="4"/><rect x="520" y="540" width="150" height="90" rx="4"/><rect x="830" y="560" width="150" height="100" rx="4"/><rect x="1150" y="850" width="140" height="90" rx="4"/></g>
+    </svg>
+  </div>
+  <nav class="topbar glass" aria-label="Ana gezinme" style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px;z-index:5">
+    <a class="ghost t" href="Main.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></svg>Harita</a>
+    <a class="ghost t" href="Bildirimlerim.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>Bildirimlerim</a>
+    <a class="ghost t" href="Oneriler.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z"/></svg>Öneriler</a>
+    <span style="width:1px;height:24px;background:#DCE4F0;display:block"></span>
+    <a class="btn-ink t" href="Bildir.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>Bildir</a>
+    <a class="ghost t" href="Bildirim-Merkezi.dc.html" aria-label="Bildirimler, 3 yeni" aria-current="page" style="position:relative;width:36px;height:36px;border-radius:8px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"/></svg><span style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:9999px;background:#B91C1C;border:2px solid #FFFFFF;box-sizing:content-box;display:block"></span></a>
+    <a class="ghost t" href="Hesap.dc.html" aria-label="Profil"  style="width:36px;height:36px;border-radius:8px;background:transparent;color:#0F2A5C;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg></a>
+  </nav>
+  <main id="icerik" class="content" style="position:relative;z-index:3;max-width:1200px;margin:0 auto;padding:96px 24px 40px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="font-size:30px;line-height:36px;font-weight:600">Bildirimler</h1>
+      <p style="font-size:16px;line-height:24px;color:#566486">Bildirimlerinin durumu, yönetim yanıtları ve kampüs uyarıları burada toplanır.</p>
+    </div>
+    <div class="cols" style="display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start">
+      <section class="glass" aria-label="Bildirim listesi" style="display:flex;flex-direction:column;gap:8px;padding:8px">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="width:240px"><div role="tablist" style="display:flex;gap:4px;padding:4px;border-radius:8px;background:#E8EFFA"><button type="button" role="tab" aria-selected="true" class="t" style="flex:1;padding:4px 12px;border:0;border-radius:4px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600">Tümü</button><button type="button" role="tab" aria-selected="false" class="ghost t" style="flex:1;padding:4px 12px;border:0;border-radius:4px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500">Okunmamış <span class="mono">3</span></button></div></div>
+            <button type="button" class="ghost t" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M149.61,85.71l-89.6,88a8,8,0,0,1-11.22,0L10.39,136a8,8,0,1,1,11.22-11.41L54.4,156.79l84-82.5a8,8,0,1,1,11.22,11.42Zm96.1-11.32a8,8,0,0,0-11.32-.1l-84,82.5-18.83-18.5a8,8,0,0,0-11.21,11.42l24.43,24a8,8,0,0,0,11.22,0l89.6-88A8,8,0,0,0,245.71,74.39Z"/></svg>Tümünü okundu işaretle</button>
+          </div>
+          <div role="group" aria-label="Tür" style="display:flex;flex-wrap:wrap;gap:8px"><button type="button" class="t" aria-pressed="true" style="padding:4px 12px;border:1px solid #0F2A5C;border-radius:9999px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500">Hepsi</button><button type="button" class="ghost t" aria-pressed="false" style="padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500">Durum değişimleri</button><button type="button" class="ghost t" aria-pressed="false" style="padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500">Yanıtlar</button><button type="button" class="ghost t" aria-pressed="false" style="padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500">Uyarılar</button></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h2 style="padding:8px 16px 0;font-size:12px;line-height:16px;font-weight:600;color:#566486">Bugün</h2>
+          <ol style="display:flex;flex-direction:column;gap:2px">
+          <li class="item t" style="display:flex;gap:12px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <span style="width:40px;height:40px;border-radius:8px;background:#FEF3C7;color:#92400E;display:flex;align-items:center;justify-content:center;flex:none"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></svg></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><p style="font-size:14px;line-height:20px;font-weight:600">Bildirimin işleme alındı</p><span class="mono" style="font-size:12px;line-height:16px;color:#566486;flex:none;margin-top:2px">10:40</span></div>
+              <p style="font-size:14px;line-height:20px;color:#566486">Koridor lambası yanmıyor: Yapı İşleri bir teknisyen atadı.</p>
+              <a class="t" href="Bildirimlerim.dc.html" style="align-self:flex-start;color:#1F5FD6;font-size:14px;line-height:20px;font-weight:600;text-decoration:underline">Bildirimi aç</a>
+            </div>
+            <span aria-label="Okunmadı" role="img" style="width:8px;height:8px;border-radius:9999px;background:#1F5FD6;display:block;margin-top:6px"></span>
+          </li><li class="item t" style="display:flex;gap:12px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <span style="width:40px;height:40px;border-radius:8px;background:#DCFCE7;color:#166534;display:flex;align-items:center;justify-content:center;flex:none"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><p style="font-size:14px;line-height:20px;font-weight:600">Sorun çözüldü mü?</p><span class="mono" style="font-size:12px;line-height:16px;color:#566486;flex:none;margin-top:2px">09:30</span></div>
+              <p style="font-size:14px;line-height:20px;color:#566486">Kütüphane 2. kat internet kesintisi için çözüm fotoğrafı yüklendi, yapay zeka doğruladı. Sen de onaylarsan kayıt kapanır.</p>
+              <div style="display:flex;flex-direction:column;gap:12px;margin-top:8px;padding:12px;border-radius:8px;background:#EEF3FB">
+                <div style="display:flex;gap:8px">
+                  <div role="img" aria-label="Önce fotoğrafı yer tutucusu" style="flex:1;height:72px;border-radius:4px;background:#D5DEEC;color:#566486;display:flex;align-items:center;justify-content:center;position:relative"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM48,48H208v77.38l-24.69-24.7a16,16,0,0,0-22.62,0L53.37,208H48ZM208,208H76l96-96,36,36v60ZM96,120A24,24,0,1,0,72,96,24,24,0,0,0,96,120Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,96,88Z"/></svg><span style="position:absolute;left:4px;bottom:4px;padding:0 8px;border-radius:9999px;background:#FFFFFF;font-size:12px;line-height:16px;font-weight:600;color:#0F2A5C">Önce</span></div>
+                  <div role="img" aria-label="Sonra fotoğrafı yer tutucusu" style="flex:1;height:72px;border-radius:4px;background:#D5DEEC;color:#566486;display:flex;align-items:center;justify-content:center;position:relative"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM48,48H208v77.38l-24.69-24.7a16,16,0,0,0-22.62,0L53.37,208H48ZM208,208H76l96-96,36,36v60ZM96,120A24,24,0,1,0,72,96,24,24,0,0,0,96,120Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,96,88Z"/></svg><span style="position:absolute;left:4px;bottom:4px;padding:0 8px;border-radius:9999px;background:#FFFFFF;font-size:12px;line-height:16px;font-weight:600;color:#0F2A5C">Sonra</span></div>
+                </div>
+                <div style="display:flex;gap:8px">
+                  <button type="button" class="btn-ink t" style="padding:8px 12px;border:0;border-radius:8px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:600">Evet, çözüldü</button>
+                  <button type="button" class="ghost t" style="padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600">Hâlâ sorun var</button>
+                </div>
+              </div>
+            </div>
+            <span aria-label="Okunmadı" role="img" style="width:8px;height:8px;border-radius:9999px;background:#1F5FD6;display:block;margin-top:6px"></span>
+          </li><li class="item t" style="display:flex;gap:12px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <span style="width:40px;height:40px;border-radius:8px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center;flex:none"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M168,112a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,112Zm-8,24H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm72-8A104,104,0,0,1,79.12,219.82L45.07,231.17a16,16,0,0,1-20.24-20.24l11.35-34.05A104,104,0,1,1,232,128Zm-16,0A88,88,0,1,0,51.81,172.06a8,8,0,0,1,.66,6.54L40,216,77.4,203.53a7.85,7.85,0,0,1,2.53-.42,8,8,0,0,1,4,1.08A88,88,0,0,0,216,128Z"/></svg></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><p style="font-size:14px;line-height:20px;font-weight:600">Önerine yönetim yanıt verdi</p><span class="mono" style="font-size:12px;line-height:16px;color:#566486;flex:none;margin-top:2px">08:20</span></div>
+              <p style="font-size:14px;line-height:20px;color:#566486">Kütüphane final haftasında sabaha kadar açık kalsın: pilot uygulama başlıyor.</p>
+              <a class="t" href="Bildirimlerim.dc.html" style="align-self:flex-start;color:#1F5FD6;font-size:14px;line-height:20px;font-weight:600;text-decoration:underline">Yanıtı oku</a>
+            </div>
+            <span aria-label="Okunmadı" role="img" style="width:8px;height:8px;border-radius:9999px;background:#1F5FD6;display:block;margin-top:6px"></span>
+          </li>
+          </ol>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h2 style="padding:8px 16px 0;font-size:12px;line-height:16px;font-weight:600;color:#566486">Dün</h2>
+          <ol style="display:flex;flex-direction:column;gap:2px">
+          <li class="item t" style="display:flex;gap:12px;padding:16px;border-radius:8px;background:transparent">
+            <span style="width:40px;height:40px;border-radius:8px;background:#E5E7EB;color:#374151;display:flex;align-items:center;justify-content:center;flex:none"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,112a32.05,32.05,0,0,0-30.69,23l-42.21-6a8,8,0,0,1-4.95-2.71L94.43,84.55A32,32,0,1,0,72,87v82a32,32,0,1,0,16,0V101.63l30,35a24,24,0,0,0,14.83,8.14l44,6.28A32,32,0,1,0,208,112ZM64,56A16,16,0,1,1,80,72,16,16,0,0,1,64,56ZM96,200a16,16,0,1,1-16-16A16,16,0,0,1,96,200Zm112-40a16,16,0,1,1,16-16A16,16,0,0,1,208,160Z"/></svg></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><p style="font-size:14px;line-height:20px;font-weight:600">Bildirimin başkalarıyla birleştirildi</p><span class="mono" style="font-size:12px;line-height:16px;color:#566486;flex:none;margin-top:2px">17:05</span></div>
+              <p style="font-size:14px;line-height:20px;color:#566486">Koridor lambası yanmıyor kaydın, 4 benzer bildirimle tek kayıtta toplandı. Artık 5 kişi takip ediyor.</p>
+              
+            </div>
+            <span style="width:8px;display:block"></span>
+          </li><li class="item t" style="display:flex;gap:12px;padding:16px;border-radius:8px;background:transparent">
+            <span style="width:40px;height:40px;border-radius:8px;background:#FEE2E2;color:#991B1B;display:flex;align-items:center;justify-content:center;flex:none"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M255.59,189.47a8,8,0,0,0-10.12-5.06l-17.42,5.81-28.9-57.8A8,8,0,0,0,192,128H112V104h56a8,8,0,0,0,0-16H112V79a32,32,0,1,0-16,0V89.81A72,72,0,0,0,112,232c33.52,0,63.69-22.71,71.75-54a8,8,0,1,0-15.5-4C162.09,198,137.91,216,112,216A56,56,0,0,1,96,106.34V136a8,8,0,0,0,8,8h83.05l29.79,59.58a8,8,0,0,0,9.69,4l24-8A8,8,0,0,0,255.59,189.47ZM88,48a16,16,0,1,1,16,16A16,16,0,0,1,88,48Z"/></svg></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><p style="font-size:14px;line-height:20px;font-weight:600">Erişilebilirlik uyarısı</p><span class="mono" style="font-size:12px;line-height:16px;color:#566486;flex:none;margin-top:2px">14:12</span></div>
+              <p style="font-size:14px;line-height:20px;color:#566486">Bilgisayar ve Bilişim Bilimleri Fakültesi asansörü arızalı. Tahmini onarım yarın öğleden önce.</p>
+              <a class="t" href="Bildirimlerim.dc.html" style="align-self:flex-start;color:#1F5FD6;font-size:14px;line-height:20px;font-weight:600;text-decoration:underline">Alternatif rotayı gör</a>
+            </div>
+            <span style="width:8px;display:block"></span>
+          </li>
+          </ol>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <h2 style="padding:8px 16px 0;font-size:12px;line-height:16px;font-weight:600;color:#566486">Daha eski</h2>
+          <ol style="display:flex;flex-direction:column;gap:2px">
+          <li class="item t" style="display:flex;gap:12px;padding:16px;border-radius:8px;background:transparent">
+            <span style="width:40px;height:40px;border-radius:8px;background:#E5E7EB;color:#374151;display:flex;align-items:center;justify-content:center;flex:none"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M158.66,196.44l-32,48a8,8,0,1,1-13.32-8.88l32-48a8,8,0,0,1,13.32,8.88ZM232,92a76.08,76.08,0,0,1-76,76H132.28l-29.62,44.44a8,8,0,1,1-13.32-8.88L113.05,168H76A52,52,0,0,1,76,64a53.26,53.26,0,0,1,8.92.76A76.08,76.08,0,0,1,232,92Zm-16,0A60.06,60.06,0,0,0,96,88.46a8,8,0,0,1-16-.92q.21-3.66.77-7.23A38.11,38.11,0,0,0,76,80a36,36,0,0,0,0,72h80A60.07,60.07,0,0,0,216,92Z"/></svg></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+              <div style="display:flex;justify-content:space-between;gap:12px"><p style="font-size:14px;line-height:20px;font-weight:600">Yapay zeka tahmini: yağış</p><span class="mono" style="font-size:12px;line-height:16px;color:#566486;flex:none;margin-top:2px">25 Eki</span></div>
+              <p style="font-size:14px;line-height:20px;color:#566486">Yarın yağış bekleniyor. Yurt yolu ve açık otopark girişinde kaygan zemin bildirimleri artabilir.</p>
+              
+            </div>
+            <span style="width:8px;display:block"></span>
+          </li>
+          </ol>
+        </div>
+      </section>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <section class="glass" aria-label="Bildirim tercihleri" style="display:flex;flex-direction:column;gap:16px;padding:24px">
+          <div><h2 style="font-size:20px;line-height:28px;font-weight:600">Bildirim tercihleri</h2><p style="font-size:14px;line-height:20px;color:#566486">Neyi, nereden almak istediğini seç.</p></div>
+          <div>
+            <h3 style="font-size:12px;line-height:16px;font-weight:600;color:#566486">Kanallar</h3>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #DCE4F0;"><div><p style="font-size:14px;line-height:20px;font-weight:600">Uygulama içi</p><p style="font-size:12px;line-height:16px;color:#566486">Bu sayfada ve zil simgesinde</p></div><button type="button" role="switch" aria-checked="true" aria-label="Uygulama içi" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#0F2A5C;display:flex;justify-content:flex-end;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #DCE4F0;"><div><p style="font-size:14px;line-height:20px;font-weight:600">E-posta</p><p style="font-size:12px;line-height:16px;color:#566486">Okul e-postana özet gönderilir</p></div><button type="button" role="switch" aria-checked="true" aria-label="E-posta" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#0F2A5C;display:flex;justify-content:flex-end;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;"><div><p style="font-size:14px;line-height:20px;font-weight:600">Tarayıcı bildirimi</p><p style="font-size:12px;line-height:16px;color:#566486">Sekme kapalıyken anlık uyarı</p></div><button type="button" role="switch" aria-checked="false" aria-label="Tarayıcı bildirimi" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#AEBBD2;display:flex;justify-content:flex-start;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button></div>
+          </div>
+          <div>
+            <h3 style="font-size:12px;line-height:16px;font-weight:600;color:#566486">Türler</h3>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #DCE4F0;"><div><p style="font-size:14px;line-height:20px;font-weight:600">Durum değişimleri</p><p style="font-size:12px;line-height:16px;color:#566486">Bildirimlerinin her adımında</p></div><button type="button" role="switch" aria-checked="true" aria-label="Durum değişimleri" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#0F2A5C;display:flex;justify-content:flex-end;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #DCE4F0;"><div><p style="font-size:14px;line-height:20px;font-weight:600">Yönetim yanıtları</p><p style="font-size:12px;line-height:16px;color:#566486">Önerilerine gelen cevaplar</p></div><button type="button" role="switch" aria-checked="true" aria-label="Yönetim yanıtları" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#0F2A5C;display:flex;justify-content:flex-end;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #DCE4F0;"><div><p style="font-size:14px;line-height:20px;font-weight:600">Erişilebilirlik uyarıları</p><p style="font-size:12px;line-height:16px;color:#566486">Asansör ve rampa arızaları</p></div><button type="button" role="switch" aria-checked="true" aria-label="Erişilebilirlik uyarıları" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#0F2A5C;display:flex;justify-content:flex-end;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;"><div><p style="font-size:14px;line-height:20px;font-weight:600">Kampüs ve hava uyarıları</p><p style="font-size:12px;line-height:16px;color:#566486">Yapay zekanın öngörüleri</p></div><button type="button" role="switch" aria-checked="false" aria-label="Kampüs ve hava uyarıları" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#AEBBD2;display:flex;justify-content:flex-start;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:16px;border-top:1px solid #DCE4F0">
+            <p class="lbl">Sessiz saatler</p>
+            <div class="field" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF"><svg width="20" height="20" viewBox="0 0 256 256" fill="#566486" aria-hidden="true" style="flex:none;"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"/></svg><p class="mono" style="font-size:14px;line-height:20px;font-weight:500">23:00 – 08:00</p></div>
+            <p style="font-size:12px;line-height:16px;color:#566486">Acil durum ve güvenlik uyarıları sessiz saatlerde de gelir.</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

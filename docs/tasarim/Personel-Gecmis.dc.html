@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Personel geçmişi</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app *{box-sizing:border-box}
+.app{font-family:'Geist',system-ui,sans-serif;color:#0F2A5C;-webkit-font-smoothing:antialiased}
+.app p,.app h1,.app h2,.app h3{margin:0;text-wrap:pretty}
+.app button,.app textarea,.app input{font-family:inherit}
+.app button{cursor:pointer}
+.app a{text-decoration:none}
+.app ol,.app ul,.app dl{list-style:none;margin:0;padding:0}
+.app dd{margin:0}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(15,42,92,0.12);border-radius:16px;box-shadow:0 8px 32px rgba(15,42,92,0.14)}
+.t{transition:background-color 300ms cubic-bezier(0.22,1,0.36,1),transform 300ms cubic-bezier(0.22,1,0.36,1),opacity 300ms cubic-bezier(0.22,1,0.36,1)}
+.t:active{transform:scale(0.98)}
+.btn-ink:hover{background:#1B3F85 !important}
+.ghost:hover{background:#E8EFFA !important}
+.item:hover{background:#F7FAFE !important}
+.app :focus-visible{outline:2px solid #1F5FD6;outline-offset:2px}
+.field:focus-within{outline:2px solid #1F5FD6;outline-offset:2px}
+.skip{position:absolute;left:16px;top:-48px;z-index:20;padding:8px 12px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500;border-radius:8px}
+.skip:focus{top:16px}
+.pill{padding:2px 8px;border-radius:9999px;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.lbl{font-size:14px;line-height:20px;font-weight:600}
+@media (prefers-reduced-motion:reduce){.t{transition:none}.t:active{transform:none}}
+@media (max-width:960px){
+.stage{display:none}
+.topbar{position:static !important;transform:none !important;margin:16px !important;flex-wrap:wrap}
+.content{padding-top:0 !important}
+.cols{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div class="app" style="position:relative;width:100%;min-height:1120px;overflow:hidden;background:#E9EEF5">
+  <a class="skip" href="#icerik">Ana içeriğe geç</a>
+  <div class="stage" aria-hidden="true" style="position:absolute;top:0;left:50%;margin-left:-720px;width:1440px;height:1120px;overflow:hidden">
+    <svg width="1440" height="1120" viewBox="0 0 1440 1120" style="display:block">
+      <rect width="1440" height="1120" fill="#E9EEF5"/>
+      <rect x="40" y="760" width="380" height="240" rx="16" fill="#D9E8DF"/>
+      <rect x="1140" y="100" width="260" height="180" rx="12" fill="#D9E8DF"/>
+      <g fill="none" stroke="#D2DBE8" stroke-width="20" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 660 C400 648 900 674 1460 636"/><path d="M470 -20 C462 300 482 620 470 1140"/><path d="M780 -20 C772 220 796 620 786 1140"/><path d="M1100 -20 C1092 300 1112 620 1100 1140"/></g>
+      <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 660 C400 648 900 674 1460 636"/><path d="M470 -20 C462 300 482 620 470 1140"/><path d="M780 -20 C772 220 796 620 786 1140"/><path d="M1100 -20 C1092 300 1112 620 1100 1140"/></g>
+      <g fill="#DAE2EE" stroke="#BAC7DA" stroke-width="1"><rect x="510" y="50" width="120" height="80" rx="4"/><rect x="660" y="60" width="90" height="70" rx="4"/><rect x="830" y="60" width="130" height="90" rx="4"/><rect x="990" y="70" width="80" height="70" rx="4"/><rect x="520" y="540" width="150" height="90" rx="4"/><rect x="830" y="560" width="150" height="100" rx="4"/><rect x="1150" y="730" width="140" height="90" rx="4"/></g>
+    </svg>
+  </div>
+  <nav class="topbar glass" aria-label="Personel gezinme" style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px;z-index:5">
+    <a class="ghost t" href="Personel-Web.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>İşler</a><button type="button" class="ghost t" aria-current="page" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:0;border-radius:8px;background:#E8EFFA;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M136,80v43.47l36.12,21.67a8,8,0,0,1-8.24,13.72l-40-24A8,8,0,0,1,120,128V80a8,8,0,0,1,16,0Zm-8-48A95.44,95.44,0,0,0,60.08,60.15C52.81,67.51,46.35,74.59,40,82V64a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H72a8,8,0,0,0,0-16H49c7.15-8.42,14.27-16.35,22.39-24.57a80,80,0,1,1,1.66,114.75,8,8,0,1,0-11,11.64A96,96,0,1,0,128,32Z"/></svg>Geçmiş</button><a class="ghost t" href="Personel-Malzeme.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg>Malzeme</a>
+  </nav>
+  <main id="icerik" class="content" style="position:relative;z-index:3;max-width:1200px;margin:0 auto;padding:96px 24px 40px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="font-size:30px;line-height:36px;font-weight:600">Geçmiş</h1>
+      <p style="font-size:16px;line-height:24px;color:#566486">Tamamladığın işler, yapay zeka doğrulaması ve öğrenci onayı.</p>
+    </div><div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px"><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Bu hafta tamamlanan</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">17</p><p style="font-size:12px;line-height:16px;color:#566486">Geçen hafta 14</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Ortalama süre</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">34 dk</p><p style="font-size:12px;line-height:16px;color:#566486">İş başına</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Yapay zeka doğrulaması</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">%94</p><p style="font-size:12px;line-height:16px;color:#566486">Fotoğraflar doğrulandı</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Yeniden açılan</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">1</p><p style="font-size:12px;line-height:16px;color:#566486">Öğrenci "hâlâ sorun var" dedi</p></div></div>
+    <div class="cols" style="display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start">
+      <section class="glass" aria-label="Tamamlanan işler" style="display:flex;flex-direction:column;gap:8px;padding:8px">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:8px">
+          <div role="group" aria-label="Dönem" style="display:flex;gap:8px"><button type="button" class="t" aria-pressed="true" style="padding:4px 12px;border:1px solid #0F2A5C;border-radius:9999px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500">Bu hafta</button><button type="button" class="ghost t" aria-pressed="false" style="padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500">Bu ay</button><button type="button" class="ghost t" aria-pressed="false" style="padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500">Tümü</button></div>
+          <div role="group" aria-label="Durum" style="display:flex;gap:8px"><button type="button" class="t" aria-pressed="true" style="padding:4px 12px;border:1px solid #0F2A5C;border-radius:9999px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500">Hepsi</button><button type="button" class="ghost t" aria-pressed="false" style="padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500">İncelemede</button><button type="button" class="ghost t" aria-pressed="false" style="padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500">Yeniden açılan</button></div>
+        </div>
+        <div aria-hidden="true" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;padding:4px 12px;font-size:12px;line-height:16px;font-weight:600;color:#566486"><span>İş</span><span>Tamamlanma</span><span>Süre</span><span>Doğrulama</span><span>Öğrenci onayı</span></div>
+        <ol aria-label="İş geçmişi" style="display:flex;flex-direction:column;gap:2px">
+          <li><button type="button" class=" t" aria-current="true" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:#EEF3FB;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Koridor lambası yanmıyor</span><span style="font-size:12px;line-height:16px;color:#566486">Mühendislik Fakültesi, 2. kat</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">Bugün 11:48</span>
+            <span class="mono" style="font-size:14px;line-height:20px">44 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#DCFCE7;color:#166534">Doğrulandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%96</span></span>
+            <span class="pill" style="background:#E5E7EB;color:#374151;justify-self:start">Bekliyor</span>
+          </button></li><li><button type="button" class="item t" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Yurt koridorunda lamba arızası</span><span style="font-size:12px;line-height:16px;color:#566486">Yurt, 3. kat</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">Bugün 09:10</span>
+            <span class="mono" style="font-size:14px;line-height:20px">31 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#DCFCE7;color:#166534">Doğrulandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%94</span></span>
+            <span class="pill" style="background:#DCFCE7;color:#166534;justify-self:start">Onayladı</span>
+          </button></li><li><button type="button" class="item t" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Kütüphane kapı kolu gevşek</span><span style="font-size:12px;line-height:16px;color:#566486">Kütüphane, giriş</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">Bugün 10:05</span>
+            <span class="mono" style="font-size:14px;line-height:20px">22 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#DCFCE7;color:#166534">Doğrulandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%91</span></span>
+            <span class="pill" style="background:#E5E7EB;color:#374151;justify-self:start">Bekliyor</span>
+          </button></li><li><button type="button" class="item t" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Yemekhane musluk damlatıyor</span><span style="font-size:12px;line-height:16px;color:#566486">Yemekhane, mutfak</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">Bugün 11:20</span>
+            <span class="mono" style="font-size:14px;line-height:20px">35 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#DCFCE7;color:#166534">Doğrulandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%89</span></span>
+            <span class="pill" style="background:#E5E7EB;color:#374151;justify-self:start">Bekliyor</span>
+          </button></li><li><button type="button" class="item t" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Derslik projeksiyon askısı</span><span style="font-size:12px;line-height:16px;color:#566486">Eğitim Fakültesi, B 105</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">26 Eki 15:30</span>
+            <span class="mono" style="font-size:14px;line-height:20px">52 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#FEF3C7;color:#92400E">İncelemede</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%71</span></span>
+            <span class="pill" style="background:#E5E7EB;color:#374151;justify-self:start">Bekliyor</span>
+          </button></li><li><button type="button" class="item t" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Merdiven korkuluğu gevşek</span><span style="font-size:12px;line-height:16px;color:#566486">Fen Edebiyat Fakültesi</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">26 Eki 10:12</span>
+            <span class="mono" style="font-size:14px;line-height:20px">47 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#DCFCE7;color:#166534">Doğrulandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%93</span></span>
+            <span class="pill" style="background:#DCFCE7;color:#166534;justify-self:start">Onayladı</span>
+          </button></li><li><button type="button" class="item t" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Yemekhane girişinde su birikintisi</span><span style="font-size:12px;line-height:16px;color:#566486">Yemekhane, giriş</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">25 Eki 14:02</span>
+            <span class="mono" style="font-size:14px;line-height:20px">28 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#DCFCE7;color:#166534">Doğrulandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%97</span></span>
+            <span class="pill" style="background:#FEE2E2;color:#991B1B;justify-self:start">Yeniden açıldı</span>
+          </button></li><li><button type="button" class="item t" style="display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 136px 120px;gap:12px;align-items:center;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;text-align:left;color:inherit">
+            <span style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;line-height:20px;font-weight:600">Otopark aydınlatması</span><span style="font-size:12px;line-height:16px;color:#566486">Açık otopark</span></span>
+            <span class="mono" style="font-size:12px;line-height:16px;color:#566486">24 Eki 17:40</span>
+            <span class="mono" style="font-size:14px;line-height:20px">1 sa 05 dk</span>
+            <span style="display:flex;align-items:center;gap:8px"><span class="pill" style="background:#DCFCE7;color:#166534">Doğrulandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486">%92</span></span>
+            <span class="pill" style="background:#DCFCE7;color:#166534;justify-self:start">Onayladı</span>
+          </button></li>
+        </ol>
+      </section>
+
+      <section class="glass" aria-label="Seçili iş" style="display:flex;flex-direction:column;gap:16px;padding:24px">
+        <div style="display:flex;flex-direction:column;gap:4px"><p class="mono" style="font-size:12px;line-height:16px;color:#566486">#2041 · Mühendislik Fakültesi, 2. kat</p><h2 style="font-size:20px;line-height:28px;font-weight:600">Koridor lambası yanmıyor</h2></div>
+        <div style="display:flex;gap:8px">
+          <div role="img" aria-label="Önce fotoğrafı yer tutucusu" style="position:relative;flex:1;height:112px;border-radius:8px;background:#D5DEEC;color:#566486;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM48,48H208v77.38l-24.69-24.7a16,16,0,0,0-22.62,0L53.37,208H48ZM208,208H76l96-96,36,36v60ZM96,120A24,24,0,1,0,72,96,24,24,0,0,0,96,120Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,96,88Z"/></svg><span style="position:absolute;left:8px;bottom:8px;padding:2px 8px;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:12px;line-height:16px;font-weight:600">Önce</span></div>
+          <div role="img" aria-label="Sonra fotoğrafı yer tutucusu" style="position:relative;flex:1;height:112px;border-radius:8px;background:#D5DEEC;color:#566486;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM48,48H208v77.38l-24.69-24.7a16,16,0,0,0-22.62,0L53.37,208H48ZM208,208H76l96-96,36,36v60ZM96,120A24,24,0,1,0,72,96,24,24,0,0,0,96,120Zm0-32a8,8,0,1,1-8,8A8,8,0,0,1,96,88Z"/></svg><span style="position:absolute;left:8px;bottom:8px;padding:2px 8px;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:12px;line-height:16px;font-weight:600">Sonra</span></div>
+        </div>
+        <ol aria-label="İş akışı" style="display:flex;flex-direction:column;gap:12px">
+          <li style="display:flex;justify-content:space-between;gap:12px"><span style="font-size:14px;line-height:20px">Yönlendirildi, Yapı İşleri</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-top:2px">09:13</span></li><li style="display:flex;justify-content:space-between;gap:12px"><span style="font-size:14px;line-height:20px">Teknisyen atandı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-top:2px">10:40</span></li><li style="display:flex;justify-content:space-between;gap:12px"><span style="font-size:14px;line-height:20px">Yola çıktı</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-top:2px">10:52</span></li><li style="display:flex;justify-content:space-between;gap:12px"><span style="font-size:14px;line-height:20px">Çözüm fotoğrafı yüklendi</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-top:2px">11:44</span></li><li style="display:flex;justify-content:space-between;gap:12px"><span style="font-size:14px;line-height:20px">Yapay zeka doğruladı, %96</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-top:2px">11:44</span></li><li style="display:flex;justify-content:space-between;gap:12px"><span style="font-size:14px;line-height:20px">Öğrenci onayı bekleniyor</span><span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-top:2px">11:48</span></li>
+        </ol>
+        <div style="padding:12px;border-radius:8px;background:#EEF3FB"><p style="font-size:12px;line-height:16px;font-weight:600;color:#566486">Yapılan işlem</p><p style="font-size:14px;line-height:20px">Floresan tüp ve starter değiştirildi.</p></div>
+        <button type="button" class="ghost t" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,144v64a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V144a8,8,0,0,1,16,0v56H208V144a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,124.69V32a8,8,0,0,0-16,0v92.69L93.66,98.34a8,8,0,0,0-11.32,11.32Z"/></svg>Raporu indir</button>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

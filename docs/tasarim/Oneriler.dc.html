@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Öneriler</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app *{box-sizing:border-box}
+.app{font-family:'Geist',system-ui,sans-serif;color:#0F2A5C;-webkit-font-smoothing:antialiased}
+.app p,.app h1,.app h2,.app h3{margin:0;text-wrap:pretty}
+.app button,.app textarea{font-family:inherit}
+.app button{cursor:pointer}
+.app a{text-decoration:none}
+.app ol,.app ul{list-style:none;margin:0;padding:0}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(15,42,92,0.12);border-radius:16px;box-shadow:0 8px 32px rgba(15,42,92,0.14)}
+.t{transition:background-color 300ms cubic-bezier(0.22,1,0.36,1),transform 300ms cubic-bezier(0.22,1,0.36,1),opacity 300ms cubic-bezier(0.22,1,0.36,1)}
+.t:active{transform:scale(0.98)}
+.btn-ink:hover{background:#1B3F85 !important}
+.ghost:hover{background:#E8EFFA !important}
+.vote:hover{background:#E8EFFA !important}
+.card:hover{background:#F7FAFE !important}
+.app :focus-visible{outline:2px solid #1F5FD6;outline-offset:2px}
+.field:focus-within{outline:2px solid #1F5FD6;outline-offset:2px}
+.skip{position:absolute;left:16px;top:-48px;z-index:20;padding:8px 12px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500;border-radius:8px}
+.skip:focus{top:16px}
+.chip{padding:4px 12px;border:1px solid #CBD5E5;border-radius:9999px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:500}
+.pill{padding:2px 8px;border-radius:9999px;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.t{transition:none}.t:active{transform:none}}
+@media (max-width:960px){
+.stage{display:none}
+.topbar{position:static !important;transform:none !important;margin:16px !important;flex-wrap:wrap}
+.content{padding-top:0 !important}
+.cols{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div class="app" style="position:relative;width:100%;min-height:1180px;overflow:hidden;background:#E9EEF5">
+  <a class="skip" href="#icerik">Ana içeriğe geç</a>
+
+  <div class="stage" aria-hidden="true" style="position:absolute;top:0;left:50%;margin-left:-720px;width:1440px;height:1180px;overflow:hidden">
+    <svg width="1440" height="1180" viewBox="0 0 1440 1180" style="display:block">
+      <rect width="1440" height="1180" fill="#E9EEF5"/>
+      <rect x="40" y="800" width="380" height="240" rx="16" fill="#D9E8DF"/>
+      <rect x="1140" y="100" width="260" height="180" rx="12" fill="#D9E8DF"/>
+      <g fill="none" stroke="#D2DBE8" stroke-width="20" stroke-linecap="round">
+        <path d="M-20 440 C300 428 700 452 1460 418"/>
+        <path d="M-20 760 C400 748 900 774 1460 736"/>
+        <path d="M470 -20 C462 300 482 700 470 1200"/>
+        <path d="M780 -20 C772 220 796 700 786 1200"/>
+        <path d="M1100 -20 C1092 300 1112 700 1100 1200"/>
+      </g>
+      <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round">
+        <path d="M-20 440 C300 428 700 452 1460 418"/>
+        <path d="M-20 760 C400 748 900 774 1460 736"/>
+        <path d="M470 -20 C462 300 482 700 470 1200"/>
+        <path d="M780 -20 C772 220 796 700 786 1200"/>
+        <path d="M1100 -20 C1092 300 1112 700 1100 1200"/>
+      </g>
+      <g fill="#DAE2EE" stroke="#BAC7DA" stroke-width="1">
+        <rect x="510" y="50" width="120" height="80" rx="4"/>
+        <rect x="660" y="60" width="90" height="70" rx="4"/>
+        <rect x="580" y="240" width="150" height="80" rx="4"/>
+        <rect x="830" y="60" width="130" height="90" rx="4"/>
+        <rect x="990" y="70" width="80" height="70" rx="4"/>
+        <rect x="830" y="190" width="110" height="70" rx="4"/>
+        <rect x="980" y="200" width="90" height="130" rx="4"/>
+        <rect x="520" y="520" width="150" height="90" rx="4"/>
+        <rect x="830" y="510" width="150" height="100" rx="4"/>
+        <rect x="540" y="840" width="130" height="80" rx="4"/>
+        <rect x="700" y="850" width="60" height="100" rx="4"/>
+        <rect x="1150" y="830" width="140" height="90" rx="4"/>
+        <rect x="1310" y="830" width="90" height="90" rx="4"/>
+      </g>
+    </svg>
+  </div>
+
+  <nav class="topbar glass" aria-label="Ana gezinme" style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px;z-index:5">
+    <a class="ghost t" href="Main.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500">
+      <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></svg>
+      Harita
+    </a>
+    <a class="ghost t" href="Bildirimlerim.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500">
+      <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>
+      Bildirimlerim
+    </a>
+    <button class="ghost t" aria-current="page" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:0;border-radius:8px;background:#E8EFFA;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600">
+      <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z"/></svg>
+      Öneriler
+    </button>
+    <span style="width:1px;height:24px;background:#DCE4F0;display:block"></span>
+    <a class="btn-ink t" href="Bildir.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:600;text-decoration:none">
+      <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+      Bildir
+    </a>
+    <a class="ghost t" href="Bildirim-Merkezi.dc.html" aria-label="Bildirimler, 3 yeni" style="position:relative;width:36px;height:36px;border-radius:8px;background:transparent;color:#0F2A5C;display:flex;align-items:center;justify-content:center">
+      <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"/></svg>
+      <span style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:9999px;background:#B91C1C;border:2px solid #FFFFFF;box-sizing:content-box;display:block"></span>
+    </a>
+    <a class="ghost t" href="Hesap.dc.html" aria-label="Profil" style="width:36px;height:36px;border-radius:8px;background:transparent;color:#0F2A5C;display:flex;align-items:center;justify-content:center">
+      <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg>
+    </a>
+  </nav>
+
+  <main id="icerik" class="content" style="position:relative;z-index:3;max-width:1200px;margin:0 auto;padding:96px 24px 40px;display:flex;flex-direction:column;gap:24px">
+
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="font-size:30px;line-height:36px;font-weight:600">Kampüsün sesi</h1>
+      <p style="font-size:16px;line-height:24px;color:#566486">Önerini yaz, diğer öğrencilerin önerilerine oy ver. Yönetim yanıtları herkese açık.</p>
+    </div>
+
+    <div class="cols" style="display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start">
+
+      <section class="glass" aria-label="Öneri listesi" style="display:flex;flex-direction:column;gap:8px;padding:8px">
+        <div style="display:flex;flex-direction:column;gap:12px;padding:8px">
+          <div role="tablist" aria-label="Sıralama" style="display:flex;gap:4px;padding:4px;border-radius:8px;background:#E8EFFA">
+            <button role="tab" aria-selected="true" class="t" style="flex:1;padding:4px 12px;border:0;border-radius:4px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600">Popüler</button>
+            <button role="tab" aria-selected="false" class="t" style="flex:1;padding:4px 12px;border:0;border-radius:4px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500">Yeni</button>
+            <button role="tab" aria-selected="false" class="t" style="flex:1;padding:4px 12px;border:0;border-radius:4px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500">Yanıtlananlar <span class="mono">3</span></button>
+          </div>
+          <div role="group" aria-label="Kategori" style="display:flex;flex-wrap:wrap;gap:8px">
+            <button class="t" aria-pressed="true" style="padding:4px 12px;border:1px solid #0F2A5C;border-radius:9999px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500">Tümü</button>
+            <button class="chip ghost t" aria-pressed="false">Kütüphane</button>
+            <button class="chip ghost t" aria-pressed="false">Yemekhane</button>
+            <button class="chip ghost t" aria-pressed="false">Ulaşım</button>
+            <button class="chip ghost t" aria-pressed="false">Akademik</button>
+            <button class="chip ghost t" aria-pressed="false">Yaşam</button>
+          </div>
+        </div>
+
+        <ol aria-label="Öneriler" style="display:flex;flex-direction:column;gap:8px">
+
+          <li class="card t" style="display:flex;gap:16px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <button class="t" aria-pressed="true" aria-label="Oyunu geri al, 412 oy" style="width:56px;height:64px;flex:none;padding:0;border:0;border-radius:8px;background:#0F2A5C;color:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg>
+              <span class="mono" style="font-size:16px;line-height:24px;font-weight:600">412</span>
+            </button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+                <span class="pill" style="background:#DBEAFE;color:#1E40AF">Planlandı</span>
+                <span style="font-size:12px;line-height:16px;color:#566486">Kütüphane</span>
+                <span class="mono" style="font-size:12px;line-height:16px;color:#566486">12 Eki</span>
+              </div>
+              <h2 style="font-size:18px;line-height:28px;font-weight:600">Kütüphane final haftasında sabaha kadar açık kalsın</h2>
+              <p style="font-size:14px;line-height:20px;color:#566486">Final haftasında 22:00 kapanışı yetmiyor. Çalışma salonları gece boyunca açık olursa yurt dışındaki arkadaşlar da yararlanır.</p>
+              <div style="display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:8px;background:#EEF3FB">
+                <div style="display:flex;align-items:center;gap:8px;color:#0F2A5C">
+                  <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+                  <p style="font-size:12px;line-height:16px;font-weight:600">Yönetim yanıtı, Kütüphane Daire Başkanlığı</p>
+                  <span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-left:auto">20 Eki</span>
+                </div>
+                <p style="font-size:14px;line-height:20px">Final haftasında iki salon pilot olarak 02:00'ye kadar açık kalacak. Sonuçlara göre tüm salonlara yaygınlaştırılacak.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="card t" style="display:flex;gap:16px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <button class="vote t" aria-pressed="false" aria-label="Oy ver, 286 oy" style="width:56px;height:64px;flex:none;padding:0;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg>
+              <span class="mono" style="font-size:16px;line-height:24px;font-weight:600">286</span>
+            </button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+                <span class="pill" style="background:#FEF3C7;color:#92400E">Değerlendiriliyor</span>
+                <span style="font-size:12px;line-height:16px;color:#566486">Yemekhane</span>
+                <span class="mono" style="font-size:12px;line-height:16px;color:#566486">18 Eki</span>
+              </div>
+              <h2 style="font-size:18px;line-height:28px;font-weight:600">Yemekhanede her gün vejetaryen seçenek olsun</h2>
+              <p style="font-size:14px;line-height:20px;color:#566486">Şu an haftada iki gün vejetaryen menü var. Günlük menüde en az bir vejetaryen ana yemek istiyoruz.</p>
+              <div style="display:flex;align-items:center;gap:8px;color:#566486">
+                <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></svg>
+                <p style="font-size:12px;line-height:16px">Yönetim henüz yanıtlamadı, ortalama yanıt süresi 6 gün</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="card t" style="display:flex;gap:16px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <button class="vote t" aria-pressed="false" aria-label="Oy ver, 241 oy" style="width:56px;height:64px;flex:none;padding:0;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg>
+              <span class="mono" style="font-size:16px;line-height:24px;font-weight:600">241</span>
+            </button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+                <span class="pill" style="background:#E8EFFA;color:#0F2A5C">Yanıtlandı</span>
+                <span style="font-size:12px;line-height:16px;color:#566486">Ulaşım</span>
+                <span class="mono" style="font-size:12px;line-height:16px;color:#566486">9 Eki</span>
+              </div>
+              <h2 style="font-size:18px;line-height:28px;font-weight:600">Kampüs içi ring seferleri akşam saatlerinde sıklaşsın</h2>
+              <p style="font-size:14px;line-height:20px;color:#566486">17:00 ile 19:00 arasında yurt hattında bekleme süresi çok uzuyor.</p>
+              <div style="display:flex;flex-direction:column;gap:4px;padding:12px;border-radius:8px;background:#EEF3FB">
+                <div style="display:flex;align-items:center;gap:8px;color:#0F2A5C">
+                  <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+                  <p style="font-size:12px;line-height:16px;font-weight:600">Yönetim yanıtı, İdari ve Mali İşler</p>
+                  <span class="mono" style="font-size:12px;line-height:16px;color:#566486;margin-left:auto">15 Eki</span>
+                </div>
+                <p style="font-size:14px;line-height:20px">Sefer sayısı bu dönem için sabit. Yoğunluk verisi toplanıyor, bir sonraki planlamada yurt hattı için ek sefer değerlendirilecek.</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="card t" style="display:flex;gap:16px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <button class="vote t" aria-pressed="false" aria-label="Oy ver, 138 oy" style="width:56px;height:64px;flex:none;padding:0;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg>
+              <span class="mono" style="font-size:16px;line-height:24px;font-weight:600">138</span>
+            </button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+                <span class="pill" style="background:#DCFCE7;color:#166534">Uygulandı</span>
+                <span style="font-size:12px;line-height:16px;color:#566486">Ulaşım</span>
+                <span class="mono" style="font-size:12px;line-height:16px;color:#566486">2 Eki</span>
+              </div>
+              <h2 style="font-size:18px;line-height:28px;font-weight:600">Mühendislik Fakültesi önüne kapalı bisiklet park alanı</h2>
+              <p style="font-size:14px;line-height:20px;color:#566486">Bisikletler dışarıda kalıyor, yağmurda ve çalınma riskinde sorun yaşanıyor.</p>
+              <div style="display:flex;align-items:center;gap:8px;color:#166534">
+                <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+                <p style="font-size:12px;line-height:16px;font-weight:600">24 Ekim'de 20 araçlık alan hizmete açıldı</p>
+              </div>
+            </div>
+          </li>
+
+          <li class="card t" style="display:flex;gap:16px;padding:16px;border-radius:8px;background:#FFFFFF">
+            <button class="vote t" aria-pressed="false" aria-label="Oy ver, 97 oy" style="width:56px;height:64px;flex:none;padding:0;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M213.66,165.66a8,8,0,0,1-11.32,0L128,91.31,53.66,165.66a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,0l80,80A8,8,0,0,1,213.66,165.66Z"/></svg>
+              <span class="mono" style="font-size:16px;line-height:24px;font-weight:600">97</span>
+            </button>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+                <span class="pill" style="background:#E5E7EB;color:#374151">Yeni</span>
+                <span style="font-size:12px;line-height:16px;color:#566486">Akademik</span>
+                <span class="mono" style="font-size:12px;line-height:16px;color:#566486">Dün</span>
+              </div>
+              <h2 style="font-size:18px;line-height:28px;font-weight:600">Ders çalışma alanlarına daha fazla priz eklensin</h2>
+              <p style="font-size:14px;line-height:20px;color:#566486">Fakülte koridorlarındaki masaların çoğunda priz yok, dizüstü bilgisayar şarjı sorun oluyor.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <section class="glass" aria-label="Yeni öneri" style="display:flex;flex-direction:column;gap:16px;padding:24px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="width:40px;height:40px;border-radius:8px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center;flex:none">
+              <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Z"/></svg>
+            </span>
+            <div>
+              <h2 style="font-size:20px;line-height:28px;font-weight:600">Öneri yaz</h2>
+              <p style="font-size:14px;line-height:20px;color:#566486">Arıza değil, iyileştirme fikri</p>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label for="oneri-metin" style="font-size:14px;line-height:20px;font-weight:600">Önerin</label>
+            <div class="field" style="border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF">
+              <textarea id="oneri-metin" rows="4" placeholder="Örn. Kütüphane girişine kitap bırakma kutusu konulsun" style="display:block;width:100%;padding:12px;border:0;border-radius:8px;background:transparent;color:#0F2A5C;font-size:14px;line-height:20px;resize:none;outline:none">Yurt çamaşırhanesinde çalışma saatleri uzatılsın</textarea>
+            </div>
+            <div style="display:flex;justify-content:space-between;gap:8px">
+              <div role="group" aria-label="Kategori" style="display:flex;flex-wrap:wrap;gap:4px">
+                <span class="pill" style="background:#0F2A5C;color:#FFFFFF">Yaşam</span>
+                <span class="pill" style="background:#E8EFFA;color:#0F2A5C">Yurt</span>
+              </div>
+              <span class="mono" style="font-size:12px;line-height:16px;color:#566486">47 / 400</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:12px;padding:12px;border-radius:8px;background:#EEF3FB">
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="#1F5FD6" aria-hidden="true" style="flex:none;margin-top:2px"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144Z"/></svg>
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <p style="font-size:12px;line-height:16px;font-weight:600;color:#566486">Yapay zeka benzer öneri buldu</p>
+              <p style="font-size:14px;line-height:20px">"Yurt çamaşırhanesi 24 saat açık olsun" önerisi 64 oya sahip. Yeni öneri açmak yerine ona oy verebilirsin.</p>
+              <button class="t" style="align-self:flex-start;padding:0;border:0;background:transparent;color:#1F5FD6;font-size:14px;line-height:20px;font-weight:600;text-decoration:underline">Benzer öneriyi gör</button>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="color:#566486"><path d="M53.92,34.62A8,8,0,1,0,42.08,45.38L61.32,66.55C25,88.84,9.38,123.2,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208a127.11,127.11,0,0,0,52.07-10.83l22,24.21a8,8,0,1,0,11.84-10.76Z"/></svg>
+              <label for="anonim" style="font-size:14px;line-height:20px;font-weight:500">Adım gizle</label>
+            </div>
+            <button id="anonim" role="switch" aria-checked="false" class="t" style="width:44px;height:24px;padding:2px;border:0;border-radius:9999px;background:#AEBBD2;display:flex;justify-content:flex-start;align-items:center;flex:none"><span style="width:20px;height:20px;border-radius:9999px;background:#FFFFFF;display:block"></span></button>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:8px;color:#566486">
+            <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></svg>
+            <p style="font-size:12px;line-height:16px">Göndermeden önce metin otomatik denetlenir. Hakaret ve kişisel bilgi içeren öneriler yayınlanmaz.</p>
+          </div>
+
+          <button class="btn-ink t" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 12px;border:0;border-radius:8px;background:#0F2A5C;color:#FFFFFF;font-size:16px;line-height:24px;font-weight:600">
+            <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M227.32,28.68a16,16,0,0,0-15.66-4.08l-.15,0L19.57,82.84a16,16,0,0,0-2.49,29.8L102,154l41.3,84.87A15.86,15.86,0,0,0,157.74,248q.69,0,1.38-.06a15.88,15.88,0,0,0,14-11.51l58.2-191.94c0-.05,0-.1,0-.15A16,16,0,0,0,227.32,28.68ZM157.83,231.85l-.05.14,0-.07-40.06-82.3,48-48a8,8,0,0,0-11.31-11.31l-48,48L24.08,98.25l-.07,0,.14,0L216,40Z"/></svg>
+            Öneriyi gönder
+          </button>
+        </section>
+
+        <section class="glass" aria-label="Kampüs karnesi" style="display:flex;flex-direction:column;gap:16px;padding:24px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+            <div>
+              <h2 style="font-size:20px;line-height:28px;font-weight:600">Kampüs karnesi</h2>
+              <p style="font-size:14px;line-height:20px;color:#566486">Ekim 2026, herkese açık</p>
+            </div>
+            <span class="pill" style="background:#E8EFFA;color:#0F2A5C">Canlı</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+            <div style="display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:8px;background:#FFFFFF">
+              <p style="font-size:12px;line-height:16px;color:#566486">Ortalama çözüm süresi</p>
+              <p class="mono" style="font-size:24px;line-height:32px;font-weight:600">2,4 gün</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:8px;background:#FFFFFF">
+              <p style="font-size:12px;line-height:16px;color:#566486">Çözülen bildirim</p>
+              <p class="mono" style="font-size:24px;line-height:32px;font-weight:600">186 / 214</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:8px;background:#FFFFFF">
+              <p style="font-size:12px;line-height:16px;color:#566486">Yanıtlanan öneri</p>
+              <p class="mono" style="font-size:24px;line-height:32px;font-weight:600">%78</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:8px;background:#FFFFFF">
+              <p style="font-size:12px;line-height:16px;color:#566486">Öğrenci memnuniyeti</p>
+              <p class="mono" style="font-size:24px;line-height:32px;font-weight:600">4,2 / 5</p>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <h3 style="font-size:14px;line-height:20px;font-weight:600;color:#566486">Birime göre ortalama çözüm süresi</h3>
+            <ul style="display:flex;flex-direction:column;gap:12px">
+              <li style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;justify-content:space-between"><span style="font-size:14px;line-height:20px">Temizlik</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:500">0,9 gün</span></div>
+                <div role="img" aria-label="Temizlik 0,9 gün" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:22%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+              </li>
+              <li style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;justify-content:space-between"><span style="font-size:14px;line-height:20px">Bilgi İşlem</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:500">1,2 gün</span></div>
+                <div role="img" aria-label="Bilgi İşlem 1,2 gün" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:30%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+              </li>
+              <li style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;justify-content:space-between"><span style="font-size:14px;line-height:20px">Yapı İşleri</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:500">3,1 gün</span></div>
+                <div role="img" aria-label="Yapı İşleri 3,1 gün" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:78%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+              </li>
+              <li style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;justify-content:space-between"><span style="font-size:14px;line-height:20px">Güvenlik</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:500">0,4 gün</span></div>
+                <div role="img" aria-label="Güvenlik 0,4 gün" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:10%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+              </li>
+            </ul>
+          </div>
+
+          <p style="font-size:12px;line-height:16px;color:#566486">Veriler örnektir, canlı sistemde bildirim kayıtlarından hesaplanır.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1180}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
