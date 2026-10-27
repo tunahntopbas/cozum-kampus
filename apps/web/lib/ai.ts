@@ -115,3 +115,31 @@ export async function verifyResolution(
   if (!res.ok) throw new AiRequestError(res.status);
   return (await res.json()) as VerifyResult;
 }
+
+export type DraftInput = {
+  title: string;
+  body: string;
+  category: string;
+  votes: number;
+  status: "yeni" | "degerlendiriliyor" | "planlandi" | "uygulandi" | "reddedildi";
+};
+export type DraftResult = { reply: string; ai_pending: boolean };
+
+const PENDING_DRAFT: DraftResult = { reply: "", ai_pending: true };
+
+// Admin-only reply draft for a student suggestion; the admin edits it before publishing.
+export async function draftReply(
+  input: DraftInput,
+  accessToken: string,
+  { timeoutMs = DEFAULT_TIMEOUT_MS, fetchImpl = fetch, baseUrl = process.env.NEXT_PUBLIC_AI_API_URL ?? "" }: Options = {},
+): Promise<DraftResult> {
+  const request = fetchImpl(`${baseUrl}/ai/draft-reply`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify(input),
+  });
+  const res = await withTimeout(request, timeoutMs);
+  if (res === "unavailable") return PENDING_DRAFT;
+  if (!res.ok) throw new AiRequestError(res.status);
+  return (await res.json()) as DraftResult;
+}
