@@ -94,10 +94,10 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - Storage bucket `report-media` (private), yol biçimi `{auth.uid()}/{uuid}.jpg`.
   - Realtime yayını: `reports`, `report_events`, `notifications`.
 
-- [ ] **Step 1:** `npx supabase init`, `npx supabase link --project-ref <ref>`.
-- [ ] **Step 2:** `..._init.sql`: spec 8. bölüm SQL'i birebir + `allowed_emails` + `alter publication supabase_realtime add table reports, report_events, notifications;`.
-- [ ] **Step 3:** Aynı dosyada `handle_new_user()` tetikleyicisi (`after insert on auth.users`): e-posta alan adı `ogr.sakarya.edu.tr` ya da `sakarya.edu.tr` değilse ve `allowed_emails` içinde yoksa `raise exception 'Yalnızca okul e-postası ile kayıt olunabilir'`; uygunsa `profiles(id, full_name)` satırı ekler (`raw_user_meta_data->>'full_name'`).
-- [ ] **Step 4:** `..._rls.sql`: tüm tablolarda RLS aç. İlkeler:
+- [x] **Step 1:** `npx supabase init`, `npx supabase link --project-ref <ref>`.
+- [x] **Step 2:** `..._init.sql`: spec 8. bölüm SQL'i birebir + `allowed_emails` + `alter publication supabase_realtime add table reports, report_events, notifications;`.
+- [x] **Step 3:** Aynı dosyada `handle_new_user()` tetikleyicisi (`after insert on auth.users`): e-posta alan adı `ogr.sakarya.edu.tr` ya da `sakarya.edu.tr` değilse ve `allowed_emails` içinde yoksa `raise exception 'Yalnızca okul e-postası ile kayıt olunabilir'`; uygunsa `profiles(id, full_name)` satırı ekler (`raw_user_meta_data->>'full_name'`).
+- [x] **Step 4:** `..._rls.sql`: tüm tablolarda RLS aç. İlkeler:
   - `units`, `buildings`, `places`: `anon` ve `authenticated` okur.
   - `profiles`: kendi satırını okur/günceller, `role` ve `unit_id` değiştiremez (`with check (role = auth_role() and unit_id is not distinct from auth_unit())`); `admin` hepsini okur.
   - `reports`: `insert` `reporter_id = auth.uid()`; `select` kendi kaydı ya da `auth_role() = 'admin'` ya da (`staff` ve `unit_id = auth_unit()`); `update` aynı kural, öğrenci yalnızca kendi kaydını.
@@ -108,9 +108,9 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `ai_runs`, `allowed_emails`, `moderation_flags`: istemciye ilke yok (yalnızca servis anahtarı).
   - Storage `report-media`: `insert` `(storage.foldername(name))[1] = auth.uid()::text`; `select` `authenticated`.
   - `can_read_report`: sahibi, admin, aynı birim personeli ya da `is_hidden = false`.
-- [ ] **Step 5:** `seed.sql`: 5 birim; Esentepe Kampüsü çevresinde 8 bina (merkez yaklaşık `40.7425, 30.3330`; adlar ve koordinatlar yer tutucu, spec 14. bölüm açık işi), her binada 2 `places` satırı (`qr_code` ör. `M1-K2-WC`); demo hesaplar için `allowed_emails`: `personel@demo.cozumkampus.app`, `yonetim@demo.cozumkampus.app`, `guvenlik@demo.cozumkampus.app`; 12 kurgusal bildirim (karışık kategori/durum, `reporter_id` null).
-- [ ] **Step 6:** `npx supabase db push` ve `psql "$SUPABASE_DB_URL" -f supabase/seed.sql`. Beklenen: hata yok.
-- [ ] **Step 7:** `supabase/tests/rls_check.sql` yaz ve SQL editörde çalıştır. Beklenen çıktılar yorum satırında:
+- [x] **Step 5:** `seed.sql`: 5 birim; Esentepe Kampüsü çevresinde 8 bina (merkez yaklaşık `40.7425, 30.3330`; adlar ve koordinatlar yer tutucu, spec 14. bölüm açık işi), her binada 2 `places` satırı (`qr_code` ör. `M1-K2-WC`); demo hesaplar için `allowed_emails`: `personel@demo.cozumkampus.app`, `yonetim@demo.cozumkampus.app`, `guvenlik@demo.cozumkampus.app`; 12 kurgusal bildirim (karışık kategori/durum, `reporter_id` null).
+- [x] **Step 6:** `npx supabase db push` ve `psql "$SUPABASE_DB_URL" -f supabase/seed.sql`. Beklenen: hata yok.
+- [x] **Step 7:** `supabase/tests/rls_check.sql` yaz ve SQL editörde çalıştır. Beklenen çıktılar yorum satırında:
   ```sql
   select count(*) from units;            -- 5
   select count(*) from public_reports;   -- 12
@@ -120,8 +120,8 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   select count(*) from security_reports; -- 0
   ```
   Ayrıca Auth panelinden `deneme@gmail.com` ile kullanıcı oluşturmayı dene. Beklenen: "Database error saving new user".
-- [ ] **Step 8:** Panelden 3 demo hesabı oluştur, SQL ile `profiles.role` ve `unit_id` ata (`staff` → `yapi_isleri`).
-- [ ] **Step 9:** Commit: `feat(db): add schema, RLS policies and demo seed`
+- [ ] **Step 8:** (Kullanıcı panelden demo hesaplarını oluşturunca) Panelden 3 demo hesabı oluştur, SQL ile `profiles.role` ve `unit_id` ata (`staff` → `yapi_isleri`).
+- [x] **Step 9:** Commit: `feat(db): add schema, RLS policies and demo seed`
 
 ---
 
