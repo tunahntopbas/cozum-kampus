@@ -6,11 +6,13 @@ Sorumlu: tunahan
 
 ## Son durum
 
-Task 6 ve 7 tamam (Task 7'nin elle giriş testi Supabase projesi açılınca yapılacak). Task 8 sürüyor.
+Web hattı (Task 6, 7, 8) kod olarak tamam. Elle doğrulamalar (Task 7 giriş, Task 8 EXIF) Supabase projesi açılınca yapılacak. Sıradaki: `hat/web` için PR, sonra Birleşme hattı (Task 9).
 
 ## Sıradaki adım
 
-Task 8 Step 1: lib/image.test.ts (fitWithin)
+1. Supabase projesi açılınca `apps/web/.env.local` doldur, Task 7 Step 4 elle doğrulamasını yap.
+2. `hat/web` -> `main` PR aç.
+3. DB ve AI hatları da `main`e girince Task 9'a geç (`docs/durum/entegrasyon.md`).
 
 ## Yapılanlar
 
@@ -18,9 +20,11 @@ Task 8 Step 1: lib/image.test.ts (fitWithin)
 
 - 2026-10-27 Task 6: Next.js 16.4 + Tailwind v4 iskeleti, `@theme` token'ları, Glass/Button/StatusPill/Switch/Logo, öğrenci üst menüsü, tüm rotalar için yer tutucu sayfalar. Testler: `pnpm --filter web test` 6/6.
 - 2026-10-27 Task 7: Supabase istemcileri (`lib/supabase/{client,server,env}.ts`), `proxy.ts` (oturum yenileme + rol kontrolü), `/giris` (OTP kod + bağlantı), `/auth/callback`, `/hesap` (profil + çıkış), `safeNext` (açık yönlendirme koruması). Testler 20/20.
+- 2026-10-27 Task 8: `lib/image.ts` (`fitWithin`, `isSupportedImageType`, `prepareImage`: 1600 px'e küçültme + canvas ile yeniden kodlama, EXIF silinir), `lib/upload.ts` (`uploadReportImage`, bucket `report-media`, yol `{userId}/{uuid}.jpg`). Testler 26/26.
 
 ## Engeller
 
+- Task 8 elle doğrulaması (EXIF silindi mi, `exiftool`): Task 9 sayfası ve Supabase gerekli.
 - Task 7 elle doğrulaması: Supabase projesi ve `apps/web/.env.local` gerekli. Env yokken tüm sayfalar 500 verir (bilinçli, sessizce kimlik doğrulamasız çalışmasın diye).
 
 ## Alınan kararlar
@@ -34,6 +38,7 @@ Task 8 Step 1: lib/image.test.ts (fitWithin)
 - Vitest yapılandırması `vitest.config.mts` (ESM uyarısı nedeniyle).
 - Next 16'da `middleware.ts` yerine `proxy.ts` kullanılıyor (aynı işlev, yeni ad).
 - Rol kontrolü proxy'de `profiles.role` sorgusuyla yapılıyor (sayfa başına bir ek sorgu). Profil satırı yoksa `student` sayılır.
+- `isSupportedImageType` eklendi: yalnızca JPEG/PNG/WebP. HEIC reddedilir (iOS Safari dosya seçicide zaten JPEG'e çevirir).
 - `/giris` hem 6 haneli kod hem e-posta bağlantısını destekliyor.
 
 ## Diğer hatlara notlar

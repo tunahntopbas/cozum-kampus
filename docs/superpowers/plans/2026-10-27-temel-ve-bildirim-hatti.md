@@ -355,15 +355,15 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `prepareImage(file: File): Promise<Blob>`: `createImageBitmap(file, { imageOrientation: 'from-image' })` → canvas → `toBlob('image/jpeg', 0.82)`. Yeniden kodlama EXIF'i (GPS dahil) siler. Kabul edilen türler JPEG, PNG, WebP, HEIC dışı; desteklenmeyen türde `Error('Bu dosya türü desteklenmiyor')`.
   - `uploadReportImage(userId: string, blob: Blob): Promise<string>`: yol `${userId}/${crypto.randomUUID()}.jpg`, döndürür yolu.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```ts
   expect(fitWithin(4000, 3000)).toEqual({ width: 1600, height: 1200 })
   expect(fitWithin(3000, 4000)).toEqual({ width: 1200, height: 1600 })
   expect(fitWithin(800, 600)).toEqual({ width: 800, height: 600 })
   ```
-- [ ] **Step 2:** FAIL → yaz → PASS (`pnpm --filter web test`).
-- [ ] **Step 3:** Elle doğrula (Task 9 sayfasında): GPS'li bir iPhone fotoğrafı yükle, Storage'dan indir, `exiftool <dosya>` çıktısında GPS satırı yok.
-- [ ] **Step 4:** Commit: `feat(web): client-side image downscale, EXIF strip and upload`
+- [x] **Step 2:** FAIL → yaz → PASS (`pnpm --filter web test`).
+- [ ] **Step 3:** (Task 9 + Supabase bekleniyor) Elle doğrula (Task 9 sayfasında): GPS'li bir iPhone fotoğrafı yükle, Storage'dan indir, `exiftool <dosya>` çıktısında GPS satırı yok.
+- [x] **Step 4:** Commit: `feat(web): client-side image downscale, EXIF strip and upload`
 
 ---
 

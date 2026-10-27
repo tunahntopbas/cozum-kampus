@@ -11,7 +11,7 @@ Aktif plan: `docs/superpowers/plans/2026-10-27-temel-ve-bildirim-hatti.md` (Plan
 | Temel | `main` | 1 | tunahan | bu dosya | Tamamlandı |
 | DB | `hat/db` | 2 | ? | [db.md](db.md) | Başlamadı |
 | AI servisi | `hat/ai` | 3, 4, 5 | ? | [ai.md](ai.md) | Başlamadı |
-| Web | `hat/web` | 6, 7, 8 | tunahan | [web.md](web.md) | Task 6, 7 tamam; Task 8 sürüyor |
+| Web | `hat/web` | 6, 7, 8 | tunahan | [web.md](web.md) | Kod tamam; elle doğrulama Supabase bekliyor |
 | Birleşme | `hat/entegrasyon` | 9, 10 | herkes | [entegrasyon.md](entegrasyon.md) | Bekliyor (DB, AI, Web bitince) |
 
 ## Bağımlılıklar
