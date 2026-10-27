@@ -7,8 +7,10 @@
   --color-muted: #566486;
   --color-tint: #e8effa;
   --color-tint-2: #eef3fb;
-  --color-hairline: #dce4f0;
-  --color-input-border: #cbd5e5;
+  --color-hairline: rgba(15, 42, 92, 0.08);
+  --color-input-border: rgba(15, 42, 92, 0.14);
+  --color-surface: rgba(255, 255, 255, 0.58);
+  --color-surface-strong: rgba(255, 255, 255, 0.82);
   --color-map-bg: #e9eef5;
   --color-danger: #b91c1c;
   --color-danger-hover: #991b1b;
@@ -35,13 +37,17 @@
   }
 }
 
+/* Frosted panel: mostly transparent, a light top edge and a soft, wide shadow instead of a grey drop. */
 @utility glass {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
-  border: 1px solid rgba(15, 42, 92, 0.12);
-  box-shadow: 0 8px 32px rgba(15, 42, 92, 0.14);
-  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.36));
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(15, 42, 92, 0.04),
+    0 18px 48px -18px rgba(15, 42, 92, 0.22);
+  border-radius: 20px;
 }
 
 @utility focus-ring {
@@ -137,9 +143,6 @@
     padding-top: 96px;
   }
   @media (max-width: 960px) {
-    .stage {
-      display: none;
-    }
     .topbar {
       position: static;
       transform: none;

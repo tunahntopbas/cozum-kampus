@@ -12,7 +12,7 @@ export default function ErrorPage({ retry }: { error: unknown; retry: () => void
         <p className="text-sm leading-6 text-muted">Bağlantını kontrol edip yeniden deneyebilirsin.</p>
         <div className="flex flex-wrap gap-3">
           <button onClick={retry} className="btn-ink t rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-white">Yeniden dene</button>
-          <Link href="/" className="ghost t rounded-lg border border-input-border bg-white px-4 py-2 text-sm font-semibold">Haritaya dön</Link>
+          <Link href="/" className="ghost t rounded-lg border border-input-border bg-surface-strong px-4 py-2 text-sm font-semibold">Haritaya dön</Link>
         </div>
       </section>
     </main>

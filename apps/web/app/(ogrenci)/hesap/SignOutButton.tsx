@@ -9,7 +9,7 @@ export function SignOutButton() {
   return (
     <button
       type="button"
-      className="ghost t flex items-center justify-center gap-2 rounded-lg border border-input-border bg-white px-3 py-2 text-base font-semibold text-ink"
+      className="ghost t flex items-center justify-center gap-2 rounded-lg border border-input-border bg-surface-strong px-3 py-2 text-base font-semibold text-ink"
       onClick={async () => {
         await createClient().auth.signOut();
         router.replace("/giris");

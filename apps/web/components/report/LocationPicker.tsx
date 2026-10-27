@@ -43,7 +43,7 @@ export function LocationPicker({ buildings, value, qrPlace, onChange, onUnlockQr
         Konum
       </p>
       {qrPlace ? (
-        <div className={`${fieldBox} bg-white`}>
+        <div className={`${fieldBox} bg-surface-strong`}>
           <MapPin size={20} weight="fill" className="flex-none text-accent" aria-hidden />
           <p className="flex-1 text-sm font-medium">
             {qrPlace.buildingName}
@@ -55,7 +55,7 @@ export function LocationPicker({ buildings, value, qrPlace, onChange, onUnlockQr
         </div>
       ) : (
         <div className="flex gap-2 max-sm:flex-col">
-          <div className={`${fieldBox} flex-1 bg-white`}>
+          <div className={`${fieldBox} flex-1 bg-surface-strong`}>
             <MapPin size={20} weight="fill" className="flex-none text-accent" aria-hidden />
             <select
               aria-labelledby="konum-lbl"
@@ -92,7 +92,7 @@ export function LocationPicker({ buildings, value, qrPlace, onChange, onUnlockQr
             type="button"
             onClick={onUseMyLocation}
             disabled={locating}
-            className="ghost t flex items-center justify-center gap-2 rounded-lg border border-input-border bg-white px-3 py-2 text-sm font-semibold whitespace-nowrap text-ink disabled:opacity-60"
+            className="ghost t flex items-center justify-center gap-2 rounded-lg border border-input-border bg-surface-strong px-3 py-2 text-sm font-semibold whitespace-nowrap text-ink disabled:opacity-60"
           >
             <Crosshair size={20} aria-hidden />
             {locating ? "Konum alınıyor" : "Konumumu kullan"}

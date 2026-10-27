@@ -114,7 +114,7 @@ export function MyReportDetail({ report, buildingName, unitName, own, notify, bu
 
       {own && isOpen(report.status) && (
         <>
-          <label className="ghost cursor-pointer rounded-lg border border-input-border bg-white px-3 py-2 text-center">
+          <label className="ghost cursor-pointer rounded-lg border border-input-border bg-surface-strong px-3 py-2 text-center">
             {busy ? "Yükleniyor" : "Ek fotoğraf ekle"}
             <input
               aria-label="Ek fotoğraf ekle"

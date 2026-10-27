@@ -75,7 +75,7 @@ export function AnalysisPanel({ state, analysis, onCategoryChange }: Props) {
                     onCategoryChange(e.target.value as Category);
                     setEditing(false);
                   }}
-                  className="rounded-lg border border-input-border bg-white px-2 py-1 text-sm"
+                  className="rounded-lg border border-input-border bg-surface-strong px-2 py-1 text-sm"
                 >
                   {CATEGORIES.map((c) => (
                     <option key={c} value={c}>
@@ -130,7 +130,7 @@ export function AnalysisPanel({ state, analysis, onCategoryChange }: Props) {
             <button
               type="button"
               onClick={() => setEditing(true)}
-              className="ghost t flex items-center gap-2 self-start rounded-lg border border-input-border bg-white px-3 py-2 text-sm font-semibold text-ink"
+              className="ghost t flex items-center gap-2 self-start rounded-lg border border-input-border bg-surface-strong px-3 py-2 text-sm font-semibold text-ink"
             >
               <PencilSimple size={16} aria-hidden />
               Kategoriyi düzenle

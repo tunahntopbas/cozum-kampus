@@ -47,7 +47,7 @@ async function Account() {
         </div>
         <div className="grid grid-cols-3 gap-2">
           {stats.map(([label, value]) => (
-            <div key={label} className="flex flex-col gap-0.5 rounded-lg bg-white p-3">
+            <div key={label} className="flex flex-col gap-0.5 rounded-lg bg-surface-strong p-3">
               <p className="mono text-2xl font-semibold">{value}</p>
               <p className="text-xs text-muted">{label}</p>
             </div>
@@ -82,7 +82,7 @@ async function Account() {
             type="button"
             disabled
             title="Yakında"
-            className="flex-none rounded-lg border border-[#FECACA] bg-white px-3 py-2 text-sm font-semibold text-[#991B1B] disabled:opacity-60"
+            className="flex-none rounded-lg border border-[#FECACA] bg-surface-strong px-3 py-2 text-sm font-semibold text-[#991B1B] disabled:opacity-60"
           >
             Hesabımı ve verilerimi sil
           </button>

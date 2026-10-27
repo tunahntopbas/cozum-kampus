@@ -29,7 +29,7 @@ export function InputTabs({ mode, onChange }: { mode: InputMode; onChange: (m: I
               role="tab"
               aria-selected={selected}
               onClick={() => onChange(id)}
-              className={`t flex items-center justify-center gap-2 rounded px-3 py-2 text-sm ${selected ? "bg-white font-semibold text-ink" : "ghost bg-transparent font-medium text-muted"}`}
+              className={`t flex items-center justify-center gap-2 rounded px-3 py-2 text-sm ${selected ? "bg-surface-strong font-semibold text-ink" : "ghost bg-transparent font-medium text-muted"}`}
             >
               <IconCmp size={16} weight={selected ? "fill" : "regular"} aria-hidden />
               {label}

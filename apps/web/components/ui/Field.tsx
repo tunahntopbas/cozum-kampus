@@ -13,7 +13,7 @@ export function TextField({ id, label, hint, readOnly, className = "", ...rest }
       <label className="lbl" htmlFor={id}>
         {label}
       </label>
-      <div className={`${fieldBox} ${readOnly ? "bg-[#F3F6FB]" : "bg-white"}`}>
+      <div className={`${fieldBox} ${readOnly ? "bg-[#F3F6FB]" : "bg-surface-strong"}`}>
         <input id={id} readOnly={readOnly} className={fieldInput} {...rest} />
         {readOnly && <LockSimple size={16} className="ml-auto text-muted" aria-hidden />}
       </div>

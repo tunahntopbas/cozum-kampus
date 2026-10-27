@@ -16,7 +16,7 @@ export function DescriptionField({ value, onChange, listening, onToggleDictation
       <label htmlFor="aciklama" className="lbl">
         Açıklama {!required && <span className="font-normal text-muted">isteğe bağlı</span>}
       </label>
-      <div className="field relative rounded-lg border border-input-border bg-white">
+      <div className="field relative rounded-lg border border-input-border bg-surface-strong">
         <textarea
           id="aciklama"
           rows={4}

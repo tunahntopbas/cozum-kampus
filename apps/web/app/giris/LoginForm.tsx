@@ -8,7 +8,7 @@ import { safeNext } from "@/lib/safe-next";
 import { createClient } from "@/lib/supabase/client";
 
 const inputClass =
-  "mt-1 w-full rounded-lg border border-input-border bg-white px-3 py-2 text-sm text-ink placeholder:text-muted focus-ring";
+  "mt-1.5 w-full rounded-xl border border-input-border bg-surface-strong px-3.5 py-2.5 text-sm text-ink placeholder:text-muted transition-colors focus:border-accent focus:bg-white focus-ring";
 const linkClass = "w-full rounded-lg text-sm text-accent focus-ring";
 
 type Step = "password" | "otp-email" | "otp-code";

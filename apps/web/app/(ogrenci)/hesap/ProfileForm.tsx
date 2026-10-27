@@ -58,7 +58,7 @@ export function ProfileForm({ profile }: { profile: ProfileView }) {
           <label className="lbl" htmlFor="dil">
             Dil
           </label>
-          <div className={`${fieldBox} bg-white`}>
+          <div className={`${fieldBox} bg-surface-strong`}>
             <select
               id="dil"
               value={language}

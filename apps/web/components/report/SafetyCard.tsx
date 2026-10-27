@@ -53,7 +53,7 @@ export function SafetyCard({ location }: { location: string | null }) {
             value={body}
             maxLength={2000}
             onChange={(e) => setBody(e.target.value)}
-            className="field rounded-lg border border-input-border bg-white p-3 text-sm text-ink outline-none"
+            className="field rounded-lg border border-input-border bg-surface-strong p-3 text-sm text-ink outline-none"
           />
           {state === "error" && <p className="text-sm text-danger">Gönderilemedi. Biraz sonra yeniden dene.</p>}
           <button
@@ -68,7 +68,7 @@ export function SafetyCard({ location }: { location: string | null }) {
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="ghost t rounded-lg border border-input-border bg-white px-3 py-2 text-base font-semibold text-ink"
+          className="ghost t rounded-lg border border-input-border bg-surface-strong px-3 py-2 text-base font-semibold text-ink"
         >
           Anonim güvenlik kanalını aç
         </button>
