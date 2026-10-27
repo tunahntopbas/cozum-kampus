@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import Link from "next/link";
 import { BellIcon, CheckCircleIcon, ChatCircleTextIcon, WarningCircleIcon } from "@phosphor-icons/react";
 import { PageContent } from "@/components/layout/PageContent";
@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/Button";
 import { Glass } from "@/components/ui/Glass";
 import { Switch } from "@/components/ui/Switch";
-import { Chips, DemoLabel, Photo, Tabs } from "./Common";
+import { Chips, DemoLabel, Photo, TabPanels, Tabs } from "./Common";
 import s from "./StudentDemo.module.css";
 
 const initial = [
@@ -29,6 +29,7 @@ const preferences = [
   { group: "Türler", label: "Kampüs ve hava uyarıları", description: "Yapay zekanın öngörüleri", enabled: false },
 ];
 export function Notifications() {
+  const tabsId = useId();
   const [items, setItems] = useState(initial);
   const [tab, setTab] = useState("Tümü");
   const [type, setType] = useState("Hepsi");
@@ -42,7 +43,8 @@ export function Notifications() {
   function markRead(id: number) { setItems(previous => previous.map(item => item.id === id ? { ...item, unread: false } : item)); }
   function confirm(reopen: boolean) { setResolution(reopen ? "Demo: bildirim yeniden açıldı. Birime tekrar iletilecek." : "Demo: çözümü onayladın. Kayıt kapatıldı."); markRead(2); }
   return <div className={s.root}><PageContent><PageHeader title="Bildirimler" description="Bildirimlerinin durumu, yönetim yanıtları ve kampüs uyarıları burada toplanır." /><DemoLabel />
-    <div className={s.columns}><Glass className={`${s.panel} !p-4`}><div className={s.between}><Tabs label="Bildirim görünümü" options={["Tümü", "Okunmamış"]} value={tab} onChange={setTab} /><span className={s.badge}>{items.filter(item => item.unread).length} okunmamış</span><button type="button" className="text-accent font-medium" onClick={() => setItems(previous => previous.map(item => ({ ...item, unread: false })))}>Tümünü okundu işaretle</button></div><Chips label="Bildirim türü" options={["Hepsi", "Durum değişimleri", "Yanıtlar", "Uyarılar"]} value={type} onChange={setType} />
+    <div className={s.columns}><Glass className={`${s.panel} !p-4`}><div className={s.between}><Tabs id={tabsId} label="Bildirim görünümü" options={["Tümü", "Okunmamış"]} value={tab} onChange={setTab} /><span className={s.badge}>{items.filter(item => item.unread).length} okunmamış</span><button type="button" className="text-accent font-medium" onClick={() => setItems(previous => previous.map(item => ({ ...item, unread: false })))}>Tümünü okundu işaretle</button></div><Chips label="Bildirim türü" options={["Hepsi", "Durum değişimleri", "Yanıtlar", "Uyarılar"]} value={type} onChange={setType} />
+      <TabPanels id={tabsId} options={["Tümü", "Okunmamış"]} value={tab}>
       {!visible.length && <p className="p-4 text-muted" role="status">{tab === "Okunmamış" ? "Okunmamış bildirim yok." : "Bu filtreye uygun bildirim yok."}</p>}
       {["Bugün", "Dün", "Daha eski"].map(group => { const grouped = visible.filter(item => item.group === group); return grouped.length > 0 && <section key={group} className="sec" aria-label={group}><h2 className={`${s.small} px-4 pt-2 font-semibold`}>{group}</h2><ol className="space-y-1">{grouped.map(item => <li key={item.id} className={`${s.item} ${item.unread ? s.unread : ""}`}>
         <span className={s.icon}>{item.id === 2 ? <CheckCircleIcon size={24} aria-hidden="true" /> : item.type === "Yanıtlar" ? <ChatCircleTextIcon size={24} aria-hidden="true" /> : item.type === "Uyarılar" ? <WarningCircleIcon size={24} aria-hidden="true" /> : <BellIcon size={24} aria-hidden="true" />}</span>
@@ -53,7 +55,7 @@ export function Notifications() {
           {item.unread && <button type="button" className="text-xs text-accent self-start mt-1" aria-label={`${item.title} bildirimini okundu işaretle`} onClick={() => markRead(item.id)}>Okundu işaretle</button>}
         </div>{item.unread && <span role="img" aria-label="Okunmadı" className="mt-1.5 h-2 w-2 flex-none rounded-full bg-accent" />}
       </li>)}</ol></section>; })}
-    </Glass><Glass className={s.panel}><div><h2 className={s.heading}>Bildirim tercihleri</h2><p className={s.muted}>Neyi, nereden almak istediğini seç.</p></div><p className={s.small}>Demo tercihleri gerçek bildirim gönderimini değiştirmez.</p>
+    </TabPanels></Glass><Glass className={s.panel}><div><h2 className={s.heading}>Bildirim tercihleri</h2><p className={s.muted}>Neyi, nereden almak istediğini seç.</p></div><p className={s.small}>Demo tercihleri gerçek bildirim gönderimini değiştirmez.</p>
       {["Kanallar", "Türler"].map(group => <section key={group}><h3 className={`${s.small} font-semibold`}>{group}</h3>{preferences.filter(pref => pref.group === group).map(pref => <div className={s.preference} key={pref.label}><div><p className="font-semibold">{pref.label}</p><p className={s.small}>{pref.description}</p></div><Switch label={pref.label} hideLabel checked={prefs[pref.label]} onChange={value => { setPrefs(previous => ({ ...previous, [pref.label]: value })); setPrefsMessage("Demo tercihin bu ekranda güncellendi."); }} /></div>)}</section>)}
       <div className="sec border-t border-hairline pt-4"><h3 className="lbl">Sessiz saatler</h3><div className={s.row}><label className="min-w-0 flex-1"><span className={s.small}>Başlangıç</span><input type="time" className={`${s.input} mono`} value={start} onChange={event => { setStart(event.target.value); setPrefsMessage("Demo sessiz saatlerin güncellendi."); }} /></label><label className="min-w-0 flex-1"><span className={s.small}>Bitiş</span><input type="time" className={`${s.input} mono`} value={end} onChange={event => { setEnd(event.target.value); setPrefsMessage("Demo sessiz saatlerin güncellendi."); }} /></label></div><p className={s.small}>Acil durum ve güvenlik uyarıları sessiz saatlerde de gelir.</p></div>{prefsMessage && <p role="status" className={s.notice}>{prefsMessage}</p>}
     </Glass></div>

@@ -94,3 +94,67 @@ describe("student demo screens", () => {
     expect(screen.getByText("Okunmamış bildirim yok.")).toBeInTheDocument();
   });
 });
+
+describe("student review regressions", () => {
+  it("orders Yeni suggestions by creation date rather than fixture ID", () => {
+    render(<SuggestionsPage />);
+    fireEvent.click(screen.getByRole("tab", { name: "Yeni" }));
+    const titles = screen.getAllByRole("article").map(article => within(article).getByRole("heading").textContent);
+    expect(titles).toEqual([
+      "Yurt çamaşırhanesi 24 saat açık olsun",
+      "Ders çalışma alanlarına daha fazla priz eklensin",
+      "Yemekhanede her gün vejetaryen seçenek olsun",
+      "Kütüphane final haftasında sabaha kadar açık kalsın",
+      "Kampüs içi ring seferleri akşam saatlerinde sıklaşsın",
+      "Mühendislik Fakültesi önüne kapalı bisiklet park alanı",
+    ]);
+    fireEvent.change(screen.getByLabelText("Önerin"), { target: { value: "Yeni çalışma alanı açılsın" } });
+    fireEvent.click(screen.getByRole("button", { name: "Öneriyi gönder" }));
+    expect(within(screen.getAllByRole("article")[0]).getByRole("heading")).toHaveTextContent("Yeni çalışma alanı açılsın");
+  });
+  it.each([
+    ["Projeksiyon cihazı açılmıyor", 2],
+    ["Yurt rampasında kaygan zemin", 6],
+  ])("preserves initial support for %s and reverses the existing vote", (title, initialCount) => {
+    render(<MapPage />);
+    fireEvent.change(screen.getByRole("searchbox"), { target: { value: title } });
+    const detail = screen.getByRole("region", { name: "Seçili bildirim" });
+    const remove = within(detail).getByRole("button", { name: "Desteğimi geri al" });
+    expect(remove).toHaveAttribute("aria-pressed", "true");
+    expect(within(detail).getByText(`${initialCount} kişi bildirdi`)).toBeInTheDocument();
+    fireEvent.click(remove);
+    expect(within(detail).getByText(`${initialCount - 1} kişi bildirdi`)).toBeInTheDocument();
+    fireEvent.click(within(detail).getByRole("button", { name: "Ben de yaşıyorum" }));
+    expect(within(detail).getByText(`${initialCount} kişi bildirdi`)).toBeInTheDocument();
+  });
+  it.each([
+    [SuggestionsPage, ["Popüler", "Yeni", "Yanıtlananlar"]],
+    [MyReportsPage, ["Açtıklarım", "Desteklediklerim"]],
+    [NotificationsPage, ["Tümü", "Okunmamış"]],
+  ])("connects tabs to panels and supports roving keyboard focus", (Page, names) => {
+    render(<Page />);
+    const tabs = screen.getAllByRole("tab");
+    expect(tabs[0]).toHaveAttribute("tabindex", "0");
+    expect(tabs[1]).toHaveAttribute("tabindex", "-1");
+    const assertActive = (index: number) => {
+      expect(tabs[index]).toHaveFocus();
+      expect(tabs[index]).toHaveAttribute("aria-selected", "true");
+      expect(tabs[index]).toHaveAttribute("tabindex", "0");
+      const panel = screen.getByRole("tabpanel", { name: names[index] });
+      expect(tabs[index]).toHaveAttribute("aria-controls", panel.id);
+      expect(panel).toHaveAttribute("aria-labelledby", tabs[index].id);
+      tabs.filter((_, other) => other !== index).forEach(tab => expect(tab).toHaveAttribute("tabindex", "-1"));
+    };
+    tabs[0].focus();
+    fireEvent.keyDown(tabs[0], { key: "ArrowRight" });
+    assertActive(1);
+    fireEvent.keyDown(tabs[1], { key: "End" });
+    assertActive(tabs.length - 1);
+    fireEvent.keyDown(tabs[tabs.length - 1], { key: "ArrowRight" });
+    assertActive(0);
+    fireEvent.keyDown(tabs[0], { key: "ArrowLeft" });
+    assertActive(tabs.length - 1);
+    fireEvent.keyDown(tabs[tabs.length - 1], { key: "Home" });
+    assertActive(0);
+  });
+});

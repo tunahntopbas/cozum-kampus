@@ -17,7 +17,7 @@ export function CampusMap() {
   const [status, setStatus] = useState("Tüm durumlar");
   const [selectedId, setSelectedId] = useState(2041);
   const [expanded, setExpanded] = useState("Mühendislik Fakültesi");
-  const [votes, setVotes] = useState<Set<number>>(new Set());
+  const [votes, setVotes] = useState(() => new Set(reports.filter(report => report.supported).map(report => report.id)));
   const [emergency, setEmergency] = useState(false);
   const visible = reports.filter(report =>
     `${report.building} ${report.place} ${report.title}`.toLocaleLowerCase("tr").includes(query.toLocaleLowerCase("tr")) &&
@@ -48,7 +48,7 @@ export function CampusMap() {
         {buildings.map(building => { const matches = visible.filter(report => report.building === building.name); return matches.length > 0 && <div key={building.name}><button type="button" className={`${s.item} !p-2`} aria-expanded={selectedBuilding === building.name} onClick={() => selectBuilding(building.name)}><span className={s.itemBody}><span className="font-medium">{building.name}</span><span className={s.small}>{matches.length} bildirim{matches.some(report => report.urgent) && ", 1 acil"}</span></span><span aria-hidden="true">{selectedBuilding === building.name ? "⌃" : "⌄"}</span></button>{selectedBuilding === building.name && <div className="pl-2">{matches.map(report => <button key={report.id} type="button" className={`${s.item} !p-2`} aria-pressed={selected?.id === report.id} onClick={() => setSelectedId(report.id)}><span className={s.dot} style={{ background: report.urgent ? "#b91c1c" : report.status === "cozuldu" ? "#166534" : undefined }} /><span className={s.itemBody}><span>{report.title}</span><span className={s.small}>{statusMeta(report.status).label}, {report.place}, {report.people} kişi, {report.time}</span></span></button>)}</div>}</div>; })}
       </div>
     </Glass>
-    <Glass className={s.mapRight}>{selected ? <ReportDetail key={selected.id} report={selected} supported={votes.has(selected.id)} onSupport={() => setVotes(previous => { const next = new Set(previous); if (next.has(selected.id)) next.delete(selected.id); else next.add(selected.id); return next; })} /> : <p className="p-4 text-muted">Filtrelerini değiştirerek haritadan bir bildirim seç.</p>}</Glass>
+    <Glass className={s.mapRight}>{selected ? <ReportDetail key={selected.id} report={{ ...selected, people: selected.people + Number(votes.has(selected.id)) - Number(!!selected.supported) }} supported={votes.has(selected.id)} onSupport={() => setVotes(previous => { const next = new Set(previous); if (next.has(selected.id)) next.delete(selected.id); else next.add(selected.id); return next; })} /> : <p className="p-4 text-muted">Filtrelerini değiştirerek haritadan bir bildirim seç.</p>}</Glass>
     <div className={s.emergency}><button type="button" className="btn-red t flex items-center gap-2 rounded-lg bg-danger px-3 py-2 text-white font-semibold" onClick={() => setEmergency(v => !v)} aria-expanded={emergency}><WarningCircleIcon size={20} aria-hidden="true" />Acil durum</button>{emergency && <Glass className="mt-2 max-w-72 p-4"><p>Can güvenliği riski varsa 112 Acil Çağrı Merkezi’ni ara.</p><a className="mt-2 inline-block font-semibold text-danger underline" href="tel:112">112’yi ara</a></Glass>}</div>
     <Glass className={s.legend}><span className="text-danger">● Acil</span> · <span className="text-amber-700">● İşlemde</span> · <span className="text-green-800">● Çözüldü</span> · Şematik demo haritası</Glass>
   </main>;
