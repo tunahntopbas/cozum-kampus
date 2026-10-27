@@ -140,8 +140,8 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `app.ratelimit.RateLimiter(limit: int, window_s: float = 60, clock=time.monotonic)` ve `check(key: str) -> None` (aşımda `HTTPException(429)`).
   - `app.main.app`: CORS yalnızca `allowed_origin`; `GET /health` → `{"status": "ok"}`.
 
-- [ ] **Step 1:** `uv init --python 3.12 services/ai`; `uv add fastapi "uvicorn[standard]" openai pydantic-settings httpx`; `uv add --dev pytest pytest-asyncio ruff`. `pyproject.toml` içinde `[tool.pytest.ini_options] asyncio_mode = "auto"`.
-- [ ] **Step 2: Failing tests**
+- [x] **Step 1:** `uv init --python 3.12 services/ai`; `uv add fastapi "uvicorn[standard]" openai pydantic-settings httpx`; `uv add --dev pytest pytest-asyncio ruff`. `pyproject.toml` içinde `[tool.pytest.ini_options] asyncio_mode = "auto"`.
+- [x] **Step 2: Failing tests**
   ```python
   # tests/test_health.py
   def test_health(client):
@@ -162,10 +162,10 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   async def test_get_current_user_raises_401_on_bad_token(): ... # status_code == 401
   ```
   `conftest.py`: ortam değişkenlerini sahte değerlerle ayarlayan ve `TestClient(app)` döndüren `client` fixture'ı; `app.dependency_overrides[get_current_user] = lambda: CurrentUser(id="u-1", email="a@ogr.sakarya.edu.tr")`.
-- [ ] **Step 3:** `cd services/ai && uv run pytest -q` → FAIL (modüller yok).
-- [ ] **Step 4:** Modülleri yaz. `auth.py` httpx istemcisini modül düzeyinde `get_http_client()` ile verir ki testte değiştirilebilsin.
-- [ ] **Step 5:** `uv run pytest -q && uv run ruff check .` → PASS.
-- [ ] **Step 6:** Commit: `feat(ai): FastAPI skeleton with health, auth and rate limiting`
+- [x] **Step 3:** `cd services/ai && uv run pytest -q` → FAIL (modüller yok).
+- [x] **Step 4:** Modülleri yaz. `auth.py` httpx istemcisini modül düzeyinde `get_http_client()` ile verir ki testte değiştirilebilsin.
+- [x] **Step 5:** `uv run pytest -q && uv run ruff check .` → PASS.
+- [x] **Step 6:** Commit: `feat(ai): FastAPI skeleton with health, auth and rate limiting`
 
 ---
 
