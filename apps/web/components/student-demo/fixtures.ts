@@ -15,15 +15,6 @@ export const reports: DemoReport[] = [
   { id: 2040, title: "Projeksiyon cihazı açılmıyor", building: "Mühendislik Fakültesi", place: "Lab 204", category: "Donanım", status: "alindi", mine: false, supported: true, people: 2, time: "09:45", unit: "Bilgi İşlem" },
   { id: 2039, title: "Yurt rampasında kaygan zemin", building: "Yurt", place: "Giriş rampası", category: "Temizlik", status: "islemde", urgent: true, accessible: true, mine: false, supported: true, people: 6, time: "09:20", unit: "Temizlik" },
 ];
-export const buildings = [
-  { name: "Mühendislik Fakültesi", x: 650, y: 280 },
-  { name: "Bilgisayar ve Bilişim Bilimleri Fak.", x: 905, y: 515 },
-  { name: "Kütüphane", x: 595, y: 525 },
-  { name: "Yemekhane", x: 605, y: 730 },
-  { name: "Yurt", x: 1215, y: 745 },
-  { name: "Eğitim Fakültesi", x: 895, y: 240 },
-];
-
 export type Suggestion = { id: number; title: string; body: string; category: string; votes: number; status: string; date: string; createdAt: string; author?: string; reply?: string; unit?: string };
 export const suggestions: Suggestion[] = [
   { id: 1, title: "Kütüphane final haftasında sabaha kadar açık kalsın", body: "Final haftasında 22:00 kapanışı yetmiyor. Çalışma salonları gece boyunca açık olursa yurttaki arkadaşlar da yararlanır.", category: "Kütüphane", votes: 412, status: "Planlandı", date: "12 Eki", createdAt: "2026-10-12T12:00:00+03:00", unit: "Kütüphane Daire Başkanlığı", reply: "Final haftasında iki salon pilot olarak 02:00'ye kadar açık kalacak. Sonuçlara göre tüm salonlara yaygınlaştırılacak." },
