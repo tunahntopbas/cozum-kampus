@@ -6,6 +6,8 @@ import { PageHeading, Pill, Stats } from "@/components/staff-demo/Shared";
 import s from "@/components/staff-demo/Staff.module.css";
 import { REQUEST_COLUMNS, stockLevel, toRequest, type MaterialRequest, type NeededMaterial, type RequestRow, type StockItem } from "@/lib/staff";
 import { createClient } from "@/lib/supabase/client";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Package as PackageIcon_, Sparkle as SparkleIcon_, ClipboardText as ClipboardTextIcon_ } from "@phosphor-icons/react";
 
 const DATE = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" });
 const REQUEST_STATUS: Record<string, [string, string]> = {
@@ -137,7 +139,7 @@ export function MaterialsView({
             </table>
           </div>
           {!matches.length && (
-            <p className={s.empty}>{stock.length ? "Aramana uygun malzeme bulunamadı." : "Biriminin deposunda kayıt yok."}</p>
+            <EmptyState icon={<PackageIcon_ size={22} />} title={stock.length ? "Aramana uygun malzeme bulunamadı." : "Biriminin deposunda kayıt yok."} hint={stock.length ? "Başka bir ad dene." : "Depo kayıtları yönetimden eklenir."} />
           )}
         </section>
         <div className={s.stack}>
@@ -163,7 +165,7 @@ export function MaterialsView({
                 ))}
               </ul>
             ) : (
-              <p className={s.empty}>Açık işlerde malzeme önerisi yok.</p>
+              <EmptyState icon={<SparkleIcon_ size={22} />} title="Açık işlerde malzeme önerisi yok." hint="Yapay zeka bildirimlere malzeme önerdikçe burada toplanır." />
             )}
             <button className={s.primary} disabled={busy || !missing.length} onClick={requestMissing}>
               {missing.length ? "Eksikleri depodan iste" : "Talepler iletildi"}
@@ -236,7 +238,7 @@ export function MaterialsView({
                 })}
               </ul>
             ) : (
-              <p className={s.empty}>Henüz talebin yok.</p>
+              <EmptyState icon={<ClipboardTextIcon_ size={22} />} title="Henüz talebin yok." hint="Yeni talep ile depodan malzeme iste." />
             )}
           </section>
         </div>

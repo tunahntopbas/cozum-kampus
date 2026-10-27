@@ -13,6 +13,8 @@ import { categoryLabel, urgencyLabel, type Urgency } from "@/lib/labels";
 import { statusMeta, type ReportStatus } from "@/lib/status";
 import { createClient } from "@/lib/supabase/client";
 import type { AdminData, PanelReport } from "./types";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { MagnifyingGlass as MagnifyingGlassIcon_ } from "@phosphor-icons/react";
 
 export type StaffMember = { id: string; name: string; unitId: number | null };
 export type ReportNote = { reportId: number; body: string; createdAt: string; author: string };
@@ -127,7 +129,7 @@ export function ReportsView({
                 ))}
               </ol>
             ) : (
-              <p className={s.empty}>Eşleşen bildirim bulunamadı.</p>
+              <EmptyState icon={<MagnifyingGlassIcon_ size={22} />} title="Eşleşen bildirim bulunamadı." hint="Aramayı kısalt ya da filtreleri Tümü yap." />
             )}
           </section>
         </Glass>

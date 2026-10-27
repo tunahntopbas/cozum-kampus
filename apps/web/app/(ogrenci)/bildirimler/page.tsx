@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { NotificationsView, type AppNotification } from "@/components/notifications/NotificationsView";
 import { createServerClient } from "@/lib/supabase/server";
 
@@ -32,7 +33,7 @@ async function Notifications() {
 
 export default function NotificationsPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Bildirimler yükleniyor" variant="list" standalone />}>
       <Notifications />
     </Suspense>
   );

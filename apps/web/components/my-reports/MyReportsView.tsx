@@ -13,6 +13,8 @@ import { uploadReportImage } from "@/lib/upload";
 import s from "@/components/student-demo/StudentDemo.module.css";
 import { MyReportDetail } from "./MyReportDetail";
 import type { MyReportItem } from "./types";
+import { TrayIcon } from "@phosphor-icons/react";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 type Props = {
   userId: string;
@@ -155,13 +157,24 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
           />
           <TabPanels id={tabsId} options={[...MY_TABS]} value={tab}>
             {!visible.length && (
-              <p role="status" className="p-4 text-muted">
-                {tab === "Açtıklarım" && !mine.length
-                  ? "Henüz bildirim açmadın. Bir sorun gördüğünde Bildir'e dokun."
-                  : tab === "Desteklediklerim" && !supported.length
-                    ? "Haritada bir bildirime \"Ben de yaşıyorum\" dediğinde burada görünür."
-                    : "Bu filtrelere uygun bildirim yok."}
-              </p>
+              <EmptyState
+                icon={<TrayIcon size={22} />}
+                title={
+                  tab === "Açtıklarım" && !mine.length
+                    ? "Henüz bildirim açmadın."
+                    : tab === "Desteklediklerim" && !supported.length
+                      ? "Desteklediğin bildirim yok."
+                      : "Bu filtrelere uygun bildirim yok."
+                }
+                hint={
+                  tab === "Açtıklarım" && !mine.length
+                    ? "Bir sorun gördüğünde fotoğrafını çek, birkaç saniyede bildir."
+                    : tab === "Desteklediklerim" && !supported.length
+                      ? "Haritada bir bildirime “Ben de yaşıyorum” dediğinde burada görünür."
+                      : undefined
+                }
+                action={tab === "Açtıklarım" && !mine.length ? { href: "/bildir", label: "Sorun bildir" } : undefined}
+              />
             )}
             {visible.map((r) => (
               <button

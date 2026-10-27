@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { CampusVoiceView, type AdminSuggestion } from "@/components/admin/CampusVoiceView";
 import { createServerClient } from "@/lib/supabase/server";
 
@@ -37,7 +38,7 @@ async function CampusVoice() {
 
 export default function AdminCampusVoicePage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Öneriler yükleniyor" stats={4} variant="split" />}>
       <CampusVoice />
     </Suspense>
   );

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { HistoryView, type HistoryRecord } from "@/components/staff/HistoryView";
 import { floorLabel } from "@/lib/campus";
 import type { ReportEvent } from "@/lib/my-reports";
@@ -81,7 +82,7 @@ async function History() {
 
 export default function StaffHistoryPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Geçmiş yükleniyor" stats={4} variant="split" />}>
       <History />
     </Suspense>
   );

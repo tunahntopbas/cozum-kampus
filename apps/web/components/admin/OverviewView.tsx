@@ -13,6 +13,8 @@ import { groupByBuilding } from "@/lib/campus";
 import { CATEGORIES, categoryLabel } from "@/lib/labels";
 import { isOpen } from "@/lib/my-reports";
 import type { AdminData } from "./types";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Sparkle as SparkleIcon_ } from "@phosphor-icons/react";
 
 const PERIODS: [Period, string][] = [
   ["today", "Bugün"],
@@ -134,7 +136,7 @@ export function OverviewView({ data, now: nowProp }: { data: AdminData; now?: nu
               })}
             </ul>
           ) : (
-            <p className={s.empty}>Bu hafta özetlenecek hareket yok.</p>
+            <EmptyState icon={<SparkleIcon_ size={22} />} title="Bu hafta özetlenecek hareket yok." hint="Yeni bildirimler geldikçe özet kendiliğinden dolar." />
           )}
         </Glass>
       </div>

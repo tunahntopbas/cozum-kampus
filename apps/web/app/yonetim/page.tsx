@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { OverviewView } from "@/components/admin/OverviewView";
 import { loadAdminData } from "./data";
 
@@ -9,7 +10,7 @@ async function Overview() {
 
 export default function AdminOverviewPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Genel bakış yükleniyor" stats={4} variant="split" />}>
       <Overview />
     </Suspense>
   );

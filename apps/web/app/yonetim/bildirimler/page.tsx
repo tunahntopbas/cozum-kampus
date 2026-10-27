@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { ReportsView, type ReportNote } from "@/components/admin/ReportsView";
 import { ADMIN_FILTERS, type AdminFilter } from "@/lib/admin";
 import { createServerClient } from "@/lib/supabase/server";
@@ -37,7 +38,7 @@ async function Reports({ searchParams }: { searchParams: Search }) {
 
 export default function AdminReportsPage({ searchParams }: { searchParams: Search }) {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Bildirimler yükleniyor" variant="split" />}>
       <Reports searchParams={searchParams} />
     </Suspense>
   );

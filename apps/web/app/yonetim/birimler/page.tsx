@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageSkeleton } from "@/components/ui/Skeleton";
 import { UnitsView, type UnitRequest } from "@/components/admin/UnitsView";
 import { createServerClient } from "@/lib/supabase/server";
 import { loadAdminData } from "../data";
@@ -40,7 +41,7 @@ async function Units() {
 
 export default function AdminUnitsPage() {
   return (
-    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+    <Suspense fallback={<PageSkeleton label="Birimler yükleniyor" stats={4} variant="grid" />}>
       <Units />
     </Suspense>
   );

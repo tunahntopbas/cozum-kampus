@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Photo, Pill, Stats } from "@/components/staff-demo/Shared";
 import s from "@/components/staff-demo/Staff.module.css";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ClockCounterClockwise as ClockCounterClockwiseIcon_ } from "@phosphor-icons/react";
 
 export type HistoryRecord = {
   id: number;
@@ -138,7 +140,7 @@ export function HistoryView({ records, now: nowProp }: { records: HistoryRecord[
             </table>
           </div>
           {!visible.length && (
-            <p className={s.empty}>{records.length ? "Bu filtrelere uygun iş yok." : "Henüz tamamlanan iş yok."}</p>
+            <EmptyState icon={<ClockCounterClockwiseIcon_ size={22} />} title={records.length ? "Bu filtrelere uygun iş yok." : "Henüz tamamlanan iş yok."} hint={records.length ? "Dönemi Tümü yap ya da aramayı temizle." : "Tamamladığın işler burada birikir."} />
           )}
         </section>
         {record && (

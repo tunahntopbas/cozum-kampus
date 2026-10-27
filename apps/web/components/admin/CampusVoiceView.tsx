@@ -10,6 +10,8 @@ import { Badge, Filters, Kpis } from "@/components/admin-demo/ui";
 import s from "@/components/admin-demo/admin.module.css";
 import { AiRequestError, draftReply, type DraftInput } from "@/lib/ai";
 import { createClient } from "@/lib/supabase/client";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Lightbulb as LightbulbIcon_ } from "@phosphor-icons/react";
 
 type SuggestionStatus = DraftInput["status"];
 
@@ -103,7 +105,7 @@ export function CampusVoiceView({ suggestions }: { suggestions: AdminSuggestion[
                 ))}
               </ol>
             ) : (
-              <p className={s.empty}>{suggestions.length ? "Bu filtrede öneri bulunamadı." : "Henüz öneri yok."}</p>
+              <EmptyState icon={<LightbulbIcon_ size={22} />} title={suggestions.length ? "Bu filtrede öneri bulunamadı." : "Henüz öneri yok."} hint={suggestions.length ? "Hepsi filtresiyle tüm önerileri gör." : "Öğrenciler öneri yazınca burada listelenir."} />
             )}
           </section>
         </Glass>
