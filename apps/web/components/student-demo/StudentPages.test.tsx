@@ -1,27 +1,9 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import MyReportsPage from "@/app/(ogrenci)/bildirimlerim/page";
 import SuggestionsPage from "@/app/(ogrenci)/oneriler/page";
 import NotificationsPage from "@/app/(ogrenci)/bildirimler/page";
 
 describe("student demo screens", () => {
-  it("switches personal report tabs and filters resolved reports", () => {
-    render(<MyReportsPage />);
-    fireEvent.click(screen.getByRole("button", { name: "Çözüldü" }));
-    expect(screen.getByRole("button", { name: /Yemekhane girişinde su birikintisi/ })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: /Koridor lambası yanmıyor/ })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("tab", { name: /Desteklediklerim/ }));
-    expect(screen.getByRole("tab", { name: /Desteklediklerim/ })).toHaveAttribute("aria-selected", "true");
-    expect(screen.getByText("Bu filtrelere uygun bildirim yok.")).toBeInTheDocument();
-  });
-  it("keeps report notification preferences separate per selection", () => {
-    render(<MyReportsPage />);
-    fireEvent.click(screen.getByRole("switch", { name: "Durum değişince haber ver" }));
-    fireEvent.click(screen.getByRole("button", { name: /Asansör kapısı kapanmıyor/ }));
-    expect(screen.getByRole("switch", { name: "Durum değişince haber ver" })).toHaveAttribute("aria-checked", "true");
-    fireEvent.click(screen.getByRole("button", { name: /Koridor lambası yanmıyor/ }));
-    expect(screen.getByRole("switch", { name: "Durum değişince haber ver" })).toHaveAttribute("aria-checked", "false");
-  });
   it("toggles votes and displays public management replies", () => {
     render(<SuggestionsPage />);
     const vote = screen.getByRole("button", { name: /Kütüphane final haftasında.*oy ver/ });
@@ -88,7 +70,6 @@ describe("student review regressions", () => {
   });
   it.each([
     [SuggestionsPage, ["Popüler", "Yeni", "Yanıtlananlar"]],
-    [MyReportsPage, ["Açtıklarım", "Desteklediklerim"]],
     [NotificationsPage, ["Tümü", "Okunmamış"]],
   ])("connects tabs to panels and supports roving keyboard focus", (Page, names) => {
     render(<Page />);

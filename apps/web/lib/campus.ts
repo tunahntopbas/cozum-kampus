@@ -23,6 +23,48 @@ export type MapReport = {
   coverUrl: string | null;
 };
 
+// A row from public_reports (or reports for the owner); the views carry no generated types yet.
+export type ReportRow = {
+  id: number;
+  reporter_id: string | null;
+  title: string | null;
+  description: string | null;
+  category: string | null;
+  urgency: Urgency | null;
+  status: ReportStatus | null;
+  unit_id: number | null;
+  building_id: number | null;
+  floor: number | null;
+  lat?: number | null;
+  lng?: number | null;
+  ai_summary: string | null;
+  vote_count: number | null;
+  created_at: string | null;
+  resolved_at: string | null;
+};
+
+export function toMapReport(r: ReportRow, coverUrl: string | null = null): MapReport {
+  return {
+    id: r.id,
+    title: r.title ?? "Bildirim",
+    description: r.description ?? "",
+    category: r.category ?? "diger",
+    urgency: r.urgency ?? "orta",
+    status: r.status ?? "alindi",
+    unitId: r.unit_id,
+    buildingId: r.building_id,
+    floor: r.floor,
+    lat: r.lat ?? null,
+    lng: r.lng ?? null,
+    aiSummary: r.ai_summary,
+    voteCount: r.vote_count ?? 1,
+    createdAt: r.created_at ?? new Date(0).toISOString(),
+    resolvedAt: r.resolved_at,
+    reporterId: r.reporter_id,
+    coverUrl,
+  };
+}
+
 export const QUICK_FILTERS = ["Tümü", "Acil", "Benimkiler", "Erişilebilirlik"] as const;
 export type QuickFilter = (typeof QUICK_FILTERS)[number];
 export type MapFilters = { query: string; filter: QuickFilter; category: string; status: StatusTone | "" };
