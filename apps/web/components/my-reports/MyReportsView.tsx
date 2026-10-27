@@ -131,11 +131,11 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
       )}
       <div className={s.stats}>
         {statCards.map(([title, count, note]) => (
-          <Glass className={s.stat} key={title}>
+          <div className={s.stat} key={title}>
             <p className={s.muted}>{title}</p>
             <strong className="mono">{count}</strong>
             <p className={s.small}>{note}</p>
-          </Glass>
+          </div>
         ))}
       </div>
       <div className={s.reportsColumns}>
