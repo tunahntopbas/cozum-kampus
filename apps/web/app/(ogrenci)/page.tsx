@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { CampusMapView } from "@/components/map/CampusMapView";
-import type { MapBuilding, MapReport } from "@/lib/campus";
+import { toMapReport, type MapBuilding, type ReportRow } from "@/lib/campus";
 import { createServerClient } from "@/lib/supabase/server";
 
 // Signed photo URLs outlive a demo session; the page refetches them on every visit.
@@ -33,25 +33,9 @@ async function CampusMap() {
     : [];
   const urlByPath = new Map(signed.map((x) => [x.path, x.signedUrl]));
 
-  const mapReports: MapReport[] = rows.map((r) => ({
-    id: r.id,
-    title: r.title ?? "Bildirim",
-    description: r.description ?? "",
-    category: r.category ?? "diger",
-    urgency: r.urgency ?? "orta",
-    status: r.status ?? "alindi",
-    unitId: r.unit_id,
-    buildingId: r.building_id,
-    floor: r.floor,
-    lat: r.lat,
-    lng: r.lng,
-    aiSummary: r.ai_summary,
-    voteCount: r.vote_count ?? 1,
-    createdAt: r.created_at ?? new Date().toISOString(),
-    resolvedAt: r.resolved_at,
-    reporterId: r.reporter_id,
-    coverUrl: r.cover_path ? (urlByPath.get(r.cover_path) ?? null) : null,
-  }));
+  const mapReports = rows.map((r) =>
+    toMapReport(r as ReportRow, r.cover_path ? (urlByPath.get(r.cover_path) ?? null) : null),
+  );
 
   return (
     <CampusMapView
