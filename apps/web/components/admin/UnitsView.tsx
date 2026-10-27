@@ -73,13 +73,15 @@ export function UnitsView({
   const unitName = data.units.find((u) => u.id === selected)?.name ?? "";
   const unitRequests = requests.filter((r) => r.unitId === selected);
 
-  async function run(call: PromiseLike<{ error: unknown }>, ok: string) {
+  async function run(call: PromiseLike<{ data: boolean | null; error: unknown }>, ok: string) {
     setBusy(true);
-    const { error } = await call;
+    setMessage("");
+    const { data, error } = await call;
     setBusy(false);
-    setMessage(error ? "İşlem yapılamadı. Tekrar dene." : ok);
-    if (!error) router.refresh();
-    return !error;
+    const succeeded = !error && data === true;
+    setMessage(succeeded ? ok : "İşlem yapılamadı. Tekrar dene.");
+    if (succeeded) router.refresh();
+    return succeeded;
   }
 
   async function assign(e: React.FormEvent) {

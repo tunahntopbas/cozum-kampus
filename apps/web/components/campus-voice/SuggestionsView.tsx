@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { CaretUpIcon, LightbulbIcon, SparkleIcon } from "@phosphor-icons/react";
 import { PageContent } from "@/components/layout/PageContent";
@@ -61,7 +61,19 @@ export function SuggestionsView({
 }) {
   const router = useRouter();
   const tabsId = useId();
-  const [voted, setVoted] = useState(() => new Set(votedIds));
+  const [localVotes, setLocalVotes] = useState({ source: votedIds, overrides: new Map<number, boolean>() });
+  if (localVotes.source !== votedIds) {
+    const serverVotes = new Set(votedIds);
+    setLocalVotes({ source: votedIds, overrides: new Map([...localVotes.overrides].filter(([id, on]) => serverVotes.has(id) !== on)) });
+  }
+  const voted = new Set(votedIds);
+  for (const [id, on] of localVotes.overrides) {
+    if (on) voted.add(id);
+    else voted.delete(id);
+  }
+  const voting = useRef(new Set<number>());
+  const [pendingVotes, setPendingVotes] = useState(new Set<number>());
+  const submitting = useRef(false);
   const [tab, setTab] = useState("Popüler");
   const [filter, setFilter] = useState("Tümü");
   const [text, setText] = useState("");
@@ -73,6 +85,22 @@ export function SuggestionsView({
   const [busy, setBusy] = useState(false);
   const [highlight, setHighlight] = useState<number | null>(null);
 
+  // Replies can be published by another session, even with notifications disabled.
+  // These tables are not in the Realtime publication, so refetch the server props.
+  useEffect(() => {
+    const refresh = () => {
+      if (document.visibilityState === "visible") router.refresh();
+    };
+    const timer = window.setInterval(refresh, 30_000);
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", refresh);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, [router]);
+
   const initial = new Set(votedIds);
   const count = (r: StudentSuggestion) => r.votes - Number(initial.has(r.id)) + Number(voted.has(r.id));
   const visible = suggestions
@@ -81,49 +109,61 @@ export function SuggestionsView({
   const similar = text.trim().length >= 8 ? findSimilar(text, suggestions) : undefined;
 
   async function toggleVote(id: number) {
+    if (voting.current.has(id)) return;
+    voting.current.add(id);
+    setPendingVotes(new Set(voting.current));
     const on = !voted.has(id);
-    setVoted((prev) => {
-      const next = new Set(prev);
-      if (on) next.add(id);
-      else next.delete(id);
-      return next;
-    });
-    const table = createClient().from("suggestion_votes");
-    const { error: err } = on
-      ? await table.insert({ suggestion_id: id, user_id: userId })
-      : await table.delete().eq("suggestion_id", id).eq("user_id", userId);
-    if (err) {
-      setVoted((prev) => {
-        const next = new Set(prev);
-        if (on) next.delete(id);
-        else next.add(id);
-        return next;
+    const previous = localVotes.overrides.get(id);
+    setMessage("");
+    setLocalVotes((prev) => ({ ...prev, overrides: new Map(prev.overrides).set(id, on) }));
+    try {
+      const table = createClient().from("suggestion_votes");
+      const { error: err } = on
+        ? await table.insert({ suggestion_id: id, user_id: userId })
+        : await table.delete().eq("suggestion_id", id).eq("user_id", userId);
+      if (err) throw err;
+    } catch {
+      setLocalVotes((prev) => {
+        const overrides = new Map(prev.overrides);
+        if (previous === undefined) overrides.delete(id);
+        else overrides.set(id, previous);
+        return { ...prev, overrides };
       });
       setMessage("Oy kaydedilemedi. Tekrar dene.");
+    } finally {
+      voting.current.delete(id);
+      setPendingVotes(new Set(voting.current));
     }
   }
 
   async function submit(e: FormEvent) {
     e.preventDefault();
+    if (submitting.current) return;
     const body = text.trim();
     if (!body) {
       setError("Lütfen önerini yaz.");
       return;
     }
+    submitting.current = true;
     setBusy(true);
-    const { error: err } = await createClient()
-      .from("suggestions")
-      .insert({
-        author_id: userId,
-        is_anonymous: anonymous,
-        category,
-        title: body.length > 120 ? `${body.slice(0, 117)}…` : body,
-        body: place === PLACES[0] ? body : `${body}\nKonum: ${place}`,
-      });
-    setBusy(false);
-    if (err) {
+    setError("");
+    try {
+      const { error: err } = await createClient()
+        .from("suggestions")
+        .insert({
+          author_id: userId,
+          is_anonymous: anonymous,
+          category,
+          title: body.length > 120 ? `${body.slice(0, 117)}…` : body,
+          body: place === PLACES[0] ? body : `${body}\nKonum: ${place}`,
+        });
+      if (err) throw err;
+    } catch {
       setError("Öneri gönderilemedi. Tekrar dene.");
       return;
+    } finally {
+      submitting.current = false;
+      setBusy(false);
     }
     setText("");
     setTab("Yeni");
@@ -157,6 +197,7 @@ export function SuggestionsView({
                     className={`${s.vote} mono`}
                     aria-label={`${r.title} önerisine oy ver`}
                     aria-pressed={voted.has(r.id)}
+                    disabled={pendingVotes.has(r.id)}
                     onClick={() => toggleVote(r.id)}
                   >
                     <CaretUpIcon size={20} aria-hidden="true" />

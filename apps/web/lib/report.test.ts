@@ -27,14 +27,15 @@ const FORM: ReportForm = {
 const UNITS = { yapi_isleri: 1, bilgi_islem: 2, guvenlik: 5 };
 
 describe("buildReportInsert", () => {
-  it("marks pending analysis as alindi", () => {
-    expect(buildReportInsert(FORM, { ...A, ai_pending: true }, "u-1", UNITS).status).toBe("alindi");
+  it("quarantines pending rows even when the builder is called directly", () => {
+    expect(buildReportInsert(FORM, { ...A, ai_pending: true }, "u-1", UNITS)).toMatchObject({ is_hidden: true, status: "alindi", ai_summary: null });
   });
 
   it("routes analysed report", () => {
     const row = buildReportInsert(FORM, A, "u-1", UNITS);
     expect(row).toMatchObject({
       reporter_id: "u-1",
+      is_hidden: false,
       status: "yonlendirildi",
       unit_id: 1,
       title: "Koridor lambası yanmıyor",
@@ -56,11 +57,7 @@ describe("buildReportInsert", () => {
     expect(row.location).toBe("SRID=4326;POINT(30.33 40.74)");
   });
 
-  it("does not store AI fields for a pending analysis", () => {
-    const row = buildReportInsert(FORM, { ...A, ai_pending: true, confidence: 0 }, "u-1", UNITS);
-    expect(row.ai_summary).toBeNull();
-    expect(row.ai_confidence).toBeNull();
-  });
+
 });
 
 describe("canSubmit", () => {
@@ -86,7 +83,18 @@ describe("canSubmit", () => {
     });
   });
 
-  it("allows submission while analysis is still missing", () => {
-    expect(canSubmit(null, FORM)).toEqual({ ok: true });
+  it("files a report without a finished analysis; it is stored hidden until an admin publishes it", () => {
+    expect(canSubmit(null, FORM).ok).toBe(true);
+    expect(canSubmit({ ...A, ai_pending: true }, FORM).ok).toBe(true);
+    expect(buildReportInsert(FORM, { ...A, ai_pending: true }, "u-1", UNITS)).toMatchObject({ is_hidden: true });
   });
+});
+
+it.each([undefined, null, "true", 1])("requires boolean approval (%s)", (ok) => {
+ expect(canSubmit({ ...A, moderation: { ok, reasons: [] } } as unknown as ReportAnalysis, FORM).ok).toBe(false);
+});
+
+it("quarantines a denied verdict when the builder is called directly", () => {
+  expect(buildReportInsert(FORM, { ...A, moderation: { ok: false, reasons: ["portrait"] } }, "u-1", UNITS))
+    .toMatchObject({ is_hidden: true, status: "alindi", ai_summary: null });
 });

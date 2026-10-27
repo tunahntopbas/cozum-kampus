@@ -112,6 +112,7 @@ describe("filterAdminReports", () => {
     report({ id: 2, unitId: null, title: "Sıcak su yok", place: "Yurt" }),
     report({ id: 3, status: "yeniden_acildi", unitId: 2 }),
     report({ id: 4, urgency: "dusuk", createdAt: ago(9) }),
+    report({ id: 5, status: "cozuldu", resolvedAt: ago(0), isHidden: true }),
   ];
   const ids = (f: Parameters<typeof filterAdminReports>[1]) => filterAdminReports(reports, f, NOW).map((r) => r.id);
 
@@ -123,6 +124,7 @@ describe("filterAdminReports", () => {
     expect(ids({ query: "", filter: "Tümü", unitId: 2 })).toEqual([3]);
     expect(ids({ query: "yurt", filter: "Tümü", unitId: null })).toEqual([2]);
     expect(ids({ query: "#4", filter: "Tümü", unitId: null })).toEqual([4]);
+    expect(ids({ query: "", filter: "Yayında değil", unitId: null })).toEqual([5]);
   });
 });
 

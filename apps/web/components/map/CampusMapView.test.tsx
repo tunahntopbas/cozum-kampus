@@ -73,6 +73,82 @@ describe("CampusMapView", () => {
     remove.mockReset().mockResolvedValue({ error: null });
   });
 
+  it.each(["automatic", "pin", "single building"])("collapses and reopens the selected building (%s)", (mode) => {
+    if (mode === "single building") {
+      render(<CampusMapView userId="me" buildings={buildings} reports={[reports[0]]} unitNames={{}} votedIds={[]} />);
+    } else {
+      renderView();
+      if (mode === "pin") {
+        fireEvent.click(screen.getByRole("button", { name: "Mühendislik Fakültesi Dekanlığı harita işareti" }));
+      }
+    }
+    const building = screen.getByRole("button", { expanded: true });
+    expect(screen.getByRole("button", { name: /Koridor lambası yanmıyor/, pressed: true })).toBeInTheDocument();
+    fireEvent.click(building);
+    expect(building).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("button", { name: /Koridor lambası yanmıyor/, pressed: true })).not.toBeInTheDocument();
+    expect(screen.getByRole("region", { name: "Seçili bildirim" })).toBeInTheDocument();
+    fireEvent.click(building);
+    expect(building).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("button", { name: /Koridor lambası yanmıyor/, pressed: true })).toBeInTheDocument();
+  });
+
+  it("updates report details, counts, pins and votes from refreshed props", () => {
+    const { rerender } = renderView();
+    const fresh = report({ id: 3, title: "Yeni rapor", status: "cozuldu", voteCount: 12 });
+    rerender(<CampusMapView userId="me" buildings={buildings} reports={[fresh]} unitNames={{}} votedIds={[3]} />);
+    expect(screen.getByRole("heading", { name: "Yeni rapor" })).toBeInTheDocument();
+    expect(screen.getByText("12 kişi bildirdi")).toBeInTheDocument();
+    expect(screen.getByText("Sakarya Üniversitesi, 0 açık bildirim")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Süleyman Demirel Kütüphanesi harita işareti" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Desteğimi geri al" })).toHaveAttribute("aria-pressed", "true");
+    rerender(<CampusMapView userId="me" buildings={buildings} reports={[{ ...fresh, status: "islemde", voteCount: 13 }]} unitNames={{}} votedIds={[]} />);
+    expect(screen.getByText("13 kişi bildirdi")).toBeInTheDocument();
+    expect(screen.getByText("Sakarya Üniversitesi, 1 açık bildirim")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Ben de yaşıyorum" })).toHaveAttribute("aria-pressed", "false");
+    rerender(<CampusMapView userId="me" buildings={buildings} reports={[]} unitNames={{}} votedIds={[]} />);
+    expect(screen.queryByRole("region", { name: "Seçili bildirim" })).not.toBeInTheDocument();
+  });
+
+  it.each([false, true])("preserves a local vote change across stale refreshes (initial support: %s)", async (supported) => {
+    const rows = [report({ voteCount: 3 })];
+    const view = (nextRows: MapReport[], ids: number[]) => (
+      <CampusMapView userId="me" buildings={buildings} reports={nextRows} unitNames={{}} votedIds={ids} />
+    );
+    const { rerender } = render(view(rows, supported ? [1] : []));
+    fireEvent.click(screen.getByRole("button", { name: supported ? "Desteğimi geri al" : "Ben de yaşıyorum" }));
+    const count = supported ? 2 : 4;
+    await screen.findByText(`${count} kişi bildirdi`);
+    rerender(view([report({ title: "Güncel başlık", voteCount: 7 })], supported ? [1] : []));
+    expect(screen.getByRole("heading", { name: "Güncel başlık" })).toBeInTheDocument();
+    expect(screen.getByText(`${supported ? 6 : 8} kişi bildirdi`)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: supported ? "Ben de yaşıyorum" : "Desteğimi geri al" })).toHaveAttribute("aria-pressed", String(!supported));
+    // Acknowledgement retires the local override and must not double-count it.
+    rerender(view([report({ voteCount: count })], supported ? [] : [1]));
+    expect(screen.getByText(`${count} kişi bildirdi`)).toBeInTheDocument();
+    // Later authoritative changes are no longer masked by an old local vote.
+    rerender(view([report({ voteCount: 10 })], supported ? [1] : []));
+    expect(screen.getByText("10 kişi bildirdi")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: supported ? "Desteğimi geri al" : "Ben de yaşıyorum" })).toBeInTheDocument();
+  });
+
+  it("does not double-count a server vote arriving while its save is pending", async () => {
+    let finish!: (result: { error: null }) => void;
+    insert.mockImplementationOnce(() => new Promise((resolve) => { finish = resolve; }));
+    const view = (count: number, ids: number[]) => (
+      <CampusMapView userId="me" buildings={buildings} reports={[report({ voteCount: count })]} unitNames={{}} votedIds={ids} />
+    );
+    const { rerender } = render(view(3, []));
+    fireEvent.click(screen.getByRole("button", { name: "Ben de yaşıyorum" }));
+    rerender(view(4, [1]));
+    finish({ error: null });
+    await waitFor(() => expect(screen.getByRole("button", { name: "Desteğimi geri al" })).toBeEnabled());
+    expect(screen.getByText("4 kişi bildirdi")).toBeInTheDocument();
+    rerender(view(3, []));
+    expect(screen.getByRole("button", { name: "Ben de yaşıyorum" })).toBeInTheDocument();
+    expect(screen.getByText("3 kişi bildirdi")).toBeInTheDocument();
+  });
+
   it("filters results without leaving stale report details", () => {
     renderView();
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "bulunamayan" } });

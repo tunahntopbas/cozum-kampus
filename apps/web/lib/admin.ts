@@ -13,6 +13,7 @@ export type AdminReport = {
   place: string;
   createdAt: string;
   resolvedAt: string | null;
+  isHidden?: boolean;
 };
 
 export type Period = "today" | "week" | "month";
@@ -114,7 +115,7 @@ export function unitPerformance(reports: AdminReport[], units: { id: number; nam
   });
 }
 
-export const ADMIN_FILTERS = ["Tümü", "Acil", "Yönlendirilmedi", "Gecikmiş", "Yeniden açılan"] as const;
+export const ADMIN_FILTERS = ["Tümü", "Acil", "Yönlendirilmedi", "Gecikmiş", "Yeniden açılan", "Yayında değil"] as const;
 export type AdminFilter = (typeof ADMIN_FILTERS)[number];
 
 export function filterAdminReports<T extends AdminReport>(
@@ -129,6 +130,7 @@ export function filterAdminReports<T extends AdminReport>(
     if (filter === "Yönlendirilmedi" && !(r.unitId == null && isOpen(r.status))) return false;
     if (filter === "Gecikmiş" && !isOverdue(r, now)) return false;
     if (filter === "Yeniden açılan" && r.status !== "yeniden_acildi") return false;
+    if (filter === "Yayında değil" && !r.isHidden) return false;
     return !q || `#${r.id} ${r.title} ${r.place}`.toLocaleLowerCase("tr").includes(q);
   });
 }

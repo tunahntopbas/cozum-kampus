@@ -1,7 +1,7 @@
 import type { AdminReport } from "@/lib/admin";
 import type { MapBuilding, MapReport } from "@/lib/campus";
 
-export type PanelReport = MapReport & AdminReport;
+export type PanelReport = MapReport & AdminReport & { isHidden?: boolean };
 
 export type AdminData = {
   userId: string;

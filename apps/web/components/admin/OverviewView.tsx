@@ -47,6 +47,10 @@ export function OverviewView({ data, now: nowProp }: { data: AdminData; now?: nu
     .sort((a, b) => open.filter((r) => r.category === b).length - open.filter((r) => r.category === a).length)
     .slice(0, 3);
   const categoryByLabel = new Map(topCategories.map((c) => [categoryLabel(c), c]));
+  if (category !== "Tümü" && !categoryByLabel.has(category)) {
+    setCategory("Tümü");
+    setBuilding(null);
+  }
   const shown = category === "Tümü" ? open : open.filter((r) => r.category === categoryByLabel.get(category));
   const groups = groupByBuilding(shown, data.buildings);
   const selected = groups.find((g) => g.building.id === building);

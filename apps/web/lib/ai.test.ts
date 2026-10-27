@@ -123,3 +123,12 @@ describe("draftReply", () => {
     expect(r).toEqual({ reply: "", ai_pending: true });
   });
 });
+
+it("does not approve fallback content", async () => {
+  const result = await analyzeReport(input, "t", { fetchImpl: async () => new Response("", { status: 503 }) });
+  expect(result.moderation.ok).toBe(false);
+});
+it.each([{ ...OK, moderation: { ok: "true", reasons: [] } }, { ...OK, moderation: { ok: true, reasons: ["portrait"] } }, { ...OK, ai_pending: undefined }])("does not trust malformed or contradictory analysis", async (body) => {
+  const result = await analyzeReport(input, "t", { fetchImpl: async () => Response.json(body) });
+  expect(result.moderation.ok).toBe(false);
+});

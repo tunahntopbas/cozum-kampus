@@ -4,7 +4,7 @@ import { createServerClient } from "@/lib/supabase/server";
 import type { AdminData } from "@/components/admin/types";
 
 const REPORT_COLUMNS =
-  "id, reporter_id, title, description, category, urgency, status, unit_id, building_id, floor, ai_summary, vote_count, created_at, resolved_at";
+  "id, reporter_id, title, description, category, urgency, status, unit_id, building_id, floor, ai_summary, vote_count, is_hidden, created_at, resolved_at";
 
 // Admin reads every report through RLS; the panel works on the latest 500.
 export async function loadAdminData(): Promise<AdminData | null> {
@@ -28,6 +28,7 @@ export async function loadAdminData(): Promise<AdminData | null> {
       const r = toMapReport(row);
       return {
         ...r,
+        isHidden: (row as ReportRow & { is_hidden?: boolean }).is_hidden === true,
         place: [r.buildingId != null ? name.get(r.buildingId) : null, floorLabel(r.floor)].filter(Boolean).join(", "),
       };
     }),
