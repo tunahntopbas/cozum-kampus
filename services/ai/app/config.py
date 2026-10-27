@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     deepseek_api_key: str
     deepseek_base_url: str = "https://api.deepseek.com"
     llm_model: str = "deepseek-flash"
+    llm_json_mode: bool = True
+    llm_timeout_s: float = 12
     allowed_origin: str = "http://localhost:3000"
     ai_rate_limit_per_min: int = 10
 

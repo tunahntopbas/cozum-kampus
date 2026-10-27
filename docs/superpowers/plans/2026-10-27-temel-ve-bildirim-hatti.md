@@ -210,7 +210,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `rule_based_analysis(text: str) -> ReportAnalysis`: anahtar kelime eşleşmesi (`lamba|ışık|aydınlat → aydinlatma`, `su|musluk|sızıntı|tuvalet → su_tesisat`, `asansör|rampa → asansor_erisilebilirlik`, `wifi|wi-fi|internet|ağ → internet_ag`, `çöp|kirli|temiz → temizlik`, `sıra|masa|sandalye → mobilya`, `kalorifer|klima|ısıtma|soğuk → isitma_sogutma`, `kablo|yangın|duman|mahsur → urgency=acil`), `ai_pending=True`, `confidence=0`, `moderation.ok=True`, başlık metnin ilk 60 karakteri ya da `"Yeni bildirim"`.
   - `POST /ai/analyze-report` → `ReportAnalysis`. Akış: hız sınırı (`user.id`), görsel sayısı > 3 ise 413, `fetch_images`, `mask_pii(text)`, LLM çağrısı, `ReportAnalysis.model_validate`; `LLMError` ya da `ValidationError` olursa `rule_based_analysis`. Model `unit` değeri yerine her zaman `CATEGORY_TO_UNIT[category]` kullanılır, `is_sensitive=True` ise `unit="guvenlik"`. Her çağrı `ai_runs` tablosuna yazılır (`kind="analyze_report"`, `input_hash`, `latency_ms`), yazma hatası yanıtı bozmaz.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```python
   # test_privacy.py
   def test_mask_pii():
@@ -236,11 +236,11 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   def test_analyze_rejects_foreign_image_path(client): ...               # image_paths ["baska-kullanici/x.jpg"] -> 403
   def test_analyze_rejects_too_many_images(client): ...                  # 4 yol -> 413
   ```
-- [ ] **Step 2:** `uv run pytest -q` → yeni testler FAIL.
-- [ ] **Step 3:** Modülleri yaz. Sistem komutu (`prompts/analyze_report.py`, Türkçe) spec 7.3'teki kuralları açıkça içerir: yalnızca JSON; kategori ve aciliyet listeleri; hakaret/küfür ve kişi odaklı görüntüler `moderation.ok=false`; kampüs sorunuyla ilgisiz fotoğraf `moderation.reasons` içinde; taciz, şiddet, intihar riski `is_sensitive=true`; elektrik, yangın, yaralanma, mahsur kalma riski `acil`. `schema_hint` spec 7.3 örnek JSON'u.
-- [ ] **Step 4:** `uv run pytest -q && uv run ruff check .` → PASS.
-- [ ] **Step 5: Gerçek model denemesi (spec 14. bölüm açık işi).** `scripts/smoke_deepseek.py`: `tests/fixtures/lamp.jpg` ile önce `use_json_mode=True`, sonra `False` çağırır, her birinin sonucunu ve süresini basar. Çalıştır: `uv run python scripts/smoke_deepseek.py`. Beklenen: en az biri geçerli `ReportAnalysis`. JSON modu görselle 400 verirse `get_llm()` içinde `use_json_mode=False` sabitle ve sonucu README'ye bir satır olarak yaz.
-- [ ] **Step 6:** Commit: `feat(ai): analyze-report endpoint with DeepSeek provider and rule-based fallback`
+- [x] **Step 2:** `uv run pytest -q` → yeni testler FAIL.
+- [x] **Step 3:** Modülleri yaz. Sistem komutu (`prompts/analyze_report.py`, Türkçe) spec 7.3'teki kuralları açıkça içerir: yalnızca JSON; kategori ve aciliyet listeleri; hakaret/küfür ve kişi odaklı görüntüler `moderation.ok=false`; kampüs sorunuyla ilgisiz fotoğraf `moderation.reasons` içinde; taciz, şiddet, intihar riski `is_sensitive=true`; elektrik, yangın, yaralanma, mahsur kalma riski `acil`. `schema_hint` spec 7.3 örnek JSON'u.
+- [x] **Step 4:** `uv run pytest -q && uv run ruff check .` → PASS.
+- [ ] **Step 5: (DeepSeek anahtarı bekleniyor) Gerçek model denemesi (spec 14. bölüm açık işi).** `scripts/smoke_deepseek.py`: `tests/fixtures/lamp.jpg` ile önce `use_json_mode=True`, sonra `False` çağırır, her birinin sonucunu ve süresini basar. Çalıştır: `uv run python scripts/smoke_deepseek.py`. Beklenen: en az biri geçerli `ReportAnalysis`. JSON modu görselle 400 verirse `get_llm()` içinde `use_json_mode=False` sabitle ve sonucu README'ye bir satır olarak yaz.
+- [x] **Step 6:** Commit: `feat(ai): analyze-report endpoint with DeepSeek provider and rule-based fallback`
 
 ---
 

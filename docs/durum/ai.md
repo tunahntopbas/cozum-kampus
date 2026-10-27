@@ -6,21 +6,22 @@ Sorumlu: tunahan
 
 ## Son durum
 
-Task 3 tamam. Task 4 sürüyor.
+Task 3 ve 4 tamam (Task 4 Step 5 gerçek DeepSeek denemesi anahtar bekliyor). Task 5 sürüyor.
 
 ## Sıradaki adım
 
-Task 4 Step 1: test_privacy.py, test_deepseek.py, test_analyze.py başarısız testleri
+Task 5 Step 1: tests/test_verify.py başarısız testleri
 
 ## Yapılanlar
 
 (tarih, task/adım, kısa not, commit)
 
 - 2026-10-27 Task 3: uv projesi (Python 3.12), `app/config.py` (kök `.env` okunur), `app/auth.py` (token Supabase `/auth/v1/user` ile doğrulanır, 60 sn önbellek), `app/ratelimit.py`, `/health`, CORS. Testler: `cd services/ai && uv run pytest -q` 9/9.
+- 2026-10-27 Task 4: `app/llm/` (Protocol, DeepSeekProvider: 3 deneme, JSON modu açık/kapalı, FakeProvider), `app/privacy.py` (`mask_pii`), `app/storage.py` (yol doğrulama, Storage'dan servis anahtarıyla indirme, 5 MB sınırı, `ai_runs` kaydı, `get_user_role`), `app/fallback.py` (kural tabanlı analiz), `app/prompts/analyze_report.py`, `POST /ai/analyze-report`, `scripts/smoke_deepseek.py`. Testler 52/52.
 
 ## Engeller
 
-Yok.
+- Task 4 Step 5: `DEEPSEEK_API_KEY` kök `.env`'e girilince bir lamba fotoğrafıyla çalıştır: `cd services/ai && uv run python -m scripts.smoke_deepseek foto.jpg "Koridorda lamba yanmıyor"`. JSON modu görselle hata verirse `.env`'e `LLM_JSON_MODE=false` yaz ve sonucu buraya not et.
 
 ## Alınan kararlar
 
@@ -28,8 +29,18 @@ Yok.
 
 - Supabase'e ulaşılamazsa 401 yerine 503 dönülür; web istemcisi 5xx'te "analiz bekleniyor" yoluna düşer.
 - `Authorization` başlığı `Bearer` değilse 401.
+- Model çağrısına toplam süre sınırı eklendi: `LLM_TIMEOUT_S=12` (web istemcisi 15 sn'de vazgeçiyor; sunucu ondan önce kural tabanlı sonuca düşer). OpenAI SDK'nın kendi yeniden denemesi kapalı (`max_retries=0`), denemeler sağlayıcıda.
+- JSON modu ayarla açılıp kapanır: `LLM_JSON_MODE` (varsayılan true).
+- Model çıktısı doğrulanmadan önce normalize edilir: `unit` her zaman kategoriden (hassas ise `guvenlik`) türetilir, başlık 80 karaktere kırpılır. Böylece yalnızca birim ya da başlık hatası yüzünden yedek analize düşülmez.
+- Metin ve fotoğraf ikisi de boşsa 400.
+- Storage'da dosya yoksa 400.
+- Kural tabanlı analiz hassas kelimelerde (taciz, şiddet, intihar...) `is_sensitive=true` ve `guvenlik` birimi verir; tehlikeli kelimelerde (kablo, yangın, duman...) `acil`.
+- `ai_runs` kaydında kullanıcı kimliği yok; `input_hash` metin + yol özetidir.
 - Ayarlar önce ortam değişkeninden, yoksa depo kökündeki `.env`'den okunur.
 
 ## Diğer hatlara notlar
 
 (Arayüz değişiklikleri, ihtiyaçlar)
+
+- Web: `POST /ai/analyze-report` 400 (boş istek), 403 (başkasının yolu), 413 (3'ten fazla fotoğraf ya da 5 MB üstü), 429 (dakikada 10'dan fazla), 503 (Supabase Auth'a ulaşılamadı) dönebilir. Model hatasında 200 ve `ai_pending: true` döner.
+- DB: `ai_runs` tablosuna servis anahtarıyla `kind, model, input_hash, output, latency_ms` yazılıyor.

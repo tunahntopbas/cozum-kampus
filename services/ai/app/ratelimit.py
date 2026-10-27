@@ -22,3 +22,15 @@ class RateLimiter:
         if len(hits) >= self.limit:
             raise HTTPException(status_code=429, detail="Çok fazla istek. Biraz sonra yeniden dene.")
         hits.append(now)
+
+
+_limiter: RateLimiter | None = None
+
+
+def get_rate_limiter() -> RateLimiter:
+    global _limiter
+    if _limiter is None:
+        from app.config import get_settings
+
+        _limiter = RateLimiter(limit=get_settings().ai_rate_limit_per_min)
+    return _limiter
