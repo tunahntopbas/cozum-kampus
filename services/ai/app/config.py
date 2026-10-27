@@ -3,12 +3,15 @@ from pathlib import Path
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+
+def env_files(config_path: Path) -> tuple[Path, ...]:
+    """Up to three parent folders of app/ (repo root first, so closer files win). Shallow in Docker."""
+    return tuple(p / ".env" for p in reversed(config_path.parents[1:4]))
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=(REPO_ROOT / ".env", Path(__file__).resolve().parents[1] / ".env"),
+        env_file=env_files(Path(__file__).resolve()),
         extra="ignore",
     )
 
