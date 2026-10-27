@@ -6,11 +6,11 @@ Sorumlu: tunahan
 
 ## Son durum
 
-AI hattı (Task 3, 4, 5) kod olarak tamam. Bekleyen tek iş: Task 4 Step 5 gerçek DeepSeek denemesi (anahtar gerekli).
+AI hattı (Task 3, 4, 5) kod olarak tamam. Model sağlayıcısı DeepSeek'ten Gemini'ye geçti (OpenAI uyumlu uç nokta). Bekleyen: Task 4 Step 5 gerçek model denemesi (`LLM_API_KEY` gerekli).
 
 ## Sıradaki adım
 
-1. `DEEPSEEK_API_KEY` gelince Task 4 Step 5 (bkz. Engeller).
+1. `LLM_API_KEY` gelince Task 4 Step 5 (bkz. Engeller).
 2. `hat/ai` -> `main` PR aç.
 3. Üç hat `main`e girince Task 9 (`docs/durum/entegrasyon.md`).
 
@@ -21,10 +21,11 @@ AI hattı (Task 3, 4, 5) kod olarak tamam. Bekleyen tek iş: Task 4 Step 5 gerç
 - 2026-10-27 Task 3: uv projesi (Python 3.12), `app/config.py` (kök `.env` okunur), `app/auth.py` (token Supabase `/auth/v1/user` ile doğrulanır, 60 sn önbellek), `app/ratelimit.py`, `/health`, CORS. Testler: `cd services/ai && uv run pytest -q` 9/9.
 - 2026-10-27 Task 4: `app/llm/` (Protocol, DeepSeekProvider: 3 deneme, JSON modu açık/kapalı, FakeProvider), `app/privacy.py` (`mask_pii`), `app/storage.py` (yol doğrulama, Storage'dan servis anahtarıyla indirme, 5 MB sınırı, `ai_runs` kaydı, `get_user_role`), `app/fallback.py` (kural tabanlı analiz), `app/prompts/analyze_report.py`, `POST /ai/analyze-report`, `scripts/smoke_deepseek.py`. Testler 52/52.
 - 2026-10-27 Task 5: `POST /ai/verify-resolution` (yalnızca `staff`/`admin`, rol `profiles` tablosundan servis anahtarıyla okunur; sonra fotoğrafı kullanıcının kendi klasöründe olmalı; hata/geçersiz çıktıda `ai_pending: true`). Testler 60/60.
+- 2026-10-27 Sağlayıcı değişikliği: ekip DeepSeek yerine Gemini kullanmaya karar verdi. `DeepSeekProvider` -> `OpenAICompatProvider` (`app/llm/openai_compat.py`), ayarlar `LLM_API_KEY`, `LLM_BASE_URL` (varsayılan Gemini OpenAI uç noktası), `LLM_MODEL` (varsayılan `gemini-3.8-flash`), `LLM_REASONING_EFFORT` (varsayılan `low`), `LLM_JSON_MODE`. `max_tokens` 2048 (Gemini 3 düşünme kapatılamıyor, düşünme token'ları da sayılıyor). Betik `scripts/smoke_llm.py`. CORS varsayılanı `http://localhost:3100` (web portu değişti). Testler 62/62.
 
 ## Engeller
 
-- Task 4 Step 5: `DEEPSEEK_API_KEY` kök `.env`'e girilince bir lamba fotoğrafıyla çalıştır: `cd services/ai && uv run python -m scripts.smoke_deepseek foto.jpg "Koridorda lamba yanmıyor"`. JSON modu görselle hata verirse `.env`'e `LLM_JSON_MODE=false` yaz ve sonucu buraya not et.
+- Task 4 Step 5: `LLM_API_KEY` (Gemini) kök `.env`'e girilince bir lamba fotoğrafıyla çalıştır: `cd services/ai && uv run python -m scripts.smoke_llm foto.jpg "Koridorda lamba yanmıyor"`. JSON modu görselle hata verirse `.env`'e `LLM_JSON_MODE=false` yaz ve sonucu buraya not et.
 
 ## Alınan kararlar
 
@@ -32,6 +33,7 @@ AI hattı (Task 3, 4, 5) kod olarak tamam. Bekleyen tek iş: Task 4 Step 5 gerç
 
 - Supabase'e ulaşılamazsa 401 yerine 503 dönülür; web istemcisi 5xx'te "analiz bekleniyor" yoluna düşer.
 - `Authorization` başlığı `Bearer` değilse 401.
+- Sağlayıcı: Gemini, OpenAI uyumlu katman üzerinden (beta). `response_format: json_object` desteği belgede açıkça yazmıyor; smoke testi karar verecek, gerekirse `LLM_JSON_MODE=false`.
 - Model çağrısına toplam süre sınırı eklendi: `LLM_TIMEOUT_S=12` (web istemcisi 15 sn'de vazgeçiyor; sunucu ondan önce kural tabanlı sonuca düşer). OpenAI SDK'nın kendi yeniden denemesi kapalı (`max_retries=0`), denemeler sağlayıcıda.
 - JSON modu ayarla açılıp kapanır: `LLM_JSON_MODE` (varsayılan true).
 - Model çıktısı doğrulanmadan önce normalize edilir: `unit` her zaman kategoriden (hassas ise `guvenlik`) türetilir, başlık 80 karaktere kırpılır. Böylece yalnızca birim ya da başlık hatası yüzünden yedek analize düşülmez.

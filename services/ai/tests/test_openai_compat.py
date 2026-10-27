@@ -5,7 +5,7 @@ import openai
 import pytest
 
 from app.llm.base import LLMError
-from app.llm.deepseek import DeepSeekProvider
+from app.llm.openai_compat import OpenAICompatProvider
 
 
 class FakeCompletions:
@@ -24,7 +24,7 @@ class FakeCompletions:
 def make(outputs, **kw):
     completions = FakeCompletions(outputs)
     client = SimpleNamespace(chat=SimpleNamespace(completions=completions))
-    return DeepSeekProvider(client, model="deepseek-flash", **kw), completions
+    return OpenAICompatProvider(client, model="gemini-test", **kw), completions
 
 
 async def call(p, images=None):
@@ -44,7 +44,7 @@ async def test_raises_after_three_invalid():
 
 
 async def test_retries_on_api_error():
-    timeout = openai.APITimeoutError(request=httpx.Request("POST", "https://api.deepseek.com"))
+    timeout = openai.APITimeoutError(request=httpx.Request("POST", "https://llm.example"))
     p, _ = make([timeout, '{"a": 1}'])
     assert await call(p) == {"a": 1}
 
@@ -60,7 +60,7 @@ async def test_json_mode_sets_response_format_and_mentions_json():
     await call(p)
     kw = c.calls[0]
     assert kw["response_format"] == {"type": "json_object"}
-    assert kw["model"] == "deepseek-flash"
+    assert kw["model"] == "gemini-test"
     user_text = kw["messages"][1]["content"][0]["text"]
     assert "JSON" in user_text
 
@@ -74,3 +74,13 @@ async def test_images_go_only_in_user_message():
         "type": "image_url",
         "image_url": {"url": "data:image/jpeg;base64,QUJD"},
     }
+
+
+async def test_reasoning_effort_sent_only_when_set():
+    p, c = make(['{"a": 1}'], reasoning_effort="low")
+    await call(p)
+    assert c.calls[0]["reasoning_effort"] == "low"
+
+    p, c = make(['{"a": 1}'])
+    await call(p)
+    assert "reasoning_effort" not in c.calls[0]

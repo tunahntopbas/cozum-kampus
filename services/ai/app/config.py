@@ -15,12 +15,13 @@ class Settings(BaseSettings):
     supabase_url: str
     supabase_anon_key: str
     supabase_service_role_key: str
-    deepseek_api_key: str
-    deepseek_base_url: str = "https://api.deepseek.com"
-    llm_model: str = "deepseek-flash"
+    llm_api_key: str
+    llm_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    llm_model: str = "gemini-3.8-flash"
+    llm_reasoning_effort: str | None = "low"
     llm_json_mode: bool = True
     llm_timeout_s: float = 12
-    allowed_origin: str = "http://localhost:3000"
+    allowed_origin: str = "http://localhost:3100"
     ai_rate_limit_per_min: int = 10
 
 

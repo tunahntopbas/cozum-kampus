@@ -22,12 +22,22 @@ def _parse(text: str, extract: bool) -> dict | None:
     return value if isinstance(value, dict) else None
 
 
-class DeepSeekProvider:
-    def __init__(self, client, model: str, use_json_mode: bool = True, max_tokens: int = 800):
+class OpenAICompatProvider:
+    """Any OpenAI-compatible chat API (Gemini, DeepSeek, self-hosted). Switch provider via .env."""
+
+    def __init__(
+        self,
+        client,
+        model: str,
+        use_json_mode: bool = True,
+        max_tokens: int = 2048,
+        reasoning_effort: str | None = None,
+    ):
         self.client = client
         self.model = model
         self.use_json_mode = use_json_mode
         self.max_tokens = max_tokens
+        self.reasoning_effort = reasoning_effort
 
     async def complete_json(
         self,
@@ -47,6 +57,8 @@ class DeepSeekProvider:
         }
         if self.use_json_mode:
             kwargs["response_format"] = {"type": "json_object"}
+        if self.reasoning_effort:
+            kwargs["reasoning_effort"] = self.reasoning_effort
 
         for _ in range(ATTEMPTS):
             try:

@@ -5,7 +5,7 @@ os.environ.update(
         "SUPABASE_URL": "https://test.supabase.co",
         "SUPABASE_ANON_KEY": "anon-test",
         "SUPABASE_SERVICE_ROLE_KEY": "service-test",
-        "DEEPSEEK_API_KEY": "deepseek-test",
+        "LLM_API_KEY": "llm-test",
         "ALLOWED_ORIGIN": "http://localhost:3000",
     }
 )
