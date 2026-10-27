@@ -120,7 +120,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   select count(*) from security_reports; -- 0
   ```
   Ayrıca Auth panelinden `deneme@gmail.com` ile kullanıcı oluşturmayı dene. Beklenen: "Database error saving new user".
-- [ ] **Step 8:** (Kullanıcı panelden demo hesaplarını oluşturunca) Panelden 3 demo hesabı oluştur, SQL ile `profiles.role` ve `unit_id` ata (`staff` → `yapi_isleri`).
+- [x] **Step 8:** (SQL ile yapıldı, bkz. db.md) Panelden 3 demo hesabı oluştur, SQL ile `profiles.role` ve `unit_id` ata (`staff` → `yapi_isleri`).
 - [x] **Step 9:** Commit: `feat(db): add schema, RLS policies and demo seed`
 
 ---

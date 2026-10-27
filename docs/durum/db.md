@@ -6,29 +6,23 @@ Sorumlu: tunahan
 
 ## Son durum
 
-Task 2 tamam (Step 8 demo hesapları hariç). Supabase projesi `cozumkampus` (ref `owvzlonnpiuigrstsean`, bölge ap-northeast-2 Seoul) üzerinde 3 migration ve seed uygulandı, RLS doğrulandı.
+Task 2 tamam. Supabase projesi `cozumkampus` (ref `owvzlonnpiuigrstsean`, bölge ap-northeast-2 Seoul) üzerinde 3 migration ve seed uygulandı, RLS doğrulandı.
 
 ## Sıradaki adım
 
-1. Kullanıcı panelden demo hesaplarını açınca (Authentication > Users > Add user: `personel@`, `yonetim@`, `guvenlik@demo.cozumkampus.app`) rolleri ata:
-   ```sql
-   update profiles set role='staff', unit_id=(select id from units where slug='yapi_isleri') where id=(select id from auth.users where email='personel@demo.cozumkampus.app');
-   update profiles set role='admin' where id=(select id from auth.users where email='yonetim@demo.cozumkampus.app');
-   update profiles set role='security', unit_id=(select id from units where slug='guvenlik') where id=(select id from auth.users where email='guvenlik@demo.cozumkampus.app');
-   ```
-2. `hat/db` -> `main` PR.
+`hat/db` -> `main` PR.
 
 ## Yapılanlar
 
 (tarih, task/adım, kısa not, commit)
 
 - 2026-10-27 Task 2: `supabase/migrations/2026102700000{1,2,3}_*.sql` (şema, RLS, fonksiyon sıkılaştırma), `supabase/seed.sql` (5 birim, 8 bina, 16 QR mekân, 12 kurgusal bildirim + zaman çizelgesi olayları, 3 izinli demo e-postası), `supabase/tests/rls_check.sql`. Hepsi Supabase MCP ile uzak projeye uygulandı.
+- 2026-10-27 Task 2 Step 8: demo hesapları SQL ile oluşturuldu (`auth.users` + `auth.identities`, e-posta onaylı, bcrypt şifre): `ogrenci@`, `personel@` (staff, yapi_isleri), `yonetim@` (admin), `guvenlik@` (security, guvenlik) `demo.cozumkampus.app`. Şifre depoda değil: kök `.env` içinde `DEMO_PASSWORD` (ekip içinde güvenli kanaldan paylaşın). Supabase Auth şifreli giriş API'siyle doğrulandı.
 - Doğrulama (geri alınan işlemlerle): öğrenci ham `reports` 0, `public_reports` 12, `security_reports` 0, `ai_runs` 0; anon `places` 16, `public_reports` erişimi yok; gmail kaydı reddedildi; okul + izinli e-posta profili oluştu; personel kendi biriminin 9 bildirimini görüyor ve kendi rolünü değiştiremiyor.
 
 ## Engeller
 
-- Step 8: demo hesapları panelden açılmalı (Auth admin API servis anahtarı gerektirir, MCP'de yok).
-- Kullanıcının panelde yapacakları: Magic Link şablonuna `{{ .Token }}`, URL Configuration'a `http://localhost:3000/auth/callback`.
+- Auth ayarları (e-posta şablonu, Redirect URL, SMTP) MCP ile değiştirilemiyor; panelden yapılmalı. Şifreli giriş kullanıldığı için demo bunlara bağlı değil. Öğrencilerin kendi kaydı ve kodla giriş için: Magic Link şablonuna `{{ .Token }}`, Redirect URL `http://localhost:3100/auth/callback`, özel SMTP (yerleşik servis yalnızca ekip üyelerine posta gönderiyor).
 
 ## Alınan kararlar
 
