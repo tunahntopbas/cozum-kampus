@@ -4,5 +4,6 @@
   "scripts": {
     "dev:web": "pnpm --filter web dev",
     "test:web": "pnpm --filter web test"
-  }
+  },
+  "packageManager": "pnpm@12.8.1"
 }

@@ -1,0 +1,36 @@
+# Render blueprint for the AI service (docs/PROJE_REHBERI.md 2.3: free plan sleeps after 15 min idle;
+# ping /health about 10 minutes before the demo).
+services:
+  - type: web
+    name: cozum-kampus-ai
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerContext: ./services/ai
+    dockerfilePath: ./services/ai/Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    buildFilter:
+      paths:
+        - services/ai/**
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: LLM_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGIN
+        sync: false
+      - key: LLM_BASE_URL
+        value: https://generativelanguage.googleapis.com/v1beta/openai/
+      - key: LLM_MODEL
+        value: gemini-3.5-flash
+      - key: LLM_REASONING_EFFORT
+        value: low
+      - key: LLM_JSON_MODE
+        value: "true"
+      - key: AI_RATE_LIMIT_PER_MIN
+        value: "10"

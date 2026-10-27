@@ -1,0 +1,37 @@
+name: ai
+
+on:
+  push:
+    branches: [main]
+    paths: ["services/ai/**", ".github/workflows/ai.yml"]
+  pull_request:
+    paths: ["services/ai/**", ".github/workflows/ai.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/ai
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.11.28"
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -q
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t cozum-ai services/ai
+      - name: Container answers /health
+        run: |
+          docker run -d --name ai -p 8000:8000 \
+            -e SUPABASE_URL=https://example.supabase.co -e SUPABASE_ANON_KEY=x \
+            -e SUPABASE_SERVICE_ROLE_KEY=x -e LLM_API_KEY=x cozum-ai
+          for i in $(seq 1 30); do curl -sf localhost:8000/health && exit 0; sleep 1; done
+          docker logs ai; exit 1
