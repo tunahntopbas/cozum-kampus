@@ -21,7 +21,12 @@ STATUS_LABELS = {
 
 
 def build_user_text(title: str, body: str, category: str, votes: int, status: str) -> str:
-    lines = [f"Öneri: {title}", f"Kategori: {category}", f"Destek: {votes} oy", f"Seçilen durum: {STATUS_LABELS[status]}"]
+    lines = [
+        f"Öneri: {title}",
+        f"Kategori: {category}",
+        f"Destek: {votes} oy",
+        f"Seçilen durum: {STATUS_LABELS[status]}",
+    ]
     if body:
         lines.append(f"Açıklama: {body}")
     return "\n".join(lines)
