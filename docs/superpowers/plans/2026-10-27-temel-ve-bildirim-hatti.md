@@ -289,8 +289,8 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `statusMeta(s: ReportStatus): { label: string; tone: 'alindi'|'islemde'|'cozuldu' }`. Etiketler: `Alındı, Yönlendirildi, Atandı, İşlemde, Çözüldü, Yeniden açıldı, Geri çekildi`. Ton: `alindi, yonlendirildi, geri_cekildi → alindi`; `atandi, islemde, yeniden_acildi → islemde`; `cozuldu → cozuldu`.
   - `<StatusPill status={ReportStatus} />`, `<Glass className? />`, `<Button variant="primary"|"secondary"|"danger" />`, `<Switch checked onChange label />` (`role="switch"`, `aria-checked`).
 
-- [ ] **Step 1:** Next.js'i oluştur; `pnpm add @supabase/supabase-js @supabase/ssr @phosphor-icons/react geist`; `pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/jest-dom`. `package.json`'a `"test": "vitest run"`.
-- [ ] **Step 2: Failing tests**
+- [x] **Step 1:** Next.js'i oluştur; `pnpm add @supabase/supabase-js @supabase/ssr @phosphor-icons/react geist`; `pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/jest-dom`. `package.json`'a `"test": "vitest run"`.
+- [x] **Step 2: Failing tests**
   ```ts
   // lib/status.test.ts
   expect(statusMeta('islemde')).toEqual({ label: 'İşlemde', tone: 'islemde' })
@@ -299,10 +299,10 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   // StatusPill.test.tsx
   render(<StatusPill status="cozuldu" />); expect(screen.getByText('Çözüldü')).toBeInTheDocument()
   ```
-- [ ] **Step 3:** `pnpm --filter web test` → FAIL.
-- [ ] **Step 4:** Token'ları, bileşenleri ve yer tutucu sayfaları yaz. Üst menü: Harita `/`, Bildirimlerim, Öneriler, sağda `Bildir` ana butonu ve zil (`/bildirimler`), profil (`/hesap`). Yer tutucu sayfalar yalnızca başlık ve "Bu ekran yakında" metni.
-- [ ] **Step 5:** `pnpm --filter web test && pnpm --filter web lint && pnpm --filter web exec tsc --noEmit` → PASS. `pnpm dev:web` ile `/` açılır, menü bağlantıları 404 vermez.
-- [ ] **Step 6:** Commit: `feat(web): Next.js skeleton with design tokens and base UI components`
+- [x] **Step 3:** `pnpm --filter web test` → FAIL.
+- [x] **Step 4:** Token'ları, bileşenleri ve yer tutucu sayfaları yaz. Üst menü: Harita `/`, Bildirimlerim, Öneriler, sağda `Bildir` ana butonu ve zil (`/bildirimler`), profil (`/hesap`). Yer tutucu sayfalar yalnızca başlık ve "Bu ekran yakında" metni.
+- [x] **Step 5:** `pnpm --filter web test && pnpm --filter web lint && pnpm --filter web exec tsc --noEmit` → PASS. `pnpm dev:web` ile `/` açılır, menü bağlantıları 404 vermez.
+- [x] **Step 6:** Commit: `feat(web): Next.js skeleton with design tokens and base UI components`
 
 ---
 
