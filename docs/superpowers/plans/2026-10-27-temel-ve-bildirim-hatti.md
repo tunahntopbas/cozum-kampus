@@ -289,8 +289,8 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `statusMeta(s: ReportStatus): { label: string; tone: 'alindi'|'islemde'|'cozuldu' }`. Etiketler: `Alındı, Yönlendirildi, Atandı, İşlemde, Çözüldü, Yeniden açıldı, Geri çekildi`. Ton: `alindi, yonlendirildi, geri_cekildi → alindi`; `atandi, islemde, yeniden_acildi → islemde`; `cozuldu → cozuldu`.
   - `<StatusPill status={ReportStatus} />`, `<Glass className? />`, `<Button variant="primary"|"secondary"|"danger" />`, `<Switch checked onChange label />` (`role="switch"`, `aria-checked`).
 
-- [ ] **Step 1:** Next.js'i oluştur; `pnpm add @supabase/supabase-js @supabase/ssr @phosphor-icons/react geist`; `pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/jest-dom`. `package.json`'a `"test": "vitest run"`.
-- [ ] **Step 2: Failing tests**
+- [x] **Step 1:** Next.js'i oluştur; `pnpm add @supabase/supabase-js @supabase/ssr @phosphor-icons/react geist`; `pnpm add -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/jest-dom`. `package.json`'a `"test": "vitest run"`.
+- [x] **Step 2: Failing tests**
   ```ts
   // lib/status.test.ts
   expect(statusMeta('islemde')).toEqual({ label: 'İşlemde', tone: 'islemde' })
@@ -299,10 +299,10 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   // StatusPill.test.tsx
   render(<StatusPill status="cozuldu" />); expect(screen.getByText('Çözüldü')).toBeInTheDocument()
   ```
-- [ ] **Step 3:** `pnpm --filter web test` → FAIL.
-- [ ] **Step 4:** Token'ları, bileşenleri ve yer tutucu sayfaları yaz. Üst menü: Harita `/`, Bildirimlerim, Öneriler, sağda `Bildir` ana butonu ve zil (`/bildirimler`), profil (`/hesap`). Yer tutucu sayfalar yalnızca başlık ve "Bu ekran yakında" metni.
-- [ ] **Step 5:** `pnpm --filter web test && pnpm --filter web lint && pnpm --filter web exec tsc --noEmit` → PASS. `pnpm dev:web` ile `/` açılır, menü bağlantıları 404 vermez.
-- [ ] **Step 6:** Commit: `feat(web): Next.js skeleton with design tokens and base UI components`
+- [x] **Step 3:** `pnpm --filter web test` → FAIL.
+- [x] **Step 4:** Token'ları, bileşenleri ve yer tutucu sayfaları yaz. Üst menü: Harita `/`, Bildirimlerim, Öneriler, sağda `Bildir` ana butonu ve zil (`/bildirimler`), profil (`/hesap`). Yer tutucu sayfalar yalnızca başlık ve "Bu ekran yakında" metni.
+- [x] **Step 5:** `pnpm --filter web test && pnpm --filter web lint && pnpm --filter web exec tsc --noEmit` → PASS. `pnpm dev:web` ile `/` açılır, menü bağlantıları 404 vermez.
+- [x] **Step 6:** Commit: `feat(web): Next.js skeleton with design tokens and base UI components`
 
 ---
 
@@ -323,7 +323,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `requiredRole(pathname: string): Role[] | null`: `/personel*` → `['staff','admin']`, `/yonetim*` → `['admin']`, `/giris`, `/auth/*` → `null` (herkese açık), diğerleri → `['student','staff','admin','security']`.
   - `middleware.ts`: oturum yoksa `/giris?next=<path>`; rol uymuyorsa `/`.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```ts
   const D = 'ogr.sakarya.edu.tr,sakarya.edu.tr'
   expect(isAllowedEmail('Ali@OGR.sakarya.edu.tr', D)).toBe(true)
@@ -335,10 +335,10 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   expect(requiredRole('/personel')).toEqual(['staff','admin'])
   expect(requiredRole('/giris')).toBeNull()
   ```
-- [ ] **Step 2:** `pnpm --filter web test` → FAIL.
-- [ ] **Step 3:** Yaz. `/giris`: e-posta alanı, `isAllowedEmail` başarısızsa "Okul e-posta adresinle giriş yapabilirsin." ; `signInWithOtp({ email, options: { emailRedirectTo: <origin>/auth/callback?next=... } })`; ardından 6 haneli kod alanı (`verifyOtp`, type `email`). Demo hesapları (`demo.cozumkampus.app`) arayüz kontrolünü geçemez; onlar için `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS`'e yerelde `demo.cozumkampus.app` eklenir (veritabanı tarafı `allowed_emails` ile zaten izinli).
-- [ ] **Step 4:** Testler PASS. Elle doğrula: okul e-postasıyla kod gelir, giriş sonrası `/hesap` adı gösterir; öğrenci hesabıyla `/yonetim` → `/`'e döner; çıkışta `/giris`.
-- [ ] **Step 5:** Commit: `feat(web): Supabase auth with school email OTP and role-gated routes`
+- [x] **Step 2:** `pnpm --filter web test` → FAIL.
+- [x] **Step 3:** Yaz. `/giris`: e-posta alanı, `isAllowedEmail` başarısızsa "Okul e-posta adresinle giriş yapabilirsin." ; `signInWithOtp({ email, options: { emailRedirectTo: <origin>/auth/callback?next=... } })`; ardından 6 haneli kod alanı (`verifyOtp`, type `email`). Demo hesapları (`demo.cozumkampus.app`) arayüz kontrolünü geçemez; onlar için `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS`'e yerelde `demo.cozumkampus.app` eklenir (veritabanı tarafı `allowed_emails` ile zaten izinli).
+- [x] **Step 4:** Testler PASS. Elle doğrula: okul e-postasıyla kod gelir, giriş sonrası `/hesap` adı gösterir; öğrenci hesabıyla `/yonetim` → `/`'e döner; çıkışta `/giris`.
+- [x] **Step 5:** Commit: `feat(web): Supabase auth with school email OTP and role-gated routes`
 
 ---
 
@@ -355,15 +355,15 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `prepareImage(file: File): Promise<Blob>`: `createImageBitmap(file, { imageOrientation: 'from-image' })` → canvas → `toBlob('image/jpeg', 0.82)`. Yeniden kodlama EXIF'i (GPS dahil) siler. Kabul edilen türler JPEG, PNG, WebP, HEIC dışı; desteklenmeyen türde `Error('Bu dosya türü desteklenmiyor')`.
   - `uploadReportImage(userId: string, blob: Blob): Promise<string>`: yol `${userId}/${crypto.randomUUID()}.jpg`, döndürür yolu.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```ts
   expect(fitWithin(4000, 3000)).toEqual({ width: 1600, height: 1200 })
   expect(fitWithin(3000, 4000)).toEqual({ width: 1200, height: 1600 })
   expect(fitWithin(800, 600)).toEqual({ width: 800, height: 600 })
   ```
-- [ ] **Step 2:** FAIL → yaz → PASS (`pnpm --filter web test`).
-- [ ] **Step 3:** Elle doğrula (Task 9 sayfasında): GPS'li bir iPhone fotoğrafı yükle, Storage'dan indir, `exiftool <dosya>` çıktısında GPS satırı yok.
-- [ ] **Step 4:** Commit: `feat(web): client-side image downscale, EXIF strip and upload`
+- [x] **Step 2:** FAIL → yaz → PASS (`pnpm --filter web test`).
+- [ ] **Step 3:** (Task 9 + Supabase bekleniyor) Elle doğrula (Task 9 sayfasında): GPS'li bir iPhone fotoğrafı yükle, Storage'dan indir, `exiftool <dosya>` çıktısında GPS satırı yok.
+- [x] **Step 4:** Commit: `feat(web): client-side image downscale, EXIF strip and upload`
 
 ---
 
