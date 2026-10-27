@@ -123,6 +123,7 @@ export function ReportsView({
                         <Badge>{statusMeta(r.status).label}</Badge>
                         {isOverdue(r, now) && <Badge>Gecikmiş</Badge>}
                         {data.unverified.includes(r.id) && <Badge>Doğrulanmadı</Badge>}
+                        {r.isHidden && <Badge>Yayında değil</Badge>}
                       </span>
                     </button>
                   </li>
@@ -185,9 +186,10 @@ function ReportDetail({
     e.preventDefault();
     setBusy(true);
     setError("");
+    onSaved("");
     // Routing an unrouted report moves it forward, as in the design.
     const nextStatus = unit && status === "alindi" ? "yonlendirildi" : status;
-    const { error: err } = await createClient().rpc("admin_update_report", {
+    const { data, error: err } = await createClient().rpc("admin_update_report", {
       rid: report.id,
       to_unit: unit ? Number(unit) : null,
       to_urgency: urgency,
@@ -196,12 +198,26 @@ function ReportDetail({
       note: note.trim() || null,
     });
     setBusy(false);
-    if (err) {
+    if (err || data !== true) {
       setError("Değişiklikler kaydedilemedi. Tekrar dene.");
       return;
     }
     onSaved(`#${report.id} kaydedildi.`);
     setNote("");
+    router.refresh();
+  }
+
+  // Reports filed while the AI could not check them, or rejected by it, stay off the campus map until reviewed.
+  async function setVisibility(hidden: boolean) {
+    setBusy(true);
+    setError("");
+    const { error: err } = await createClient().from("reports").update({ is_hidden: hidden }).eq("id", report.id);
+    setBusy(false);
+    if (err) {
+      setError("Görünürlük değiştirilemedi. Tekrar dene.");
+      return;
+    }
+    onSaved(hidden ? `#${report.id} kampüsten gizlendi.` : `#${report.id} kampüste yayınlandı.`);
     router.refresh();
   }
 
@@ -218,6 +234,17 @@ function ReportDetail({
           <Badge>{statusMeta(report.status).label}</Badge>
           <Badge>{categoryLabel(report.category)}</Badge>
           {unverified && <Badge>Doğrulanmadı</Badge>}
+          {report.isHidden && <Badge>Yayında değil</Badge>}
+        </div>
+        <div className={`${s.note} ${s.row} text-sm`}>
+          <p className="min-w-0 flex-1">
+            {report.isHidden
+              ? "Bu bildirim içerik denetiminden geçmedi ya da denetlenemedi; haritada görünmüyor. İçeriği kontrol edip yayınlayabilirsin."
+              : "Bildirim kampüs haritasında herkese açık."}
+          </p>
+          <Button variant="secondary" disabled={busy} onClick={() => setVisibility(!report.isHidden)}>
+            {report.isHidden ? "Yayınla" : "Gizle"}
+          </Button>
         </div>
         {report.aiSummary && (
           <div className={s.note}>

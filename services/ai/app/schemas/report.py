@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StrictBool, model_validator
 
 Category = Literal[
     "aydinlatma",
@@ -32,8 +32,14 @@ def unit_for(category: str, is_sensitive: bool) -> UnitSlug:
 
 
 class Moderation(BaseModel):
-    ok: bool
+    ok: StrictBool
     reasons: list[str] = []
+
+    @model_validator(mode="after")
+    def reject_contradictory_approval(self):
+        if self.reasons:
+            self.ok = False
+        return self
 
 
 class AnalyzeRequest(BaseModel):

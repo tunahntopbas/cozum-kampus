@@ -45,7 +45,7 @@ describe("UnitsView", () => {
   });
 
   it("assigns an unassigned job through the admin function", async () => {
-    rpc.mockResolvedValue({ error: null });
+    rpc.mockResolvedValue({ data: true, error: null });
     view();
     fireEvent.click(screen.getByRole("button", { name: "Mehmet Usta için iş ata" }));
     fireEvent.click(screen.getByRole("button", { name: "Atamayı onayla" }));
@@ -62,7 +62,7 @@ describe("UnitsView", () => {
   });
 
   it("handles material requests and blocks ready when stock is short", async () => {
-    rpc.mockResolvedValue({ error: null });
+    rpc.mockResolvedValue({ data: true, error: null });
     view();
     const starter = screen.getByRole("listitem", { name: "Starter talebi" });
     fireEvent.click(within(starter).getByRole("button", { name: "Hazır" }));
@@ -70,5 +70,39 @@ describe("UnitsView", () => {
     const priz = screen.getByRole("listitem", { name: "Priz 16 A talebi" });
     expect(within(priz).getByRole("button", { name: "Hazır" })).toBeDisabled();
     expect(within(priz).queryByRole("button", { name: "Hazırla" })).not.toBeInTheDocument();
+  });
+
+  it("keeps the assignment form and selection when the RPC returns false", async () => {
+    rpc.mockResolvedValue({ data: false, error: null });
+    view();
+    fireEvent.click(screen.getByRole("button", { name: "Mehmet Usta için iş ata" }));
+    fireEvent.change(screen.getByLabelText("Atanacak iş"), { target: { value: "5" } });
+    fireEvent.click(screen.getByRole("button", { name: "Atamayı onayla" }));
+
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("İşlem yapılamadı"));
+    expect(screen.getByRole("form", { name: "İş ataması" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Mehmet Usta · İş ata" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Atanacak iş")).toHaveValue("5");
+    expect(screen.getByRole("button", { name: "Atamayı onayla" })).toBeEnabled();
+    expect(screen.getByRole("status")).not.toHaveTextContent("atandı");
+    expect(refresh).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ["Hazırla", "hazirlaniyor"],
+    ["Hazır", "hazir"],
+    ["Reddet", "reddedildi"],
+  ])("does not report success when %s returns false", async (label, toStatus) => {
+    rpc.mockResolvedValue({ data: false, error: null });
+    view();
+    const request = screen.getByRole("listitem", { name: "Starter talebi" });
+    fireEvent.click(within(request).getByRole("button", { name: label }));
+
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("İşlem yapılamadı"));
+    expect(rpc).toHaveBeenCalledWith("set_material_request_status", { rid: 7, to_status: toStatus });
+    expect(within(request).getByText("Onay bekliyor")).toBeInTheDocument();
+    expect(within(request).getByRole("button", { name: label })).toBeEnabled();
+    expect(screen.getByRole("status")).not.toHaveTextContent(/hazırlanıyor|stoktan düşüldü|reddedildi/);
+    expect(refresh).not.toHaveBeenCalled();
   });
 });

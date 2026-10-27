@@ -23,7 +23,7 @@ def tr_lower(text: str) -> str:
 
 
 def rule_based_analysis(text: str) -> ReportAnalysis:
-    """Used when the model is unavailable: the report is still filed and marked as awaiting AI analysis."""
+    """Used when the model is unavailable: classification only; this does not authorize publication."""
     low = tr_lower(text)
     category = next((c for c, p in _CATEGORY_PATTERNS if re.search(p, low)), "diger")
     sensitive = bool(_SENSITIVE.search(low))
@@ -38,7 +38,7 @@ def rule_based_analysis(text: str) -> ReportAnalysis:
         summary=stripped[:280],
         materials=[],
         is_sensitive=sensitive,
-        moderation=Moderation(ok=True, reasons=[]),
+        moderation=Moderation(ok=False, reasons=["İçerik denetimi tamamlanamadı."]),
         confidence=0,
         ai_pending=True,
     )

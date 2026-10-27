@@ -32,7 +32,9 @@ export function MaterialsView({
   initialRequests: MaterialRequest[];
 }) {
   const [query, setQuery] = useState("");
-  const [requests, setRequests] = useState(initialRequests);
+  const [localRequests, setLocalRequests] = useState<MaterialRequest[]>([]);
+  const serverIds = new Set(initialRequests.map((r) => r.id));
+  const requests = [...localRequests.filter((r) => !serverIds.has(r.id)), ...initialRequests];
   const [open, setOpen] = useState(false);
   const [material, setMaterial] = useState(stock[0]?.id ?? 0);
   const [quantity, setQuantity] = useState("1");
@@ -59,7 +61,7 @@ export function MaterialsView({
       setError("Talep gönderilemedi. Tekrar dene.");
       return false;
     }
-    setRequests((all) => [...(data as RequestRow[]).map(toRequest), ...all]);
+    setLocalRequests((all) => [...(data as RequestRow[]).map(toRequest), ...all]);
     return true;
   }
 
