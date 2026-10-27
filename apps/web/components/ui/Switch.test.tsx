@@ -12,3 +12,12 @@ describe("Switch", () => {
     expect(onChange).toHaveBeenCalledWith(true);
   });
 });
+
+describe("Switch hideLabel", () => {
+  it("keeps the accessible name but hides the visible text", () => {
+    render(<Switch checked onChange={() => {}} label="Anonim bildir" hideLabel />);
+    const el = screen.getByRole("switch", { name: "Anonim bildir" });
+    expect(el).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByText("Anonim bildir")).toHaveClass("sr-only");
+  });
+});

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Personel malzeme</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app *{box-sizing:border-box}
+.app{font-family:'Geist',system-ui,sans-serif;color:#0F2A5C;-webkit-font-smoothing:antialiased}
+.app p,.app h1,.app h2,.app h3{margin:0;text-wrap:pretty}
+.app button,.app textarea,.app input{font-family:inherit}
+.app button{cursor:pointer}
+.app a{text-decoration:none}
+.app ol,.app ul,.app dl{list-style:none;margin:0;padding:0}
+.app dd{margin:0}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(15,42,92,0.12);border-radius:16px;box-shadow:0 8px 32px rgba(15,42,92,0.14)}
+.t{transition:background-color 300ms cubic-bezier(0.22,1,0.36,1),transform 300ms cubic-bezier(0.22,1,0.36,1),opacity 300ms cubic-bezier(0.22,1,0.36,1)}
+.t:active{transform:scale(0.98)}
+.btn-ink:hover{background:#1B3F85 !important}
+.ghost:hover{background:#E8EFFA !important}
+.item:hover{background:#F7FAFE !important}
+.app :focus-visible{outline:2px solid #1F5FD6;outline-offset:2px}
+.field:focus-within{outline:2px solid #1F5FD6;outline-offset:2px}
+.skip{position:absolute;left:16px;top:-48px;z-index:20;padding:8px 12px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500;border-radius:8px}
+.skip:focus{top:16px}
+.pill{padding:2px 8px;border-radius:9999px;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.lbl{font-size:14px;line-height:20px;font-weight:600}
+@media (prefers-reduced-motion:reduce){.t{transition:none}.t:active{transform:none}}
+@media (max-width:960px){
+.stage{display:none}
+.topbar{position:static !important;transform:none !important;margin:16px !important;flex-wrap:wrap}
+.content{padding-top:0 !important}
+.cols{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div class="app" style="position:relative;width:100%;min-height:1160px;overflow:hidden;background:#E9EEF5">
+  <a class="skip" href="#icerik">Ana içeriğe geç</a>
+  <div class="stage" aria-hidden="true" style="position:absolute;top:0;left:50%;margin-left:-720px;width:1440px;height:1160px;overflow:hidden">
+    <svg width="1440" height="1160" viewBox="0 0 1440 1160" style="display:block">
+      <rect width="1440" height="1160" fill="#E9EEF5"/>
+      <rect x="40" y="800" width="380" height="240" rx="16" fill="#D9E8DF"/>
+      <rect x="1140" y="100" width="260" height="180" rx="12" fill="#D9E8DF"/>
+      <g fill="none" stroke="#D2DBE8" stroke-width="20" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 700 C400 688 900 714 1460 676"/><path d="M470 -20 C462 300 482 660 470 1180"/><path d="M780 -20 C772 220 796 660 786 1180"/><path d="M1100 -20 C1092 300 1112 660 1100 1180"/></g>
+      <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 700 C400 688 900 714 1460 676"/><path d="M470 -20 C462 300 482 660 470 1180"/><path d="M780 -20 C772 220 796 660 786 1180"/><path d="M1100 -20 C1092 300 1112 660 1100 1180"/></g>
+      <g fill="#DAE2EE" stroke="#BAC7DA" stroke-width="1"><rect x="510" y="50" width="120" height="80" rx="4"/><rect x="660" y="60" width="90" height="70" rx="4"/><rect x="830" y="60" width="130" height="90" rx="4"/><rect x="990" y="70" width="80" height="70" rx="4"/><rect x="520" y="540" width="150" height="90" rx="4"/><rect x="830" y="560" width="150" height="100" rx="4"/><rect x="1150" y="770" width="140" height="90" rx="4"/></g>
+    </svg>
+  </div>
+  <nav class="topbar glass" aria-label="Personel gezinme" style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px;z-index:5">
+    <a class="ghost t" href="Personel-Web.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>İşler</a><a class="ghost t" href="Personel-Gecmis.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M136,80v43.47l36.12,21.67a8,8,0,0,1-8.24,13.72l-40-24A8,8,0,0,1,120,128V80a8,8,0,0,1,16,0Zm-8-48A95.44,95.44,0,0,0,60.08,60.15C52.81,67.51,46.35,74.59,40,82V64a8,8,0,0,0-16,0v40a8,8,0,0,0,8,8H72a8,8,0,0,0,0-16H49c7.15-8.42,14.27-16.35,22.39-24.57a80,80,0,1,1,1.66,114.75,8,8,0,1,0-11,11.64A96,96,0,1,0,128,32Z"/></svg>Geçmiş</a><button type="button" class="ghost t" aria-current="page" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:0;border-radius:8px;background:#E8EFFA;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm176,85.78h0l-80,43.79V133.82l32-17.51V152a8,8,0,0,0,16,0V107.55L216,90v85.77Z"/></svg>Malzeme</button>
+  </nav>
+  <main id="icerik" class="content" style="position:relative;z-index:3;max-width:1200px;margin:0 auto;padding:96px 24px 40px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="font-size:30px;line-height:36px;font-weight:600">Malzeme</h1>
+      <p style="font-size:16px;line-height:24px;color:#566486">Bugünkü iş listene göre yapay zekanın tahmini, depo stoğu ve taleplerin.</p>
+    </div><div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px"><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Bugün gerekli</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">4 kalem</p><p style="font-size:12px;line-height:16px;color:#566486">Kalan 4 işe göre</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Araçta</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">2</p><p style="font-size:12px;line-height:16px;color:#566486">Hazır</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Depodan alınacak</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">2</p><p style="font-size:12px;line-height:16px;color:#566486">Çıkmadan önce</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Kritik stok</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">1</p><p style="font-size:12px;line-height:16px;color:#566486">Priz 16 A</p></div></div>
+    <div class="cols" style="display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px;align-items:start">
+      <section class="glass" aria-label="Depo stoğu" style="display:flex;flex-direction:column;gap:8px;padding:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px"><h2 style="font-size:20px;line-height:28px;font-weight:600">Depo stoğu</h2><span class="mono" style="font-size:12px;line-height:16px;color:#566486">Son sayım bugün 08:00</span></div>
+        <div aria-hidden="true" style="display:grid;grid-template-columns:minmax(0,1fr) 72px 72px 160px 88px;gap:12px;padding:4px 12px;font-size:12px;line-height:16px;font-weight:600;color:#566486"><span>Malzeme</span><span>Stok</span><span>En az</span><span>Doluluk</span><span>Durum</span></div>
+        <ul aria-label="Stok listesi">
+          <li style="display:grid;grid-template-columns:minmax(0,1fr) 72px 72px 160px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="font-size:14px;line-height:20px;font-weight:600">LED tüp 18 W</span>
+            <span class="mono" style="font-size:14px;line-height:20px">12</span>
+            <span class="mono" style="font-size:14px;line-height:20px;color:#566486">10</span>
+            <div role="img" aria-label="LED tüp 18 W stok durumu" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:60%;height:8px;border-radius:9999px;background:#15803D"></div></div>
+            <span class="pill" style="background:#DCFCE7;color:#166534;justify-self:start">Yeterli</span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1fr) 72px 72px 160px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="font-size:14px;line-height:20px;font-weight:600">Starter</span>
+            <span class="mono" style="font-size:14px;line-height:20px">6</span>
+            <span class="mono" style="font-size:14px;line-height:20px;color:#566486">10</span>
+            <div role="img" aria-label="Starter stok durumu" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:30%;height:8px;border-radius:9999px;background:#D97706"></div></div>
+            <span class="pill" style="background:#FEF3C7;color:#92400E;justify-self:start">Düşük</span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1fr) 72px 72px 160px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="font-size:14px;line-height:20px;font-weight:600">Su sızdırmazlık bandı</span>
+            <span class="mono" style="font-size:14px;line-height:20px">3</span>
+            <span class="mono" style="font-size:14px;line-height:20px;color:#566486">4</span>
+            <div role="img" aria-label="Su sızdırmazlık bandı stok durumu" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:37%;height:8px;border-radius:9999px;background:#D97706"></div></div>
+            <span class="pill" style="background:#FEF3C7;color:#92400E;justify-self:start">Düşük</span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1fr) 72px 72px 160px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="font-size:14px;line-height:20px;font-weight:600">Sıra bağlantı seti</span>
+            <span class="mono" style="font-size:14px;line-height:20px">8</span>
+            <span class="mono" style="font-size:14px;line-height:20px;color:#566486">4</span>
+            <div role="img" aria-label="Sıra bağlantı seti stok durumu" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:100%;height:8px;border-radius:9999px;background:#15803D"></div></div>
+            <span class="pill" style="background:#DCFCE7;color:#166534;justify-self:start">Yeterli</span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1fr) 72px 72px 160px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="font-size:14px;line-height:20px;font-weight:600">Priz 16 A</span>
+            <span class="mono" style="font-size:14px;line-height:20px">2</span>
+            <span class="mono" style="font-size:14px;line-height:20px;color:#566486">6</span>
+            <div role="img" aria-label="Priz 16 A stok durumu" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:16%;height:8px;border-radius:9999px;background:#B91C1C"></div></div>
+            <span class="pill" style="background:#FEE2E2;color:#991B1B;justify-self:start">Kritik</span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1fr) 72px 72px 160px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="font-size:14px;line-height:20px;font-weight:600">Silikon tüpü</span>
+            <span class="mono" style="font-size:14px;line-height:20px">9</span>
+            <span class="mono" style="font-size:14px;line-height:20px;color:#566486">6</span>
+            <div role="img" aria-label="Silikon tüpü stok durumu" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:75%;height:8px;border-radius:9999px;background:#15803D"></div></div>
+            <span class="pill" style="background:#DCFCE7;color:#166534;justify-self:start">Yeterli</span>
+          </li>
+        </ul>
+      </section>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <section class="glass" aria-label="Bugünkü malzeme tahmini" style="display:flex;flex-direction:column;gap:8px;padding:24px">
+          <div><h2 style="font-size:20px;line-height:28px;font-weight:600">Bugünkü malzeme</h2><p style="display:flex;align-items:center;gap:4px;font-size:14px;line-height:20px;color:#566486"><svg width="14" height="14" viewBox="0 0 256 256" fill="#1F5FD6" aria-hidden="true" style="flex:none;"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg>Yapay zeka kalan işlere göre tahmin etti</p></div>
+          <ul><li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #DCE4F0"><span style="color:#15803D"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span><span style="flex:1;font-size:14px;line-height:20px">LED tüp 18 W</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:600">4</span><span class="pill" style="background:#DCFCE7;color:#166534;width:72px;text-align:center">Araçta</span></li><li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #DCE4F0"><span style="color:#15803D"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span><span style="flex:1;font-size:14px;line-height:20px">Starter</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:600">2</span><span class="pill" style="background:#DCFCE7;color:#166534;width:72px;text-align:center">Araçta</span></li><li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #DCE4F0"><span style="color:#D97706"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"/></svg></span><span style="flex:1;font-size:14px;line-height:20px">Su sızdırmazlık bandı</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:600">1</span><span class="pill" style="background:#FEF3C7;color:#92400E;width:72px;text-align:center">Depodan al</span></li><li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #DCE4F0"><span style="color:#D97706"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM120,144V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,180Z"/></svg></span><span style="flex:1;font-size:14px;line-height:20px">Sıra bağlantı seti</span><span class="mono" style="font-size:14px;line-height:20px;font-weight:600">1</span><span class="pill" style="background:#FEF3C7;color:#92400E;width:72px;text-align:center">Depodan al</span></li></ul>
+          <button type="button" class="btn-ink t" style="margin-top:8px;padding:8px 12px;border:0;border-radius:8px;background:#0F2A5C;color:#FFFFFF;font-size:16px;line-height:24px;font-weight:600">Eksikleri depodan iste</button>
+        </section>
+        <section class="glass" aria-label="Taleplerim" style="display:flex;flex-direction:column;gap:8px;padding:24px">
+          <div style="display:flex;align-items:center;justify-content:space-between"><h2 style="font-size:20px;line-height:28px;font-weight:600">Taleplerim</h2><button type="button" class="ghost t" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>Yeni talep</button></div>
+          <ul><li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #DCE4F0"><div style="flex:1"><p style="font-size:14px;line-height:20px;font-weight:600">Priz 16 A <span class="mono" style="font-weight:500;color:#566486">× 10</span></p><p class="mono" style="font-size:12px;line-height:16px;color:#566486">Bugün 08:42</p></div><span class="pill" style="background:#FEF3C7;color:#92400E">Onay bekliyor</span></li><li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #DCE4F0"><div style="flex:1"><p style="font-size:14px;line-height:20px;font-weight:600">Starter <span class="mono" style="font-weight:500;color:#566486">× 20</span></p><p class="mono" style="font-size:12px;line-height:16px;color:#566486">26 Eki 16:10</p></div><span class="pill" style="background:#E8EFFA;color:#0F2A5C">Hazırlanıyor</span></li><li style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #DCE4F0"><div style="flex:1"><p style="font-size:14px;line-height:20px;font-weight:600">LED tüp 18 W <span class="mono" style="font-weight:500;color:#566486">× 24</span></p><p class="mono" style="font-size:12px;line-height:16px;color:#566486">25 Eki 09:30</p></div><span class="pill" style="background:#DCFCE7;color:#166534">Hazır</span></li></ul>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1160}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

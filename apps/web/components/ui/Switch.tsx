@@ -4,25 +4,25 @@ type SwitchProps = {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label: string;
+  hideLabel?: boolean;
 };
 
-export function Switch({ checked, onChange, label }: SwitchProps) {
+// 44x24 track from docs/tasarim/Bildir.dc.html.
+export function Switch({ checked, onChange, label, hideLabel = false }: SwitchProps) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
       onClick={() => onChange(!checked)}
-      className="group inline-flex items-center gap-3 text-sm text-ink focus-ring rounded-lg active:scale-[0.98] transition-transform"
+      className="t inline-flex flex-none items-center gap-3 rounded-full text-sm text-ink"
     >
       <span
-        className={`relative h-6 w-10 rounded-full transition-colors ${checked ? "bg-ink" : "bg-input-border"}`}
+        className={`flex h-6 w-11 items-center rounded-full p-0.5 transition-colors ${checked ? "justify-end bg-ink" : "justify-start bg-[#AEBBD2]"}`}
       >
-        <span
-          className={`absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform ${checked ? "translate-x-4" : ""}`}
-        />
+        <span className="block h-5 w-5 rounded-full bg-white" />
       </span>
-      <span>{label}</span>
+      <span className={hideLabel ? "sr-only" : undefined}>{label}</span>
     </button>
   );
 }

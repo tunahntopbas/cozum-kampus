@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Hesabım</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app *{box-sizing:border-box}
+.app{font-family:'Geist',system-ui,sans-serif;color:#0F2A5C;-webkit-font-smoothing:antialiased}
+.app p,.app h1,.app h2,.app h3{margin:0;text-wrap:pretty}
+.app button,.app textarea,.app input{font-family:inherit}
+.app button{cursor:pointer}
+.app a{text-decoration:none}
+.app ol,.app ul,.app dl{list-style:none;margin:0;padding:0}
+.app dd{margin:0}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(15,42,92,0.12);border-radius:16px;box-shadow:0 8px 32px rgba(15,42,92,0.14)}
+.t{transition:background-color 300ms cubic-bezier(0.22,1,0.36,1),transform 300ms cubic-bezier(0.22,1,0.36,1),opacity 300ms cubic-bezier(0.22,1,0.36,1)}
+.t:active{transform:scale(0.98)}
+.btn-ink:hover{background:#1B3F85 !important}
+.ghost:hover{background:#E8EFFA !important}
+.item:hover{background:#F7FAFE !important}
+.app :focus-visible{outline:2px solid #1F5FD6;outline-offset:2px}
+.field:focus-within{outline:2px solid #1F5FD6;outline-offset:2px}
+.skip{position:absolute;left:16px;top:-48px;z-index:20;padding:8px 12px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500;border-radius:8px}
+.skip:focus{top:16px}
+.pill{padding:2px 8px;border-radius:9999px;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.lbl{font-size:14px;line-height:20px;font-weight:600}
+@media (prefers-reduced-motion:reduce){.t{transition:none}.t:active{transform:none}}
+@media (max-width:960px){
+.stage{display:none}
+.topbar{position:static !important;transform:none !important;margin:16px !important;flex-wrap:wrap}
+.content{padding-top:0 !important}
+.cols{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div class="app" style="position:relative;width:100%;min-height:900px;overflow:hidden;background:#E9EEF5">
+  <a class="skip" href="#icerik">Ana içeriğe geç</a>
+  <div class="stage" aria-hidden="true" style="position:absolute;top:0;left:50%;margin-left:-720px;width:1440px;height:900px;overflow:hidden">
+    <svg width="1440" height="900" viewBox="0 0 1440 900" style="display:block">
+      <rect width="1440" height="900" fill="#E9EEF5"/>
+      <rect x="40" y="540" width="380" height="240" rx="16" fill="#D9E8DF"/>
+      <rect x="1140" y="100" width="260" height="180" rx="12" fill="#D9E8DF"/>
+      <g fill="none" stroke="#D2DBE8" stroke-width="20" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 440 C400 428 900 454 1460 416"/><path d="M470 -20 C462 300 482 400 470 920"/><path d="M780 -20 C772 220 796 400 786 920"/><path d="M1100 -20 C1092 300 1112 400 1100 920"/></g>
+      <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 440 C400 428 900 454 1460 416"/><path d="M470 -20 C462 300 482 400 470 920"/><path d="M780 -20 C772 220 796 400 786 920"/><path d="M1100 -20 C1092 300 1112 400 1100 920"/></g>
+      <g fill="#DAE2EE" stroke="#BAC7DA" stroke-width="1"><rect x="510" y="50" width="120" height="80" rx="4"/><rect x="660" y="60" width="90" height="70" rx="4"/><rect x="830" y="60" width="130" height="90" rx="4"/><rect x="990" y="70" width="80" height="70" rx="4"/><rect x="520" y="540" width="150" height="90" rx="4"/><rect x="830" y="560" width="150" height="100" rx="4"/><rect x="1150" y="510" width="140" height="90" rx="4"/></g>
+    </svg>
+  </div>
+  <nav class="topbar glass" aria-label="Ana gezinme" style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px;z-index:5">
+    <a class="ghost t" href="Main.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M228.92,49.69a8,8,0,0,0-6.86-1.45L160.93,63.52,99.58,32.84a8,8,0,0,0-5.52-.6l-64,16A8,8,0,0,0,24,56V200a8,8,0,0,0,9.94,7.76l61.13-15.28,61.35,30.68A8.15,8.15,0,0,0,160,224a8,8,0,0,0,1.94-.24l64-16A8,8,0,0,0,232,200V56A8,8,0,0,0,228.92,49.69ZM104,52.94l48,24V203.06l-48-24ZM40,62.25l48-12v127.5l-48,12Zm176,131.5-48,12V78.25l48-12Z"/></svg>Harita</a>
+    <a class="ghost t" href="Bildirimlerim.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>Bildirimlerim</a>
+    <a class="ghost t" href="Oneriler.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M176,232a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h80A8,8,0,0,1,176,232Zm40-128a87.55,87.55,0,0,1-33.64,69.21A16.24,16.24,0,0,0,176,186v6a16,16,0,0,1-16,16H96a16,16,0,0,1-16-16v-6a16,16,0,0,0-6.23-12.66A87.59,87.59,0,0,1,40,104.49C39.74,56.83,78.26,17.14,125.88,16A88,88,0,0,1,216,104Zm-16,0a72,72,0,0,0-73.74-72c-39,.92-70.47,33.39-70.26,72.39a71.65,71.65,0,0,0,27.64,56.3A32,32,0,0,1,96,186v6h64v-6a32.15,32.15,0,0,1,12.47-25.35A71.65,71.65,0,0,0,200,104Zm-16.11-9.34a57.6,57.6,0,0,0-46.56-46.55,8,8,0,0,0-2.66,15.78c16.57,2.79,30.63,16.85,33.44,33.45A8,8,0,0,0,176,104a9,9,0,0,0,1.35-.11A8,8,0,0,0,183.89,94.66Z"/></svg>Öneriler</a>
+    <span style="width:1px;height:24px;background:#DCE4F0;display:block"></span>
+    <a class="btn-ink t" href="Bildir.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>Bildir</a>
+    <a class="ghost t" href="Bildirim-Merkezi.dc.html" aria-label="Bildirimler, 3 yeni"  style="position:relative;width:36px;height:36px;border-radius:8px;background:transparent;color:#0F2A5C;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"/></svg><span style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:9999px;background:#B91C1C;border:2px solid #FFFFFF;box-sizing:content-box;display:block"></span></a>
+    <a class="ghost t" href="Hesap.dc.html" aria-label="Profil" aria-current="page" style="width:36px;height:36px;border-radius:8px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/></svg></a>
+  </nav>
+  <main id="icerik" class="content" style="position:relative;z-index:3;max-width:1200px;margin:0 auto;padding:96px 24px 40px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="font-size:30px;line-height:36px;font-weight:600">Hesabım</h1>
+      <p style="font-size:16px;line-height:24px;color:#566486">Profil bilgilerin ve hesabınla ilgili işlemler.</p>
+    </div>
+    <div class="cols" style="display:grid;grid-template-columns:360px minmax(0,1fr);gap:16px;align-items:start">
+      <section class="glass" aria-label="Profil özeti" style="display:flex;flex-direction:column;gap:16px;padding:24px">
+        <div style="display:flex;align-items:center;gap:16px">
+          <span style="width:72px;height:72px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center;font-size:24px;line-height:32px;font-weight:600;flex:none">ZK</span>
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h2 style="font-size:20px;line-height:28px;font-weight:600">Zeynep Kaya</h2>
+            <p style="font-size:14px;line-height:20px;color:#566486">Bilgisayar Mühendisliği, 4. sınıf</p>
+            <span class="pill" style="align-self:flex-start;background:#E8EFFA;color:#0F2A5C">Öğrenci</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px"><div style="display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:8px;background:#FFFFFF"><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">6</p><p style="font-size:12px;line-height:16px;color:#566486">Bildirim</p></div><div style="display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:8px;background:#FFFFFF"><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">7</p><p style="font-size:12px;line-height:16px;color:#566486">Destek</p></div><div style="display:flex;flex-direction:column;gap:2px;padding:12px;border-radius:8px;background:#FFFFFF"><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">4</p><p style="font-size:12px;line-height:16px;color:#566486">Çözüldü</p></div></div>
+        <button type="button" class="ghost t" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;font-size:16px;line-height:24px;font-weight:600"><svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"/></svg>Çıkış yap</button>
+      </section>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <section class="glass" aria-label="Profil bilgileri" style="display:flex;flex-direction:column;gap:16px;padding:24px"><div><h2 style="font-size:20px;line-height:28px;font-weight:600">Profil bilgileri</h2><p style="font-size:14px;line-height:20px;color:#566486">Okul hesabından gelen bilgiler değiştirilemez.</p></div><div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px"><div style="display:flex;flex-direction:column;gap:8px"><label class="lbl" for="ad">Ad soyad</label><div class="field" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF"><input id="ad" value="Zeynep Kaya"  style="flex:1;min-width:0;border:0;background:transparent;color:#0F2A5C;font-size:14px;line-height:20px;outline:none;padding:0"></div></div><div style="display:flex;flex-direction:column;gap:8px"><label class="lbl" for="no">Öğrenci numarası</label><div class="field" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#F3F6FB"><input id="no" value="20210457" readonly style="flex:1;min-width:0;border:0;background:transparent;color:#0F2A5C;font-size:14px;line-height:20px;outline:none;padding:0"><span style="margin-left:auto;color:#566486"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg></span></div></div><div style="display:flex;flex-direction:column;gap:8px"><label class="lbl" for="bolum">Bölüm</label><div class="field" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#F3F6FB"><input id="bolum" value="Bilgisayar Mühendisliği" readonly style="flex:1;min-width:0;border:0;background:transparent;color:#0F2A5C;font-size:14px;line-height:20px;outline:none;padding:0"><span style="margin-left:auto;color:#566486"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg></span></div></div><div style="display:flex;flex-direction:column;gap:8px"><label class="lbl" for="dil">Dil</label><div class="field" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF"><input id="dil" value="Türkçe"  style="flex:1;min-width:0;border:0;background:transparent;color:#0F2A5C;font-size:14px;line-height:20px;outline:none;padding:0"></div></div></div><div style="display:flex;flex-direction:column;gap:8px"><label class="lbl" for="eposta">Okul e-postası</label><div class="field" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#F3F6FB"><input id="eposta" value="zeynep.kaya@ogr.example.edu.tr" readonly style="flex:1;min-width:0;border:0;background:transparent;color:#0F2A5C;font-size:14px;line-height:20px;outline:none;padding:0"><span style="margin-left:auto;color:#566486"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg></span></div><p style="font-size:12px;line-height:16px;color:#566486">Giriş bu e-posta ile yapılır. Durum bildirimleri de buraya gelir.</p></div><div style="display:flex;justify-content:flex-end"><button type="button" class="btn-ink t" style="padding:8px 12px;border:0;border-radius:8px;background:#0F2A5C;color:#FFFFFF;font-size:16px;line-height:24px;font-weight:600">Değişiklikleri kaydet</button></div></section>
+        <section class="glass" aria-label="Hesap işlemleri" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px">
+          <div><h2 style="font-size:14px;line-height:20px;font-weight:600">Hesabı sil</h2><p style="font-size:12px;line-height:16px;color:#566486">Hesabın ve ona bağlı kişisel verilerin kalıcı olarak silinir. Açtığın bildirimler anonim olarak kalır.</p></div>
+          <button type="button" class="ghost t" style="flex:none;padding:8px 12px;border:1px solid #FECACA;border-radius:8px;background:#FFFFFF;color:#991B1B;font-size:14px;line-height:20px;font-weight:600">Hesabımı ve verilerimi sil</button>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

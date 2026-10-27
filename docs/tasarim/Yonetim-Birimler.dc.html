@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Yönetim birimleri</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app *{box-sizing:border-box}
+.app{font-family:'Geist',system-ui,sans-serif;color:#0F2A5C;-webkit-font-smoothing:antialiased}
+.app p,.app h1,.app h2,.app h3{margin:0;text-wrap:pretty}
+.app button,.app textarea,.app input{font-family:inherit}
+.app button{cursor:pointer}
+.app a{text-decoration:none}
+.app ol,.app ul,.app dl{list-style:none;margin:0;padding:0}
+.app dd{margin:0}
+.mono{font-family:'Geist Mono',ui-monospace,monospace}
+.glass{background:rgba(255,255,255,0.72);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(15,42,92,0.12);border-radius:16px;box-shadow:0 8px 32px rgba(15,42,92,0.14)}
+.t{transition:background-color 300ms cubic-bezier(0.22,1,0.36,1),transform 300ms cubic-bezier(0.22,1,0.36,1),opacity 300ms cubic-bezier(0.22,1,0.36,1)}
+.t:active{transform:scale(0.98)}
+.btn-ink:hover{background:#1B3F85 !important}
+.ghost:hover{background:#E8EFFA !important}
+.item:hover{background:#F7FAFE !important}
+.app :focus-visible{outline:2px solid #1F5FD6;outline-offset:2px}
+.field:focus-within{outline:2px solid #1F5FD6;outline-offset:2px}
+.skip{position:absolute;left:16px;top:-48px;z-index:20;padding:8px 12px;background:#0F2A5C;color:#FFFFFF;font-size:14px;line-height:20px;font-weight:500;border-radius:8px}
+.skip:focus{top:16px}
+.pill{padding:2px 8px;border-radius:9999px;font-size:12px;line-height:16px;font-weight:600;white-space:nowrap}
+.lbl{font-size:14px;line-height:20px;font-weight:600}
+@media (prefers-reduced-motion:reduce){.t{transition:none}.t:active{transform:none}}
+@media (max-width:960px){
+.stage{display:none}
+.topbar{position:static !important;transform:none !important;margin:16px !important;flex-wrap:wrap}
+.content{padding-top:0 !important}
+.cols{grid-template-columns:1fr !important}
+}
+</style>
+</helmet>
+
+<div class="app" style="position:relative;width:100%;min-height:1500px;overflow:hidden;background:#E9EEF5">
+  <a class="skip" href="#icerik">Ana içeriğe geç</a>
+  <div class="stage" aria-hidden="true" style="position:absolute;top:0;left:50%;margin-left:-720px;width:1440px;height:1500px;overflow:hidden">
+    <svg width="1440" height="1500" viewBox="0 0 1440 1500" style="display:block">
+      <rect width="1440" height="1500" fill="#E9EEF5"/>
+      <rect x="40" y="1140" width="380" height="240" rx="16" fill="#D9E8DF"/>
+      <rect x="1140" y="100" width="260" height="180" rx="12" fill="#D9E8DF"/>
+      <g fill="none" stroke="#D2DBE8" stroke-width="20" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 1040 C400 1028 900 1054 1460 1016"/><path d="M470 -20 C462 300 482 1000 470 1520"/><path d="M780 -20 C772 220 796 1000 786 1520"/><path d="M1100 -20 C1092 300 1112 1000 1100 1520"/></g>
+      <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round"><path d="M-20 440 C300 428 700 452 1460 418"/><path d="M-20 1040 C400 1028 900 1054 1460 1016"/><path d="M470 -20 C462 300 482 1000 470 1520"/><path d="M780 -20 C772 220 796 1000 786 1520"/><path d="M1100 -20 C1092 300 1112 1000 1100 1520"/></g>
+      <g fill="#DAE2EE" stroke="#BAC7DA" stroke-width="1"><rect x="510" y="50" width="120" height="80" rx="4"/><rect x="660" y="60" width="90" height="70" rx="4"/><rect x="830" y="60" width="130" height="90" rx="4"/><rect x="990" y="70" width="80" height="70" rx="4"/><rect x="520" y="540" width="150" height="90" rx="4"/><rect x="830" y="560" width="150" height="100" rx="4"/><rect x="1150" y="1110" width="140" height="90" rx="4"/></g>
+    </svg>
+  </div>
+  <nav class="topbar glass" aria-label="Yönetim gezinme" style="position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:8px;z-index:5">
+    <a class="ghost t" href="Yonetim-Genel.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"/></svg>Genel bakış</a><a class="ghost t" href="Yonetim-Bildirimler.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h88A8,8,0,0,1,224,128ZM128,72h88a8,8,0,0,0,0-16H128a8,8,0,0,0,0,16Zm88,112H128a8,8,0,0,0,0,16h88a8,8,0,0,0,0-16ZM82.34,42.34,56,68.69,45.66,58.34A8,8,0,0,0,34.34,69.66l16,16a8,8,0,0,0,11.32,0l32-32A8,8,0,0,0,82.34,42.34Zm0,64L56,132.69,45.66,122.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Zm0,64L56,196.69,45.66,186.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32,0l32-32a8,8,0,0,0-11.32-11.32Z"/></svg>Bildirimler</a><button type="button" class="ghost t" aria-current="page" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:0;border-radius:8px;background:#E8EFFA;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V32a16,16,0,0,0-24.88-13.32L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,32V208H48ZM112,112v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm-32,0v16a8,8,0,0,1-16,0V112a8,8,0,1,1,16,0Zm0,56v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Zm32,0v16a8,8,0,0,1-16,0V168a8,8,0,0,1,16,0Z"/></svg>Birimler</button><a class="ghost t" href="Yonetim-Ses.dc.html" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:8px;background:transparent;color:#566486;font-size:14px;line-height:20px;font-weight:500"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M248,120a48.05,48.05,0,0,0-48-48H160.2c-2.91-.17-53.62-3.74-101.91-44.24A16,16,0,0,0,32,40V200a16,16,0,0,0,26.29,12.25c37.77-31.68,77-40.76,93.71-43.3v31.72A16,16,0,0,0,159.12,214l11,7.33A16,16,0,0,0,194.5,212l11.77-44.36A48.07,48.07,0,0,0,248,120ZM48,199.93V40h0c42.81,35.91,86.63,45,104,47.24v65.48C134.65,155,90.84,164.07,48,199.93Zm131,8,0,.11-11-7.33V168h21.6ZM200,152H168V88h32a32,32,0,1,1,0,64Z"/></svg>Kampüs sesi</a>
+  </nav>
+  <main id="icerik" class="content" style="position:relative;z-index:3;max-width:1200px;margin:0 auto;padding:96px 24px 40px;display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;flex-direction:column;gap:4px">
+      <h1 style="font-size:30px;line-height:36px;font-weight:600">Birimler</h1>
+      <p style="font-size:16px;line-height:24px;color:#566486">Birim yükü, performans ve ekip durumu.</p>
+    </div><div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px"><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Aktif birim</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">5</p><p style="font-size:12px;line-height:16px;color:#566486">Kampüs genelinde</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Sahadaki personel</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">9 / 14</p><p style="font-size:12px;line-height:16px;color:#566486">Şu anda</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Birim başı açık iş</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">5,6</p><p style="font-size:12px;line-height:16px;color:#566486">Ortalama</p></div><div class="glass" style="display:flex;flex-direction:column;gap:4px;padding:16px"><p style="font-size:14px;line-height:20px;color:#566486">Hedef altı birim</p><p class="mono" style="font-size:30px;line-height:36px;font-weight:600">1</p><p style="font-size:12px;line-height:16px;color:#566486">Yapı İşleri</p></div></div>
+    <div class="cols" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+      <section class="glass" aria-label="Yapı İşleri" aria-current="true" style="display:flex;flex-direction:column;gap:16px;padding:24px;box-shadow:0 0 0 2px #1F5FD6,0 8px 32px rgba(15,42,92,0.14);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 style="font-size:20px;line-height:28px;font-weight:600">Yapı İşleri</h2><span class="pill" style="background:#FEE2E2;color:#991B1B">Hedef altı</span></div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">11</p><p style="font-size:12px;line-height:16px;color:#566486">Açık iş</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">3,1</p><p style="font-size:12px;line-height:16px;color:#566486">Gün, ortalama</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">%78</p><p style="font-size:12px;line-height:16px;color:#566486">Süresinde</p></div>
+          </div>
+          <div role="img" aria-label="Yapı İşleri süresinde çözüm yüzde 78" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:78%;height:8px;border-radius:9999px;background:#B91C1C"></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;border-top:1px solid #DCE4F0"><div style="display:flex;align-items:center;gap:8px"><span style="display:flex"><span style="width:28px;height:28px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:0px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">MA</span><span style="width:28px;height:28px;border-radius:9999px;background:#D5DEEC;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">AD</span><span style="width:28px;height:28px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">SY</span></span><span style="font-size:12px;line-height:16px;color:#566486"><span class="mono">3 / 4</span> sahada</span></div><span style="font-size:12px;line-height:16px;color:#566486">En sık: Aydınlatma</span></div>
+        </section><section class="glass" aria-label="Bilgi İşlem"  style="display:flex;flex-direction:column;gap:16px;padding:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 style="font-size:20px;line-height:28px;font-weight:600">Bilgi İşlem</h2><span class="pill" style="background:#DCFCE7;color:#166534">Hedefte</span></div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">6</p><p style="font-size:12px;line-height:16px;color:#566486">Açık iş</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">1,2</p><p style="font-size:12px;line-height:16px;color:#566486">Gün, ortalama</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">%94</p><p style="font-size:12px;line-height:16px;color:#566486">Süresinde</p></div>
+          </div>
+          <div role="img" aria-label="Bilgi İşlem süresinde çözüm yüzde 94" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:94%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;border-top:1px solid #DCE4F0"><div style="display:flex;align-items:center;gap:8px"><span style="display:flex"><span style="width:28px;height:28px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:0px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">MA</span><span style="width:28px;height:28px;border-radius:9999px;background:#D5DEEC;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">AD</span></span><span style="font-size:12px;line-height:16px;color:#566486"><span class="mono">2 / 3</span> sahada</span></div><span style="font-size:12px;line-height:16px;color:#566486">En sık: Ağ ve internet</span></div>
+        </section><section class="glass" aria-label="Temizlik"  style="display:flex;flex-direction:column;gap:16px;padding:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 style="font-size:20px;line-height:28px;font-weight:600">Temizlik</h2><span class="pill" style="background:#DCFCE7;color:#166534">Hedefte</span></div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">5</p><p style="font-size:12px;line-height:16px;color:#566486">Açık iş</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">0,9</p><p style="font-size:12px;line-height:16px;color:#566486">Gün, ortalama</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">%97</p><p style="font-size:12px;line-height:16px;color:#566486">Süresinde</p></div>
+          </div>
+          <div role="img" aria-label="Temizlik süresinde çözüm yüzde 97" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:97%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;border-top:1px solid #DCE4F0"><div style="display:flex;align-items:center;gap:8px"><span style="display:flex"><span style="width:28px;height:28px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:0px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">MA</span><span style="width:28px;height:28px;border-radius:9999px;background:#D5DEEC;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">AD</span></span><span style="font-size:12px;line-height:16px;color:#566486"><span class="mono">2 / 3</span> sahada</span></div><span style="font-size:12px;line-height:16px;color:#566486">En sık: Zemin ve hijyen</span></div>
+        </section>
+      <section class="glass" aria-label="Teknik Servis"  style="display:flex;flex-direction:column;gap:16px;padding:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 style="font-size:20px;line-height:28px;font-weight:600">Teknik Servis</h2><span class="pill" style="background:#DCFCE7;color:#166534">Hedefte</span></div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">4</p><p style="font-size:12px;line-height:16px;color:#566486">Açık iş</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">1,8</p><p style="font-size:12px;line-height:16px;color:#566486">Gün, ortalama</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">%88</p><p style="font-size:12px;line-height:16px;color:#566486">Süresinde</p></div>
+          </div>
+          <div role="img" aria-label="Teknik Servis süresinde çözüm yüzde 88" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:88%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;border-top:1px solid #DCE4F0"><div style="display:flex;align-items:center;gap:8px"><span style="display:flex"><span style="width:28px;height:28px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:0px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">MA</span></span><span style="font-size:12px;line-height:16px;color:#566486"><span class="mono">1 / 2</span> sahada</span></div><span style="font-size:12px;line-height:16px;color:#566486">En sık: Isıtma ve su</span></div>
+        </section><section class="glass" aria-label="Güvenlik"  style="display:flex;flex-direction:column;gap:16px;padding:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><h2 style="font-size:20px;line-height:28px;font-weight:600">Güvenlik</h2><span class="pill" style="background:#DCFCE7;color:#166534">Hedefte</span></div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">2</p><p style="font-size:12px;line-height:16px;color:#566486">Açık iş</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">0,4</p><p style="font-size:12px;line-height:16px;color:#566486">Gün, ortalama</p></div>
+            <div><p class="mono" style="font-size:24px;line-height:32px;font-weight:600">%100</p><p style="font-size:12px;line-height:16px;color:#566486">Süresinde</p></div>
+          </div>
+          <div role="img" aria-label="Güvenlik süresinde çözüm yüzde 100" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:100%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;border-top:1px solid #DCE4F0"><div style="display:flex;align-items:center;gap:8px"><span style="display:flex"><span style="width:28px;height:28px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;border:2px solid #FFFFFF;margin-left:0px;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600">MA</span></span><span style="font-size:12px;line-height:16px;color:#566486"><span class="mono">1 / 2</span> sahada</span></div><span style="font-size:12px;line-height:16px;color:#566486">En sık: Giriş ve devriye</span></div>
+        </section>
+      <button type="button" class="ghost t" style="min-height:240px;border:1px dashed #AEBBD2;border-radius:16px;background:transparent;color:#0F2A5C;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:16px;line-height:24px;font-weight:600"><svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>Yeni birim ekle</button>
+    </div>
+    <section class="glass" aria-label="Yapı İşleri ekibi" style="display:flex;flex-direction:column;gap:8px;padding:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 16px 8px"><div><h2 style="font-size:20px;line-height:28px;font-weight:600">Yapı İşleri ekibi</h2><p style="display:flex;align-items:center;gap:4px;font-size:14px;line-height:20px;color:#566486"><svg width="14" height="14" viewBox="0 0 256 256" fill="#1F5FD6" aria-hidden="true" style="flex:none;"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></svg>Yapay zeka işleri ekibe konuma ve yüke göre dağıtır</p></div><button type="button" class="ghost t" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>Personel ekle</button></div>
+      <div aria-hidden="true" style="display:grid;grid-template-columns:minmax(0,1.2fr) 104px minmax(0,1.4fr) 72px 120px 88px;gap:12px;padding:4px 12px;font-size:12px;line-height:16px;font-weight:600;color:#566486"><span>Personel</span><span>Durum</span><span>Şu anki iş</span><span>Bugün</span><span>İş yükü</span><span></span></div>
+      <ul aria-label="Ekip"><li style="display:grid;grid-template-columns:minmax(0,1.2fr) 104px minmax(0,1.4fr) 72px 120px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="display:flex;align-items:center;gap:12px"><span style="width:32px;height:32px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600;flex:none">MA</span><span style="display:flex;flex-direction:column"><span style="font-size:14px;line-height:20px;font-weight:600">Mehmet Aksoy</span><span style="font-size:12px;line-height:16px;color:#566486">Teknisyen</span></span></span>
+            <span class="pill" style="background:#FEF3C7;color:#92400E;justify-self:start">Sahada</span>
+            <span style="font-size:14px;line-height:20px;color:#566486">Koridor lambası yanmıyor</span>
+            <span class="mono" style="font-size:14px;line-height:20px">3</span>
+            <div role="img" aria-label="Mehmet Aksoy iş yükü yüzde 70" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:70%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+            <span style="justify-self:end"></span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1.2fr) 104px minmax(0,1.4fr) 72px 120px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="display:flex;align-items:center;gap:12px"><span style="width:32px;height:32px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600;flex:none">AD</span><span style="display:flex;flex-direction:column"><span style="font-size:14px;line-height:20px;font-weight:600">Ali Demir</span><span style="font-size:12px;line-height:16px;color:#566486">Teknisyen</span></span></span>
+            <span class="pill" style="background:#FEF3C7;color:#92400E;justify-self:start">Sahada</span>
+            <span style="font-size:14px;line-height:20px;color:#566486">Su sızıntısı</span>
+            <span class="mono" style="font-size:14px;line-height:20px">2</span>
+            <div role="img" aria-label="Ali Demir iş yükü yüzde 55" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:55%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+            <span style="justify-self:end"></span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1.2fr) 104px minmax(0,1.4fr) 72px 120px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="display:flex;align-items:center;gap:12px"><span style="width:32px;height:32px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600;flex:none">SY</span><span style="display:flex;flex-direction:column"><span style="font-size:14px;line-height:20px;font-weight:600">Seda Yıldız</span><span style="font-size:12px;line-height:16px;color:#566486">Elektrik teknisyeni</span></span></span>
+            <span class="pill" style="background:#DCFCE7;color:#166534;justify-self:start">Müsait</span>
+            <span style="font-size:14px;line-height:20px;color:#566486">Bekliyor</span>
+            <span class="mono" style="font-size:14px;line-height:20px">4</span>
+            <div role="img" aria-label="Seda Yıldız iş yükü yüzde 20" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:20%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+            <span style="justify-self:end"><button type="button" class="ghost t" style="display:flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #CBD5E5;border-radius:8px;background:#FFFFFF;color:#0F2A5C;font-size:14px;line-height:20px;font-weight:600"><svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="flex:none;"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>İş ata</button></span>
+          </li><li style="display:grid;grid-template-columns:minmax(0,1.2fr) 104px minmax(0,1.4fr) 72px 120px 88px;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #DCE4F0">
+            <span style="display:flex;align-items:center;gap:12px"><span style="width:32px;height:32px;border-radius:9999px;background:#E8EFFA;color:#0F2A5C;display:flex;align-items:center;justify-content:center;font-size:12px;line-height:16px;font-weight:600;flex:none">HÇ</span><span style="display:flex;flex-direction:column"><span style="font-size:14px;line-height:20px;font-weight:600">Hasan Çelik</span><span style="font-size:12px;line-height:16px;color:#566486">Teknisyen</span></span></span>
+            <span class="pill" style="background:#E5E7EB;color:#374151;justify-self:start">İzinli</span>
+            <span style="font-size:14px;line-height:20px;color:#566486">İzinli, 29 Eki dönüş</span>
+            <span class="mono" style="font-size:14px;line-height:20px">0</span>
+            <div role="img" aria-label="Hasan Çelik iş yükü yüzde 0" style="height:8px;border-radius:9999px;background:#E8EFFA"><div style="width:0%;height:8px;border-radius:9999px;background:#1F5FD6"></div></div>
+            <span style="justify-self:end"></span>
+          </li></ul>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

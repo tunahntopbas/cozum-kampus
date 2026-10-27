@@ -362,7 +362,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   expect(fitWithin(800, 600)).toEqual({ width: 800, height: 600 })
   ```
 - [x] **Step 2:** FAIL → yaz → PASS (`pnpm --filter web test`).
-- [ ] **Step 3:** (Task 9 + Supabase bekleniyor) Elle doğrula (Task 9 sayfasında): GPS'li bir iPhone fotoğrafı yükle, Storage'dan indir, `exiftool <dosya>` çıktısında GPS satırı yok.
+- [x] **Step 3:** Elle doğrula (Task 9 sayfasında): GPS'li bir iPhone fotoğrafı yükle, Storage'dan indir, `exiftool <dosya>` çıktısında GPS satırı yok.
 - [x] **Step 4:** Commit: `feat(web): client-side image downscale, EXIF strip and upload`
 
 ---
@@ -385,7 +385,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `startDictation(onText: (t: string) => void): (() => void) | null`: `SpeechRecognition`/`webkitSpeechRecognition`, `lang='tr-TR'`; desteklenmiyorsa `null`.
   - Gönderim: `reports` insert → `report_media` (`kind: 'once'`) satırları → `report_events` (`type: 'olusturuldu'`, `payload: { category, urgency, ai_pending }`). Başarıda `/bildirimlerim?yeni=<id>`'e gider.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```ts
   // ai.test.ts
   it('returns pending analysis on timeout', async () => {
@@ -403,8 +403,8 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   it('blocks moderated content', ...)                 // canSubmit({..moderation:{ok:false}}) -> ok false
   it('requires photo or text', ...)                   // boş form -> ok false, message 'Bir fotoğraf ya da kısa bir açıklama ekle.'
   ```
-- [ ] **Step 2:** FAIL → `lib/ai.ts`, `lib/report.ts`, `lib/speech.ts` yaz → PASS.
-- [ ] **Step 3: Sayfa.** Düzen (1440 px tasarım): solda form (cam panel), sağda "Yapay zeka analizi" paneli.
+- [x] **Step 2:** FAIL → `lib/ai.ts`, `lib/report.ts`, `lib/speech.ts` yaz → PASS.
+- [x] **Step 3: Sayfa.** Düzen (1440 px tasarım): solda form (cam panel), sağda "Yapay zeka analizi" paneli.
   - Sekmeler: Fotoğraf / Yazı / Ses. Fotoğraf: en çok 3, önizleme, kaldırma. Yazı: açıklama alanı. Ses: mikrofon butonu `startDictation`, `null` ise "Tarayıcın sesli anlatımı desteklemiyor, yazarak devam edebilirsin."
   - Konum: `?yer=<qr_kodu>` varsa `places` + `buildings`'ten doldurulur ve kilitlenir ("Konum QR koddan alındı", değiştir bağlantısı); yoksa bina listesi + kat seçimi, "Konumumu kullan" (`navigator.geolocation`).
   - Anonim anahtarı (`Switch`): "Adım birimlere gösterilmesin".
@@ -412,13 +412,13 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `is_sensitive` ise panelde sakin bir not: "Bu bildirim gizlilikle güvenlik birimine iletilecek."
   - Acil durum butonu (danger) bu planda yalnızca `tel:` bağlantısı (kampüs güvenlik numarası `.env`'de `NEXT_PUBLIC_SECURITY_PHONE`); konumlu uyarı Plan 5.
   - Gönder: `canSubmit` başarısızsa mesajı formun altında göster; başarılıysa kayıt akışı.
-- [ ] **Step 4:** `pnpm --filter web test && pnpm --filter web exec tsc --noEmit` → PASS.
-- [ ] **Step 5: Uçtan uca elle doğrulama** (FastAPI `uv run uvicorn app.main:app --port 8000`, web `pnpm dev:web`, `.env.local` içinde `NEXT_PUBLIC_AI_API_URL=http://localhost:8000`):
+- [x] **Step 4:** `pnpm --filter web test && pnpm --filter web exec tsc --noEmit` → PASS.
+- [x] **Step 5: Uçtan uca elle doğrulama** (FastAPI `uv run uvicorn app.main:app --port 8000`, web `pnpm dev:web`, `.env.local` içinde `NEXT_PUBLIC_AI_API_URL=http://localhost:8000`):
   1. Öğrenci girişi → `/bildir` → lamba fotoğrafı. Beklenen: panel `aydinlatma`, birim Yapı İşleri.
   2. Gönder. Beklenen: Supabase'de `reports` satırı `status=yonlendirildi`, `report_media` 1 satır, `report_events` 1 satır.
   3. FastAPI'yi durdur, yalnızca metinle bildir. Beklenen: 15 sn içinde "analiz bekleniyor", gönderim çalışır, `status=alindi`.
   4. `/bildir?yer=M1-K2-WC`. Beklenen: konum dolu ve kilitli.
-- [ ] **Step 6:** Commit: `feat(web): report submission flow with AI analysis`
+- [x] **Step 6:** Commit: `feat(web): report submission flow with AI analysis`
 
 ---
 
