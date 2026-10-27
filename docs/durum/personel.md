@@ -1,24 +1,29 @@
 # Hat: Personel
 
-Dal: `hat/personel`
+Dal: `hat/personel` (birleşti), `hat/personel-gecmis`
 Sorumlu: tunahan
-Kapsam: Plan 3'ün ilk parçası (proje rehberi P0 madde 5: `/personel` iş listesi, çözüm fotoğrafı, `verify-resolution`).
+Kapsam: Plan 3 (proje rehberi P0 madde 5: `/personel` iş listesi, çözüm fotoğrafı, `verify-resolution`; `/personel/gecmis` ve `/personel/malzeme`).
 
 ## Son durum
 
 `/personel` gerçek veriyle çalışıyor. Birimin açık işleri aciliyet ve bildirim saatine göre sıralanıyor. Adımlar: Yola çık (`atandi`), İşe başla (`islemde`), çözüm fotoğrafı (yapay zeka doğrulaması), İşi tamamla (`cozuldu`). Devret, güvenlik tanımlı fonksiyonla başka birime aktarıyor. Personel ve yönetim `/` açınca kendi ekranına yönlenir. Tarayıcıda gerçek Gemini doğrulamasıyla uçtan uca denendi.
 
+`/personel/gecmis` ve `/personel/malzeme` de gerçek veriyle çalışıyor; personel arayüzünde demo ekran kalmadı.
+
 ## Sıradaki adım
 
-1. PR'ı aç, CI yeşil olunca kullanıcı onayıyla `main`e birleştir; `docs/durum/README.md` tablosuna "Personel" satırı eklenmeli.
-2. Plan 3 kalanlar: `/personel/gecmis` ve `/personel/malzeme` hâlâ demo veriyle (`components/staff-demo/{History,Materials}`). Geçmiş, birimin `cozuldu` bildirimleri ve `report_events` ile gerçeğe bağlanabilir; malzeme için tablo yok (şema kararı gerekli).
-3. Plan 4: yönetim paneli.
+1. `hat/personel-gecmis` PR'ı CI yeşil olunca kullanıcı onayıyla `main`e birleştir.
+2. Plan 4: yönetim paneli (`/yonetim`, `/yonetim/bildirimler`, `/yonetim/birimler`, `/yonetim/kampus-sesi` hâlâ `components/admin-demo`). Malzeme taleplerini onaylama ekranı da burada (yönetim `material_requests` okuyabiliyor; güncelleme politikası henüz yok).
 
 ## Yapılanlar
 
 - 2026-10-28 Migration `20261028000007_staff_handoff.sql`: `handoff_report(rid, to_unit, reason)`. RLS personelin `unit_id`'yi başka birime yazmasına izin vermediği için gerekli. Yalnızca o birimin personeli ya da yönetim, açık bildirim için; `devredildi` olayı yazar, durumu `yonlendirildi` yapar. MCP ile uygulandı, geri alınan işlemde doğrulandı (öğrenci reddedildi, personel devretti, devirden sonra bildirimi göremez).
 - 2026-10-28 Web: `lib/ai.ts` `verifyResolution` (servis yoksa "bekliyor" sonucu; 403 hata) ve ortak `withTimeout`; `lib/staff.ts` (sıralama, sonraki adım, tamamlanan adım sayısı, İstanbul saatine göre gün) + testleri; `components/staff/{StaffJobsView,types}`; `app/personel/page.tsx` sunucuda birimin bildirimlerini, fotoğraf yollarını ve imzalı URL'leri, binaları, birimleri çeker. Demo `staff-demo/Jobs` ve testleri kaldırıldı; `staff-demo/Shared` `Photo` bileşenine `alt` ve `placeholder` eklendi. `lib/auth.ts` `homeFor(role)`; `proxy.ts` personeli `/personel`'e, yönetimi `/yonetim`'e yönlendirir. Testler 123/123.
 - 2026-10-28 Tarayıcı doğrulaması (personel hesabı, #13): Yola çık, İşe başla, çözüm fotoğrafı yüklendi, Gemini sentetik görseli "doğrulanamadı (%95)" diye reddetti, "Yine de tamamla" ile `cozuldu`. Veritabanında 3 `durum` olayı (sonuncusunda yapay zeka kararı) ve `sonra` fotoğrafı görüldü. Ardından #13 `yonlendirildi`ye döndürüldü, test olayları, medya kaydı ve Storage dosyası silindi.
+
+- 2026-10-28 Migration `20261028000008_materials.sql`: mevcut `inventory` ve `material_requests` tabloları kullanıldı. Talep notu, miktar ve durum kısıtları, birim başına tekil malzeme adı; ekleme politikası yalnızca kendi adına, `onay_bekliyor` durumunda ve kendi biriminin stoğundan talebe izin verir. Yapı İşleri (9), Bilgi İşlem (2), Temizlik (1) için örnek stok. MCP ile uygulandı ve doğrulandı (başka birimin malzemesine talep reddedildi).
+- 2026-10-28 Web: `lib/staff.ts` `stockLevel`, `neededMaterials` (yapay zekanın serbest metin malzeme adlarını stokla eşler), `jobMinutes`, `completionVerdict`, talep tipleri. `components/staff/{HistoryView,MaterialsView}` demo arayüzüyle aynı düzende; `app/personel/{gecmis,malzeme}/page.tsx` sunucuda veriyi çeker. Demo `staff-demo/{History,Materials}` ve testleri silindi, başlıktaki "Demo verileri" etiketi kaldırıldı. Testler 129/129.
+- 2026-10-28 Tarayıcı doğrulaması (personel hesabı): Geçmiş #9'u gösterdi; Malzeme 11 açık işten 12 kalem derledi, "Eksikleri depodan iste" 5 talep yazdı. Test talepleri silindi.
 
 ## Engeller
 
@@ -31,6 +36,8 @@ Yok.
 - Rota sırası gerçek konuma göre değil (personel konumu yok); "Rota" butonu Google Haritalar'da binaya yol tarifi açar.
 - `assignments` tablosu kullanılmıyor (yalnızca yönetim yazabiliyor); iş birime atanır, kişiye değil.
 - Öğrenciye bildirim gönderilmiyor (Plan 5); öğrenci durumu Bildirimlerim'de Realtime ile görür.
+- Malzeme talebi stoktan düşmez ve yönetim onay ekranı yok (Plan 4). "Araçta" bilgisi tutulmuyor; yapay zekanın önerdiği ama depoda olmayan malzemeler "Depoda yok" görünür.
+- Geçmiş süresi "İşe başla" olayından tamamlanmaya; olay yoksa bildirimden çözüme kadar ölçülür (eski seed kayıtlarda günler çıkabilir).
 
 ## Alınan kararlar
 

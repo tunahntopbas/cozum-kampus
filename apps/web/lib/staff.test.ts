@@ -1,6 +1,16 @@
 import { describe, expect, it } from "vitest";
 import type { MapReport } from "./campus";
-import { completedSteps, isActiveJob, isSameDay, nextAction, sortJobs } from "./staff";
+import {
+  completedSteps,
+  completionVerdict,
+  isActiveJob,
+  isSameDay,
+  jobMinutes,
+  neededMaterials,
+  nextAction,
+  sortJobs,
+  stockLevel,
+} from "./staff";
 
 function job(over: Partial<MapReport>): MapReport {
   return {
@@ -65,5 +75,52 @@ describe("staff jobs", () => {
     const now = new Date("2026-10-28T10:00:00Z");
     expect(isSameDay("2026-10-27T22:30:00Z", now)).toBe(true); // 01:30 on the 28th in Istanbul
     expect(isSameDay("2026-10-27T20:00:00Z", now)).toBe(false);
+  });
+});
+
+describe("materials", () => {
+  it("grades stock against the minimum", () => {
+    expect(stockLevel(12, 10)).toEqual({ status: "Yeterli", fill: 60 });
+    expect(stockLevel(6, 10)).toEqual({ status: "Düşük", fill: 30 });
+    expect(stockLevel(2, 6)).toEqual({ status: "Kritik", fill: 17 });
+    expect(stockLevel(0, 0)).toEqual({ status: "Kritik", fill: 0 });
+    expect(stockLevel(30, 5)).toEqual({ status: "Yeterli", fill: 100 });
+  });
+
+  it("matches AI material guesses to stock, ignoring case and extra words", () => {
+    const needed = neededMaterials(
+      [["LED tüp 18 W", "starter"], ["Starter"], ["vida seti"]],
+      [
+        { id: 1, name: "LED tüp 18 W", qty: 12 },
+        { id: 2, name: "Starter", qty: 0 },
+      ],
+    );
+    expect(needed).toEqual([
+      { name: "Starter", count: 2, itemId: 2, available: 0 },
+      { name: "LED tüp 18 W", count: 1, itemId: 1, available: 12 },
+      { name: "vida seti", count: 1, itemId: null, available: 0 },
+    ]);
+  });
+});
+
+describe("history", () => {
+  const ev = (to: string, at: string, payload: Record<string, unknown> = {}) => ({
+    type: "durum",
+    payload: { to, ...payload },
+    createdAt: at,
+  });
+
+  it("measures work from start to completion", () => {
+    expect(
+      jobMinutes([ev("islemde", "2026-10-28T10:00:00Z"), ev("cozuldu", "2026-10-28T10:44:00Z")], "2026-10-28T08:00:00Z", "2026-10-28T10:44:00Z"),
+    ).toBe(44);
+    expect(jobMinutes([], "2026-10-28T08:00:00Z", "2026-10-28T09:30:00Z")).toBe(90);
+    expect(jobMinutes([], "2026-10-28T08:00:00Z", null)).toBeNull();
+  });
+
+  it("reads the AI verdict recorded on completion", () => {
+    const verdict = completionVerdict([ev("cozuldu", "2026-10-28T10:44:00Z", { ai: { resolved: true, confidence: 0.96 }, note: "Tüp değişti" })]);
+    expect(verdict).toEqual({ confidence: 96, resolved: true, note: "Tüp değişti" });
+    expect(completionVerdict([])).toEqual({ confidence: null, resolved: null, note: null });
   });
 });

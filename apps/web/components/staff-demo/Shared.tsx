@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { ImageSquare } from "@phosphor-icons/react";
 import s from "./Staff.module.css";
 export function PageHeading({ title, children }: { title: string; children: ReactNode }) {
-  return <header className={s.header}><h1>{title}</h1><p>{children}</p><span className={s.demo}>Demo verileri · Değişiklikler yalnızca bu ekranda; sayfa/sekme değişiminde sıfırlanır</span></header>;
+  return <header className={s.header}><h1>{title}</h1><p>{children}</p></header>;
 }
 export function Stats({ items }: { items: [string, string | number, string][] }) {
   return <div className={s.stats}>{items.map(([label, value, note]) => <div className={`glass ${s.stat}`} key={label}><p>{label}</p><strong aria-label={label}>{value}</strong><small>{note}</small></div>)}</div>;
