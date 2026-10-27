@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/layout/ComingSoon";
+import { Notifications } from "@/components/student-demo/Notifications";
 
 export default function Page() {
-  return <ComingSoon title="Bildirimler" />;
+  return <Notifications />;
 }

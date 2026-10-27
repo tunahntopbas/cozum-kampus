@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/layout/ComingSoon";
+import { Overview } from "@/components/admin-demo/Overview";
 
 export default function Page() {
-  return <ComingSoon title="Genel bakış" />;
+  return <Overview />;
 }

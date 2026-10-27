@@ -22,25 +22,25 @@
 
 ### Task 1: Öğrenci demo ekranları
 **Files:** `components/student-demo/*`, `(ogrenci)/{page,bildirimlerim,oneriler,bildirimler}/page.tsx`.
-- [ ] Tasarım dosyalarını oku ve mevcut bileşenleri kullan.
-- [ ] Harita+detay, bildirimlerim, öneriler, bildirim merkezi; anlamlı etkileşim testleri.
-- [ ] Testleri çalıştır ve sonuçları raporla.
+- [x] Tasarım dosyalarını oku ve mevcut bileşenleri kullan.
+- [x] Harita+detay, bildirimlerim, öneriler, bildirim merkezi; anlamlı etkileşim testleri.
+- [x] Testleri çalıştır ve sonuçları raporla.
 
 ### Task 2: Personel ekranları
 **Files:** `components/staff-demo/*`, `app/personel/**`.
-- [ ] Personel tasarımlarını oku; üç sekmeli ortak iskelet.
-- [ ] İşler, geçmiş, malzeme ve demo iş akışları; davranış testleri.
-- [ ] Testleri çalıştır ve sonuçları raporla.
+- [x] Personel tasarımlarını oku; üç sekmeli ortak iskelet.
+- [x] İşler, geçmiş, malzeme ve demo iş akışları; davranış testleri.
+- [x] Testleri çalıştır ve sonuçları raporla.
 
 ### Task 3: Yönetim ekranları
 **Files:** `components/admin-demo/*`, `app/yonetim/**`.
-- [ ] Yönetim tasarımlarını oku; dört sekmeli ortak iskelet.
-- [ ] Genel bakış, bildirimler, birimler, kampüs sesi; davranış testleri.
-- [ ] Testleri çalıştır ve sonuçları raporla.
+- [x] Yönetim tasarımlarını oku; dört sekmeli ortak iskelet.
+- [x] Genel bakış, bildirimler, birimler, kampüs sesi; davranış testleri.
+- [x] Testleri çalıştır ve sonuçları raporla.
 
 ### Task 4: Birleştirme ve doğrulama
 **Files:** ortak gezinme/oturum, `docs/durum/frontend.md`.
-- [ ] Üç alanı birleştir; gerçek ekranların regresyonunu kontrol et.
-- [ ] `pnpm --filter web test`, `lint`, `typecheck`, `build`.
-- [ ] Tarayıcıda öğrenci/personel/yönetim ve dar ekran kontrolü; bulunan hataları düzelt.
-- [ ] Durum dosyaları, commit, push ve PR. Canlı yayın bu UI tesliminden ayrı onaylanır.
+- [x] Üç alanı birleştir; gerçek ekranların regresyonunu kontrol et.
+- [x] `pnpm --filter web test`, `lint`, `typecheck`, `build`.
+- [x] Tarayıcıda öğrenci/personel/yönetim ve dar ekran kontrolü; bulunan hataları düzelt.
+- [x] Durum dosyaları, commit, push ve PR. Canlı yayın bu UI tesliminden ayrı onaylanır.

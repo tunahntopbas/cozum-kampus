@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/layout/ComingSoon";
+import { Suggestions } from "@/components/student-demo/Suggestions";
 
 export default function Page() {
-  return <ComingSoon title="Öneriler" />;
+  return <Suggestions />;
 }
