@@ -258,16 +258,16 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `POST /ai/verify-resolution` → `VerifyResult`. `before_path` öğrencinin klasöründe olduğundan sahiplik kontrolü yerine Supabase'den kullanıcının rolü okunur: `staff` ya da `admin` değilse 403. `after_path` kullanıcının kendi klasöründe olmalı. Hata ya da geçersiz yanıtta `VerifyResult(resolved=False, confidence=0, note="Doğrulama şu an yapılamadı, kayıt elle incelenecek.", ai_pending=True)`.
   - `get_user_role(user_id: str) -> str` `app/storage.py` içinde (servis anahtarıyla `profiles` okur), testte override edilir.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```python
   def test_verify_returns_model_result(client, fake_llm): ...      # {"resolved":true,"confidence":0.9,"note":"Lamba yanıyor"} -> resolved True
   def test_verify_forbidden_for_student(client): ...               # get_user_role -> "student" -> 403
   def test_verify_falls_back_on_llm_error(client, fake_llm): ...   # ai_pending True, resolved False
   ```
-- [ ] **Step 2:** `uv run pytest tests/test_verify.py -q` → FAIL.
-- [ ] **Step 3:** Yaz. Görsel sırası: önce, sonra; komut ikisini bu sırayla tanıtır.
-- [ ] **Step 4:** `uv run pytest -q` → PASS.
-- [ ] **Step 5:** Commit: `feat(ai): verify-resolution endpoint`
+- [x] **Step 2:** `uv run pytest tests/test_verify.py -q` → FAIL.
+- [x] **Step 3:** Yaz. Görsel sırası: önce, sonra; komut ikisini bu sırayla tanıtır.
+- [x] **Step 4:** `uv run pytest -q` → PASS.
+- [x] **Step 5:** Commit: `feat(ai): verify-resolution endpoint`
 
 ---
 

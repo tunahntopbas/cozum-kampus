@@ -21,11 +21,23 @@ def _service_headers(settings: Settings) -> dict[str, str]:
     return {"apikey": key, "Authorization": f"Bearer {key}"}
 
 
+def _path_owner(path: str) -> str | None:
+    """Returns the owner folder of a '<user_id>/<file>' path, or None if the path has any other shape."""
+    parts = path.split("/")
+    if len(parts) != 2 or not parts[0] or not parts[1] or {".", ".."} & set(parts):
+        return None
+    return parts[0]
+
+
+def validate_path_format(path: str) -> None:
+    if _path_owner(path) is None:
+        raise HTTPException(status_code=403, detail="Bu fotoğrafa erişim izni yok")
+
+
 def validate_image_paths(paths: list[str], user_id: str) -> None:
-    """Students may only send photos from their own Storage folder."""
+    """Users may only send photos from their own Storage folder."""
     for path in paths:
-        parts = path.split("/")
-        if len(parts) != 2 or parts[0] != user_id or not parts[1] or parts[1] in (".", ".."):
+        if _path_owner(path) != user_id:
             raise HTTPException(status_code=403, detail="Bu fotoğrafa erişim izni yok")
 
 
@@ -58,6 +70,16 @@ async def get_user_role(user_id: str, settings: Settings, http: httpx.AsyncClien
     )
     rows = r.json() if r.status_code == 200 else []
     return rows[0]["role"] if rows else None
+
+
+RoleLookup = Callable[[str], Awaitable[str | None]]
+
+
+def get_role_lookup(
+    settings: Annotated[Settings, Depends(get_settings)],
+    http: Annotated[httpx.AsyncClient, Depends(get_http_client)],
+) -> RoleLookup:
+    return lambda user_id: get_user_role(user_id, settings, http)
 
 
 def get_run_recorder(
