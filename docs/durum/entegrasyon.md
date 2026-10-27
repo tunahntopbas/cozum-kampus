@@ -6,14 +6,14 @@ Sorumlu: tunahan
 
 ## Son durum
 
-Task 9 tamam. Task 10 kod kısmı tamam: PR #5 (Dockerfile, `render.yaml`, GitHub Actions) CI yeşil, `main`e birleştirildi. Kalan: Render ve Vercel'e canlı dağıtım (Step 3'ün panel kısmı ve Step 4).
+Render ve Vercel üretim dağıtımları tamam. Canlı şifreli giriş, QR konumu, Gemini analizi ve bildirim kaydı doğrulandı. Task 10 Step 3 tamam; Step 4'te fotoğraflı canlı test ve Supabase Auth URL ayarı bekliyor. Planın son kod incelemesi henüz yapılmadı.
 
 ## Sıradaki adım
 
-1. `git checkout main && git pull`, sonra yeni dal (ör. `hat/dagitim`) aç.
-2. Task 10 Step 3 panel kısmı (kullanıcı yapar): Render'da "New > Blueprint" ile depoyu bağla (`render.yaml` okunur), gizli değerleri gir (`LLM_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_URL`, `ALLOWED_ORIGIN` = Vercel alan adı). Vercel'de depoyu içe aktar, Root Directory `apps/web`, `NEXT_PUBLIC_*` değerlerini gir (`NEXT_PUBLIC_AI_API_URL` = Render adresi).
-3. Task 10 Step 4: Supabase Auth > URL Configuration'a Vercel alan adını ekle; canlıda Task 9 senaryo 1 ve 2'yi tekrarla.
-4. Planın son tüm dal incelemesi, sonra Plan 2.
+1. Supabase Auth URL Configuration'a `https://cozum-kampus.vercel.app/auth/callback` ekle; Site URL'yi üretim adresine ayarla (MCP bu ayarı sunmuyor; panel veya yetkili Management API gerekli).
+2. Canlı sitede fotoğraflı bildirim senaryosunu da tamamla. Metinli canlı bildirim #15 doğrulandı.
+3. Girişte `next=/bildir?...` verilmesine rağmen ilk canlı denemede ana sayfaya gidildi; tekrar incele. Oturum açıldıktan sonra doğrudan QR bağlantısı çalışıyor.
+4. Plan 1'in son kod incelemesini yap, ardından Plan 2 (harita, bildirim detayı, Bildirimlerim, Realtime). Tasarımlar `docs/tasarim/`.
 
 ## Yapılanlar
 
@@ -26,9 +26,15 @@ Task 9 tamam. Task 10 kod kısmı tamam: PR #5 (Dockerfile, `render.yaml`, GitHu
 
 - 2026-10-27 Task 10 Step 1, 2, 5: `services/ai/Dockerfile` (python:3.12-slim + uv) ve `.dockerignore`, `render.yaml` (ücretsiz, frankfurt, `/health`), `.github/workflows/web.yml` (lint, typecheck, test, build) ve `ai.yml` (ruff, pytest, Docker imajı + `/health` denemesi). CI düzeltmeleri: `app/config.py` sığ kurulum yolunda `.env` aramasında çökmüyor; pnpm lockfile yenilendi; `lib/auth.test.ts` env'e bağımlı olmaktan çıkarıldı. PR #5, iki workflow yeşil.
 
+- 2026-10-27 Vercel: `tunahntopbas-projects/cozum-kampus`, root `apps/web`, GitHub bağlantısı kuruldu. Üretim: https://cozum-kampus.vercel.app, deploy `dpl_7xrDKUkaGaTpCe9XMmZ4x4rMpXdN` READY. `NEXT_PUBLIC_*` değerleri aktarıldı ve geri okunarak eşitliği doğrulandı; servis/LLM anahtarları Vercel'e aktarılmadı. Render `ALLOWED_ORIGIN` üretim adresine güncellendi; CORS OPTIONS 200 ve doğru origin doğrulandı.
+- Canlı tarayıcı testi: demo öğrenci girişi, QR `M1-K2-WC` kilitli konum, metin analizi, gönderim -> `/bildirimlerim?yeni=15`. SQL doğrulaması: bildirim #15 `aydinlatma`, `yonlendirildi`, `yapi_isleri`, güven 0.98, `place_id=2`.
+- CLI dağıtımı izlenmeyen `… 2` dosyalarının yüklenmemesi için temiz `/tmp/cozum-kampus-vercel` worktree'sinden (main `da3bc41`) yapıldı. Vercel proje bağlantısı bu worktree'de; normal klasörden CLI kullanırken `--project cozum-kampus --scope tunahntopbas-projects` veya `vercel link` gerekli.
+
 ## Engeller
 
-Yok.
+- 2026-10-27 Codex bağlantı kontrolü: Supabase MCP çalışıyor; proje ACTIVE_HEALTHY, 14 bildirim, 5 birim, 8 bina doğrulandı.
+- Render dağıtımı tamam (2026-10-27): servis `srv-dbgf487b9u1s73c617rg`, URL `https://cozum-kampus-ai.onrender.com`, ücretsiz Frankfurt. Deploy `dep-dbgf4p0m7kps73890u50` LIVE, commit `da3bc41`. İlk deploy dört eksik ayar yüzünden çöktü; `.env` içindeki sunucu ayarları MCP ile aktarıldı (değerler depoya yazılmadı). `/health` 200; demo öğrenciyle Supabase Auth girişi + canlı analiz 7,6 sn, `aydinlatma`, `yapi_isleri`, `ai_pending=false`. Vercel dağıtımı ve metinli canlı web testi de tamamlandı (aşağıya bak).
+- Yerelde `apps/web` altında izlenmeyen `… 2` kopyaları mevcut; kullanıcı dosyaları olduğu için değiştirilmedi ve commit edilmedi.
 
 ## Bilinen eksikler (sonraki planlar)
 

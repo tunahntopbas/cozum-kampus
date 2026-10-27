@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/layout/ComingSoon";
+import { MyReports } from "@/components/student-demo/MyReports";
 
 export default function Page() {
-  return <ComingSoon title="Bildirimlerim" />;
+  return <MyReports />;
 }

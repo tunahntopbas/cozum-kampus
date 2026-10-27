@@ -1,5 +1,5 @@
-import { ComingSoon } from "@/components/layout/ComingSoon";
+import { CampusMap } from "@/components/student-demo/CampusMap";
 
 export default function Page() {
-  return <ComingSoon title="Harita" />;
+  return <CampusMap />;
 }
