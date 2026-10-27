@@ -1,4 +1,3 @@
-import { Stage } from "@/components/layout/Stage";
 import { TopNav } from "@/components/layout/TopNav";
 
 export default function StudentLayout({ children }: LayoutProps<"/">) {
@@ -7,7 +6,6 @@ export default function StudentLayout({ children }: LayoutProps<"/">) {
       <a className="skip" href="#icerik">
         Ana içeriğe geç
       </a>
-      <Stage />
       <TopNav />
       {children}
     </div>

@@ -4,7 +4,6 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Buildings, ListChecks, Megaphone, SquaresFour } from "@phosphor-icons/react";
-import { Stage } from "@/components/layout/Stage";
 import { PageContent } from "@/components/layout/PageContent";
 import styles from "./admin.module.css";
 
@@ -19,7 +18,6 @@ export function AdminShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   return <div className={`app ${styles.shell}`}>
     <a className="skip" href="#icerik">Ana içeriğe geç</a>
-    <Stage />
     <nav aria-label="Yönetim gezinme" className={`topbar glass z-10 flex items-center gap-2 p-2 ${styles.nav}`}>
       {tabs.map(({ href, label, icon: Icon }) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} className="ghost t text-muted"><Icon size={16} aria-hidden />{label}</Link>)}
     </nav>
