@@ -140,8 +140,8 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `app.ratelimit.RateLimiter(limit: int, window_s: float = 60, clock=time.monotonic)` ve `check(key: str) -> None` (aşımda `HTTPException(429)`).
   - `app.main.app`: CORS yalnızca `allowed_origin`; `GET /health` → `{"status": "ok"}`.
 
-- [ ] **Step 1:** `uv init --python 3.12 services/ai`; `uv add fastapi "uvicorn[standard]" openai pydantic-settings httpx`; `uv add --dev pytest pytest-asyncio ruff`. `pyproject.toml` içinde `[tool.pytest.ini_options] asyncio_mode = "auto"`.
-- [ ] **Step 2: Failing tests**
+- [x] **Step 1:** `uv init --python 3.12 services/ai`; `uv add fastapi "uvicorn[standard]" openai pydantic-settings httpx`; `uv add --dev pytest pytest-asyncio ruff`. `pyproject.toml` içinde `[tool.pytest.ini_options] asyncio_mode = "auto"`.
+- [x] **Step 2: Failing tests**
   ```python
   # tests/test_health.py
   def test_health(client):
@@ -162,10 +162,10 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   async def test_get_current_user_raises_401_on_bad_token(): ... # status_code == 401
   ```
   `conftest.py`: ortam değişkenlerini sahte değerlerle ayarlayan ve `TestClient(app)` döndüren `client` fixture'ı; `app.dependency_overrides[get_current_user] = lambda: CurrentUser(id="u-1", email="a@ogr.sakarya.edu.tr")`.
-- [ ] **Step 3:** `cd services/ai && uv run pytest -q` → FAIL (modüller yok).
-- [ ] **Step 4:** Modülleri yaz. `auth.py` httpx istemcisini modül düzeyinde `get_http_client()` ile verir ki testte değiştirilebilsin.
-- [ ] **Step 5:** `uv run pytest -q && uv run ruff check .` → PASS.
-- [ ] **Step 6:** Commit: `feat(ai): FastAPI skeleton with health, auth and rate limiting`
+- [x] **Step 3:** `cd services/ai && uv run pytest -q` → FAIL (modüller yok).
+- [x] **Step 4:** Modülleri yaz. `auth.py` httpx istemcisini modül düzeyinde `get_http_client()` ile verir ki testte değiştirilebilsin.
+- [x] **Step 5:** `uv run pytest -q && uv run ruff check .` → PASS.
+- [x] **Step 6:** Commit: `feat(ai): FastAPI skeleton with health, auth and rate limiting`
 
 ---
 
@@ -210,7 +210,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `rule_based_analysis(text: str) -> ReportAnalysis`: anahtar kelime eşleşmesi (`lamba|ışık|aydınlat → aydinlatma`, `su|musluk|sızıntı|tuvalet → su_tesisat`, `asansör|rampa → asansor_erisilebilirlik`, `wifi|wi-fi|internet|ağ → internet_ag`, `çöp|kirli|temiz → temizlik`, `sıra|masa|sandalye → mobilya`, `kalorifer|klima|ısıtma|soğuk → isitma_sogutma`, `kablo|yangın|duman|mahsur → urgency=acil`), `ai_pending=True`, `confidence=0`, `moderation.ok=True`, başlık metnin ilk 60 karakteri ya da `"Yeni bildirim"`.
   - `POST /ai/analyze-report` → `ReportAnalysis`. Akış: hız sınırı (`user.id`), görsel sayısı > 3 ise 413, `fetch_images`, `mask_pii(text)`, LLM çağrısı, `ReportAnalysis.model_validate`; `LLMError` ya da `ValidationError` olursa `rule_based_analysis`. Model `unit` değeri yerine her zaman `CATEGORY_TO_UNIT[category]` kullanılır, `is_sensitive=True` ise `unit="guvenlik"`. Her çağrı `ai_runs` tablosuna yazılır (`kind="analyze_report"`, `input_hash`, `latency_ms`), yazma hatası yanıtı bozmaz.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```python
   # test_privacy.py
   def test_mask_pii():
@@ -236,11 +236,11 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   def test_analyze_rejects_foreign_image_path(client): ...               # image_paths ["baska-kullanici/x.jpg"] -> 403
   def test_analyze_rejects_too_many_images(client): ...                  # 4 yol -> 413
   ```
-- [ ] **Step 2:** `uv run pytest -q` → yeni testler FAIL.
-- [ ] **Step 3:** Modülleri yaz. Sistem komutu (`prompts/analyze_report.py`, Türkçe) spec 7.3'teki kuralları açıkça içerir: yalnızca JSON; kategori ve aciliyet listeleri; hakaret/küfür ve kişi odaklı görüntüler `moderation.ok=false`; kampüs sorunuyla ilgisiz fotoğraf `moderation.reasons` içinde; taciz, şiddet, intihar riski `is_sensitive=true`; elektrik, yangın, yaralanma, mahsur kalma riski `acil`. `schema_hint` spec 7.3 örnek JSON'u.
-- [ ] **Step 4:** `uv run pytest -q && uv run ruff check .` → PASS.
-- [ ] **Step 5: Gerçek model denemesi (spec 14. bölüm açık işi).** `scripts/smoke_deepseek.py`: `tests/fixtures/lamp.jpg` ile önce `use_json_mode=True`, sonra `False` çağırır, her birinin sonucunu ve süresini basar. Çalıştır: `uv run python scripts/smoke_deepseek.py`. Beklenen: en az biri geçerli `ReportAnalysis`. JSON modu görselle 400 verirse `get_llm()` içinde `use_json_mode=False` sabitle ve sonucu README'ye bir satır olarak yaz.
-- [ ] **Step 6:** Commit: `feat(ai): analyze-report endpoint with DeepSeek provider and rule-based fallback`
+- [x] **Step 2:** `uv run pytest -q` → yeni testler FAIL.
+- [x] **Step 3:** Modülleri yaz. Sistem komutu (`prompts/analyze_report.py`, Türkçe) spec 7.3'teki kuralları açıkça içerir: yalnızca JSON; kategori ve aciliyet listeleri; hakaret/küfür ve kişi odaklı görüntüler `moderation.ok=false`; kampüs sorunuyla ilgisiz fotoğraf `moderation.reasons` içinde; taciz, şiddet, intihar riski `is_sensitive=true`; elektrik, yangın, yaralanma, mahsur kalma riski `acil`. `schema_hint` spec 7.3 örnek JSON'u.
+- [x] **Step 4:** `uv run pytest -q && uv run ruff check .` → PASS.
+- [x] **Step 5: Gerçek model denemesi (spec 14. bölüm açık işi).** `scripts/smoke_deepseek.py`: `tests/fixtures/lamp.jpg` ile önce `use_json_mode=True`, sonra `False` çağırır, her birinin sonucunu ve süresini basar. Çalıştır: `uv run python scripts/smoke_deepseek.py`. Beklenen: en az biri geçerli `ReportAnalysis`. JSON modu görselle 400 verirse `get_llm()` içinde `use_json_mode=False` sabitle ve sonucu README'ye bir satır olarak yaz.
+- [x] **Step 6:** Commit: `feat(ai): analyze-report endpoint with DeepSeek provider and rule-based fallback`
 
 ---
 
@@ -258,16 +258,16 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
   - `POST /ai/verify-resolution` → `VerifyResult`. `before_path` öğrencinin klasöründe olduğundan sahiplik kontrolü yerine Supabase'den kullanıcının rolü okunur: `staff` ya da `admin` değilse 403. `after_path` kullanıcının kendi klasöründe olmalı. Hata ya da geçersiz yanıtta `VerifyResult(resolved=False, confidence=0, note="Doğrulama şu an yapılamadı, kayıt elle incelenecek.", ai_pending=True)`.
   - `get_user_role(user_id: str) -> str` `app/storage.py` içinde (servis anahtarıyla `profiles` okur), testte override edilir.
 
-- [ ] **Step 1: Failing tests**
+- [x] **Step 1: Failing tests**
   ```python
   def test_verify_returns_model_result(client, fake_llm): ...      # {"resolved":true,"confidence":0.9,"note":"Lamba yanıyor"} -> resolved True
   def test_verify_forbidden_for_student(client): ...               # get_user_role -> "student" -> 403
   def test_verify_falls_back_on_llm_error(client, fake_llm): ...   # ai_pending True, resolved False
   ```
-- [ ] **Step 2:** `uv run pytest tests/test_verify.py -q` → FAIL.
-- [ ] **Step 3:** Yaz. Görsel sırası: önce, sonra; komut ikisini bu sırayla tanıtır.
-- [ ] **Step 4:** `uv run pytest -q` → PASS.
-- [ ] **Step 5:** Commit: `feat(ai): verify-resolution endpoint`
+- [x] **Step 2:** `uv run pytest tests/test_verify.py -q` → FAIL.
+- [x] **Step 3:** Yaz. Görsel sırası: önce, sonra; komut ikisini bu sırayla tanıtır.
+- [x] **Step 4:** `uv run pytest -q` → PASS.
+- [x] **Step 5:** Commit: `feat(ai): verify-resolution endpoint`
 
 ---
 
