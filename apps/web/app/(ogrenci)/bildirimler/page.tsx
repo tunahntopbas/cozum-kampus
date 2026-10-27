@@ -1,5 +1,39 @@
-import { Notifications } from "@/components/student-demo/Notifications";
+import { Suspense } from "react";
+import { NotificationsView, type AppNotification } from "@/components/notifications/NotificationsView";
+import { createServerClient } from "@/lib/supabase/server";
 
-export default function Page() {
-  return <Notifications />;
+async function Notifications() {
+  const supabase = await createServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
+
+  const [notifications, prefs] = await Promise.all([
+    supabase
+      .from("notifications")
+      .select("id, type, title, body, payload, read_at, created_at")
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(100),
+    supabase.from("notification_prefs").select("types").eq("user_id", user.id).maybeSingle(),
+  ]);
+  const list: AppNotification[] = (notifications.data ?? []).map((n) => ({
+    id: n.id,
+    type: n.type,
+    title: n.title,
+    body: n.body ?? "",
+    payload: n.payload ?? {},
+    readAt: n.read_at,
+    createdAt: n.created_at,
+  }));
+  return <NotificationsView userId={user.id} notifications={list} prefTypes={(prefs.data?.types as Record<string, unknown>) ?? {}} />;
+}
+
+export default function NotificationsPage() {
+  return (
+    <Suspense fallback={<p className="text-sm text-muted">Yükleniyor</p>}>
+      <Notifications />
+    </Suspense>
+  );
 }
