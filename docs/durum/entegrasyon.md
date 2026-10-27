@@ -6,11 +6,11 @@ Sorumlu: tunahan
 
 ## Son durum
 
-Task 9 tamam. Task 10 kod kısmı tamam: PR #5 (Dockerfile, `render.yaml`, GitHub Actions) açık, CI yeşil, birleştirme onayı bekliyor. Kalan: Render ve Vercel'e canlı dağıtım (Step 3'ün panel kısmı ve Step 4).
+Task 9 tamam. Task 10 kod kısmı tamam: PR #5 (Dockerfile, `render.yaml`, GitHub Actions) CI yeşil, `main`e birleştirildi. Kalan: Render ve Vercel'e canlı dağıtım (Step 3'ün panel kısmı ve Step 4).
 
 ## Sıradaki adım
 
-1. PR #5'i `main`e birleştir (kullanıcı onayıyla).
+1. `git checkout main && git pull`, sonra yeni dal (ör. `hat/dagitim`) aç.
 2. Task 10 Step 3 panel kısmı (kullanıcı yapar): Render'da "New > Blueprint" ile depoyu bağla (`render.yaml` okunur), gizli değerleri gir (`LLM_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_URL`, `ALLOWED_ORIGIN` = Vercel alan adı). Vercel'de depoyu içe aktar, Root Directory `apps/web`, `NEXT_PUBLIC_*` değerlerini gir (`NEXT_PUBLIC_AI_API_URL` = Render adresi).
 3. Task 10 Step 4: Supabase Auth > URL Configuration'a Vercel alan adını ekle; canlıda Task 9 senaryo 1 ve 2'yi tekrarla.
 4. Planın son tüm dal incelemesi, sonra Plan 2.
