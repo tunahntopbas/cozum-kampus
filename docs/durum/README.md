@@ -1,8 +1,8 @@
 # Proje durumu (genel bakış)
 
-Son güncelleme: 2026-10-27 (akşam)
+Son güncelleme: 2026-10-28
 
-Aktif öncelik: tüm web arayüzü — `docs/superpowers/plans/2026-10-27-frontend-tamamlama.md`. Durum: [frontend.md](frontend.md). Önceki planın kalan backend/dağıtım kontrolleri sonrasında ele alınacak.
+Aktif öncelik: demo ekranları gerçek veriye bağlamak. Harita ve Bildirimlerim bağlandı; sırada personel ekranları (Plan 3).
 
 ## Hatlar
 
@@ -12,7 +12,10 @@ Aktif öncelik: tüm web arayüzü — `docs/superpowers/plans/2026-10-27-fronte
 | DB | `hat/db` | 2 | tunahan | [db.md](db.md) | Tamamlandı, `main`de |
 | AI servisi | `hat/ai` | 3, 4, 5 | tunahan | [ai.md](ai.md) | Tamamlandı, `main`de |
 | Web | `hat/web` | 6, 7, 8 | tunahan | [web.md](web.md) | Tamamlandı, gerçek giriş ve yükleme doğrulandı |
-| Birleşme | `hat/entegrasyon` | 9, 10 | tunahan | [entegrasyon.md](entegrasyon.md) | Task 9 tamam; üretim web/API çalışıyor, kalan kontroller entegrasyon.md içinde |
+| Birleşme | `hat/entegrasyon` | 9, 10 | tunahan | [entegrasyon.md](entegrasyon.md) | Tamamlandı; canlı: Vercel + Render |
+| Ön yüz (Codex) | `codex/frontend-complete` | ayrı plan | Codex | [frontend.md](frontend.md) | Tamamlandı, `main`de (demo ekranlar) |
+| Harita | `hat/harita` | Plan 2 | tunahan | [harita.md](harita.md) | Tamamlandı, `main`de |
+| Bildirimlerim | `hat/bildirimlerim` | Plan 2 | tunahan | [bildirimlerim.md](bildirimlerim.md) | Tamamlandı, `main`de |
 
 ## Bağımlılıklar
 
@@ -36,9 +39,9 @@ Aktif öncelik: tüm web arayüzü — `docs/superpowers/plans/2026-10-27-fronte
 
 ## Sonraki planlar
 
-1. Temel ve bildirim hattı (aktif)
-2. Harita, bildirim detayı, `/bildirimlerim`, Realtime
-3. Personel ekranları
+1. Temel ve bildirim hattı (tamam)
+2. Harita, bildirim detayı, `/bildirimlerim`, Realtime (tamam)
+3. Personel ekranları (sıradaki)
 4. Yönetim paneli
 5. P1 kalanlar
 6. Mobil uygulama
