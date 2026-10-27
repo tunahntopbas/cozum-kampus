@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { isAllowedEmail, requiredRole } from "./auth";
 
 const D = "ogr.sakarya.edu.tr,sakarya.edu.tr";
@@ -30,7 +30,9 @@ describe("isAllowedEmail", () => {
 
   it("rejects everything when no domains are configured", () => {
     expect(isAllowedEmail("a@sakarya.edu.tr", "")).toBe(false);
-    expect(isAllowedEmail("a@sakarya.edu.tr", undefined)).toBe(false);
+    vi.stubEnv("NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS", "");
+    expect(isAllowedEmail("a@sakarya.edu.tr")).toBe(false);
+    vi.unstubAllEnvs();
   });
 });
 
