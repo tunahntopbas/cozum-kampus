@@ -6,7 +6,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { Glass } from "@/components/ui/Glass";
 import { Button } from "@/components/ui/Button";
 import { suggestions, type Suggestion } from "./data";
-import { Badge, Filters, Kpis } from "./ui";
+import { Badge, DemoNote, Filters, Kpis } from "./ui";
 import s from "./admin.module.css";
 
 export function CampusVoice() {
@@ -19,6 +19,7 @@ export function CampusVoice() {
   const active = visible.find((record) => record.id === selected) ?? visible[0];
   const pending = records.filter((record) => !record.reply.trim()).length;
   return <>
+    <DemoNote />
     <PageHeader title="Kampüs sesi" description="Öğrenci önerileri, oylar ve herkese açık yönetim yanıtları." />
     <Kpis items={[
       { label: "Toplam öneri", value: records.length, hint: "Örnek veri kümesi" },

@@ -12,3 +12,6 @@ export function Badge({ children }: { children: ReactNode }) {
   const tone = children === "Acil" || children === "Gecikmiş" ? s.danger : children === "Çözüldü" || children === "Uygulandı" || children === "Müsait" ? s.success : children === "İşlemde" || children === "Yanıt bekliyor" || children === "Sahada" ? s.warning : "";
   return <span className={`${s.badge} ${tone}`}>{children}</span>;
 }
+export function DemoNote() {
+  return <p className={s.demo}><strong>Demo verileri</strong> · Örnek kampüs kayıtları. Bu ekrandaki değişiklikler sayfa/sekme değişiminde sıfırlanır. Veritabanına yazılmaz.</p>;
+}

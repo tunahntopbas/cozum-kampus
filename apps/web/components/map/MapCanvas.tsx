@@ -64,6 +64,14 @@ export function MapCanvas({ groups, selectedBuildingId, onSelect }: Props) {
     };
   }, []);
 
+  // MapLibre only listens to window resizes; a panel that settles its width after load leaves the canvas short.
+  useEffect(() => {
+    if (!ready || !container.current) return;
+    const observer = new ResizeObserver(() => map.current?.resize());
+    observer.observe(container.current);
+    return () => observer.disconnect();
+  }, [ready]);
+
   useEffect(() => {
     const m = map.current;
     if (!ready || !m) return;
