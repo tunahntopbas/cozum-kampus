@@ -96,7 +96,7 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
   return (
     <main id="icerik" className={`${s.root} ${s.mapPage}`}>
       <div className={s.mapCanvas} aria-label="Kampüs haritası">
-        <MapCanvas buildings={buildings} groups={groups} selectedBuildingId={selectedGroup?.building.id ?? null} onSelect={selectBuilding} />
+        <MapCanvas groups={groups} selectedBuildingId={selectedGroup?.building.id ?? null} onSelect={selectBuilding} />
       </div>
 
       <Glass className={`${s.mapLeft} ${s.stack}`}>

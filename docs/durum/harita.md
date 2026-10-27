@@ -34,11 +34,13 @@ Yok.
 
 ## Alınan kararlar
 
-- Harita karoları: OpenFreeMap `liberty` stili (OpenStreetMap görünümüne en yakın; yeşil alanlar, otopark ve durak simgeleri; anahtar gerekmiyor). İlk denemedeki `positron` bina ve fakülte adlarını göstermediği için değiştirildi (kullanıcı geri bildirimi). Vektör karolarda bina adı az olduğu için 32 binamızın adı kendi sembol katmanımızla (zoom 15 ve üstü) pinin altına yazılır.
+- Harita karoları: OpenFreeMap `liberty` stili (OpenStreetMap görünümüne en yakın; yeşil alanlar, otopark ve durak simgeleri; anahtar gerekmiyor). İlk denemedeki `positron` bina ve fakülte adlarını göstermediği için değiştirildi (kullanıcı geri bildirimi). Bina adları için stilin kendi etiketleri kullanılır; kendi etiket katmanımız denendi, kullanıcı stilinkileri tercih etti.
 - MapLibre worker'ı paketleyiciden sonra kendi yolunu bulamıyor; `scripts/copy-maplibre-worker.mjs` `dev` ve `build` öncesinde dosyayı `public/`a kopyalar, `setWorkerUrl` ile gösterilir. Dosya git'e girmez; `proxy.ts` eşleyicisi `.mjs` dosyalarını giriş kontrolünden muaf tutar.
 - Pin butonları React portal ile MapLibre marker öğelerine çizilir; testlerde `MapCanvas` sahte bileşenle değiştirilir (jsdom'da WebGL yok).
 - Kapak fotoğrafı `public_reports` üzerinden tüm giriş yapmış kullanıcılara açıldı (tasarımda haritada fotoğraf var); `report_media` tablosu gizli kalır. Fotoğraflar yüklemede EXIF'ten arındırılıyor.
 - Bina kaydı olmayan ama konumu olan bildirimler en yakın binada gösterilir.
+
+- Repo iCloud'la eşitlenen Masaüstü'nde; "… 2" kopyaları kullanıcı kararıyla kalır. `tsconfig.json` ve ESLint bu kopyaları yok sayar.
 
 ## Diğer hatlara notlar
 

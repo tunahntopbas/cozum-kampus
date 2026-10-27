@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Vendored copy of the MapLibre worker (scripts/copy-maplibre-worker.mjs).
     "public/maplibre-gl-worker.mjs",
+    // iCloud conflict copies ("file 2.ts") appear while the repo lives on the synced Desktop.
+    "**/* 2.*",
   ]),
 ]);
 

@@ -2,16 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import type { GeoJSONSource, Map as MapLibreMap, Marker } from "maplibre-gl";
+import type { Map as MapLibreMap, Marker } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import type { BuildingGroup, MapBuilding } from "@/lib/campus";
+import type { BuildingGroup } from "@/lib/campus";
 import css from "./Map.module.css";
 
 // OpenFreeMap needs no API key; the style adds the OpenStreetMap attribution itself. "liberty" is the closest
 // to the OpenStreetMap look (green areas, parking and transit icons).
 const STYLE_URL = "https://tiles.openfreemap.org/styles/liberty";
-// The vector tiles carry few building names, so our own buildings get a label layer.
-const LABEL_SOURCE = "kampus-binalari";
 // Copied into public/ by scripts/copy-maplibre-worker.mjs; the bundled default path does not survive bundling.
 const WORKER_URL = "/maplibre-gl-worker.mjs";
 // Esentepe Campus, Serdivan.
@@ -22,13 +20,12 @@ const BOUNDS: [[number, number], [number, number]] = [
 ];
 
 type Props = {
-  buildings: MapBuilding[];
   groups: BuildingGroup[];
   selectedBuildingId: number | null;
   onSelect: (buildingId: number) => void;
 };
 
-export function MapCanvas({ buildings, groups, selectedBuildingId, onSelect }: Props) {
+export function MapCanvas({ groups, selectedBuildingId, onSelect }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const markers = useRef(new Map<number, Marker>());
@@ -66,47 +63,6 @@ export function MapCanvas({ buildings, groups, selectedBuildingId, onSelect }: P
       map.current = null;
     };
   }, []);
-
-  useEffect(() => {
-    const m = map.current;
-    if (!ready || !m) return;
-    const data: Parameters<GeoJSONSource["setData"]>[0] = {
-      type: "FeatureCollection",
-      features: buildings.map((b) => ({
-        type: "Feature",
-        properties: { name: b.name },
-        geometry: { type: "Point", coordinates: [b.lng, b.lat] },
-      })),
-    };
-    const draw = () => {
-      const source = m.getSource<GeoJSONSource>(LABEL_SOURCE);
-      if (source) {
-        source.setData(data);
-        return;
-      }
-      m.addSource(LABEL_SOURCE, { type: "geojson", data });
-      m.addLayer({
-        id: LABEL_SOURCE,
-        type: "symbol",
-        source: LABEL_SOURCE,
-        // Zoomed further out the names crowd the pins.
-        minzoom: 15,
-        layout: {
-          "text-field": ["get", "name"],
-          "text-font": ["Noto Sans Bold"],
-          "text-size": ["interpolate", ["linear"], ["zoom"], 15, 11, 18, 14],
-          "text-max-width": 9,
-          // Below the pin, which sits on the building point.
-          "text-anchor": "top",
-          "text-offset": [0, 1.7],
-          "text-padding": 4,
-        },
-        paint: { "text-color": "#1f2a44", "text-halo-color": "#ffffff", "text-halo-width": 1.6 },
-      });
-    };
-    if (m.isStyleLoaded()) draw();
-    else m.once("load", draw);
-  }, [buildings, ready]);
 
   useEffect(() => {
     const m = map.current;
