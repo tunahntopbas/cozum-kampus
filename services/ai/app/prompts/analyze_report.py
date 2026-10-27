@@ -10,8 +10,9 @@ riski varsa acil.
 - unit şu değerlerden biri olmalı: yapi_isleri, bilgi_islem, temizlik, yemekhane, guvenlik.
 - title en fazla 60 karakter, Türkçe, sakin ve açıklayıcı. summary bir iki cümle.
 - materials: sorunu gidermek için muhtemelen gereken malzemeler (boş liste olabilir).
-- Hakaret, küfür içeren metinler ya da kişi odaklı görüntüler (yüz, çıplaklık, şiddet) için moderation.ok=false \
-ve nedenini moderation.reasons içine yaz.
+- Hakaret, küfür içeren metinler ya da kişi odaklı görüntüler (bir kişinin yüzünü hedef alan fotoğraf, çıplaklık, \
+şiddet) için moderation.ok=false ve nedenini moderation.reasons içine yaz. Fotoğrafın konusu kampüs sorunuysa \
+arka planda ya da kenarda tesadüfen görünen insanlar engel değildir, moderation.ok=true kalır.
 - Fotoğraf bir kampüs sorunuyla ilgili değilse bunu moderation.reasons içinde belirt.
 - Taciz, şiddet, intihar riski ya da psikolojik destek ihtiyacı sinyali varsa is_sensitive=true.
 - confidence 0 ile 1 arasında, analizine ne kadar güvendiğin.

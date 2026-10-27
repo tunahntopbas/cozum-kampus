@@ -239,7 +239,7 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
 - [x] **Step 2:** `uv run pytest -q` → yeni testler FAIL.
 - [x] **Step 3:** Modülleri yaz. Sistem komutu (`prompts/analyze_report.py`, Türkçe) spec 7.3'teki kuralları açıkça içerir: yalnızca JSON; kategori ve aciliyet listeleri; hakaret/küfür ve kişi odaklı görüntüler `moderation.ok=false`; kampüs sorunuyla ilgisiz fotoğraf `moderation.reasons` içinde; taciz, şiddet, intihar riski `is_sensitive=true`; elektrik, yangın, yaralanma, mahsur kalma riski `acil`. `schema_hint` spec 7.3 örnek JSON'u.
 - [x] **Step 4:** `uv run pytest -q && uv run ruff check .` → PASS.
-- [ ] **Step 5: (DeepSeek anahtarı bekleniyor) Gerçek model denemesi (spec 14. bölüm açık işi).** `scripts/smoke_deepseek.py`: `tests/fixtures/lamp.jpg` ile önce `use_json_mode=True`, sonra `False` çağırır, her birinin sonucunu ve süresini basar. Çalıştır: `uv run python scripts/smoke_deepseek.py`. Beklenen: en az biri geçerli `ReportAnalysis`. JSON modu görselle 400 verirse `get_llm()` içinde `use_json_mode=False` sabitle ve sonucu README'ye bir satır olarak yaz.
+- [x] **Step 5: Gerçek model denemesi (spec 14. bölüm açık işi).** `scripts/smoke_deepseek.py`: `tests/fixtures/lamp.jpg` ile önce `use_json_mode=True`, sonra `False` çağırır, her birinin sonucunu ve süresini basar. Çalıştır: `uv run python scripts/smoke_deepseek.py`. Beklenen: en az biri geçerli `ReportAnalysis`. JSON modu görselle 400 verirse `get_llm()` içinde `use_json_mode=False` sabitle ve sonucu README'ye bir satır olarak yaz.
 - [x] **Step 6:** Commit: `feat(ai): analyze-report endpoint with DeepSeek provider and rule-based fallback`
 
 ---

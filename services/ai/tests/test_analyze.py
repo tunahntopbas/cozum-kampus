@@ -116,3 +116,9 @@ def test_analyze_requires_auth():
     with TestClient(app) as c:
         r = c.post("/ai/analyze-report", json={"text": "lamba"})
     assert r.status_code in (401, 422)
+
+
+def test_prompt_allows_incidental_bystanders():
+    from app.prompts.analyze_report import SYSTEM
+
+    assert "tesadüfen görünen insanlar engel değildir" in SYSTEM
