@@ -48,16 +48,12 @@
 .unread { background:white; }
 .mapPage { min-height:1000px; position:relative; }
 .mapCanvas { position:absolute; inset:0; overflow:hidden; }
-.mapArtwork { position:absolute; left:50%; top:0; width:1440px; height:900px; margin-left:-720px; }
 .mapLeft,.mapRight { position:relative; z-index:3; width:360px; }
 .mapLeft { margin:16px; float:left; padding:16px; }
 .mapRight { margin:16px; float:right; padding:8px; }
 .mapDetails { padding:8px; display:flex; flex-direction:column; gap:16px; }
-.mapPin { position:absolute; width:40px; height:40px; border:2px solid var(--color-ink); border-radius:50%; background:white; color:var(--color-ink); font-weight:600; transform:translate(-50%,-50%); }
-.mapPin[aria-pressed=true] { background:var(--color-ink); color:white; outline:2px solid var(--color-ink); outline-offset:4px; }
-.mapPin:active { transform:translate(-50%,-50%) scale(.98) !important; }
 .emergency { position:absolute; left:16px; bottom:16px; z-index:3; }
 .legend { position:absolute; bottom:16px; left:50%; transform:translateX(-50%); padding:8px 12px; z-index:2; font-size:12px; }
 @media(max-width:1359px) { .mapLeft,.mapRight { width:300px; margin-top:96px; } .mapPage { min-height:1150px; } }
-@media(max-width:960px) { .columns,.reportsColumns { grid-template-columns:1fr; } .mapPage { display:flex; flex-direction:column; gap:16px; padding:0 16px 72px; min-height:0; } .mapCanvas { position:relative; height:400px; border-radius:16px; order:1; } .mapArtwork { transform:scale(.64); transform-origin:center 0; top:-20px; } .mapLeft,.mapRight { float:none; margin:0; width:100%; } .mapLeft { order:0; } .mapRight { order:2; } .legend { display:none; } .stats { gap:8px; } .stat { padding:16px; } }
+@media(max-width:960px) { .columns,.reportsColumns { grid-template-columns:1fr; } .mapPage { display:flex; flex-direction:column; gap:16px; padding:0 16px 72px; min-height:0; } .mapCanvas { position:relative; height:400px; border-radius:16px; order:1; } .mapLeft,.mapRight { float:none; margin:0; width:100%; } .mapLeft { order:0; } .mapRight { order:2; } .legend { display:none; } .stats { gap:8px; } .stat { padding:16px; } }
 @media(max-width:520px) { .panel { padding:16px; } .stats { grid-template-columns:1fr; } .stat { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; } .suggestion { gap:8px; } .between { align-items:start; flex-wrap:wrap; } }

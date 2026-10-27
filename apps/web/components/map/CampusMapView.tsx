@@ -1,0 +1,266 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { BuildingsIcon, MagnifyingGlassIcon, WarningCircleIcon } from "@phosphor-icons/react";
+import { Chips } from "@/components/student-demo/Common";
+import { Glass } from "@/components/ui/Glass";
+import {
+  QUICK_FILTERS,
+  filterReports,
+  floorLabel,
+  groupByBuilding,
+  relativeTime,
+  type MapBuilding,
+  type MapFilters,
+  type MapReport,
+  type QuickFilter,
+} from "@/lib/campus";
+import { CATEGORIES, categoryLabel } from "@/lib/labels";
+import { statusMeta, type StatusTone } from "@/lib/status";
+import { createClient } from "@/lib/supabase/client";
+import s from "@/components/student-demo/StudentDemo.module.css";
+import { MapCanvas } from "./MapCanvas";
+import { MapReportDetail } from "./MapReportDetail";
+
+const STATUS_OPTIONS: { value: StatusTone | ""; label: string }[] = [
+  { value: "", label: "Tüm durumlar" },
+  { value: "alindi", label: "Alındı" },
+  { value: "islemde", label: "İşlemde" },
+  { value: "cozuldu", label: "Çözüldü" },
+];
+
+type Props = {
+  userId: string;
+  buildings: MapBuilding[];
+  reports: MapReport[];
+  unitNames: Record<number, string>;
+  votedIds: number[];
+};
+
+export function CampusMapView({ userId, buildings, reports: initialReports, unitNames, votedIds }: Props) {
+  const [reports, setReports] = useState(initialReports);
+  const [filters, setFilters] = useState<MapFilters>({ query: "", filter: "Tümü", category: "", status: "" });
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [expanded, setExpanded] = useState<number | null>(null);
+  const [votes, setVotes] = useState(() => new Set(votedIds));
+  const [voteBusy, setVoteBusy] = useState(false);
+  const [voteError, setVoteError] = useState<string | null>(null);
+  const [emergency, setEmergency] = useState(false);
+
+  const buildingsById = useMemo(() => new Map(buildings.map((b) => [b.id, b])), [buildings]);
+  const visible = useMemo(
+    () => filterReports(reports, buildingsById, filters, userId),
+    [reports, buildingsById, filters, userId],
+  );
+  const groups = useMemo(() => groupByBuilding(visible, buildings), [visible, buildings]);
+  const selectedGroup =
+    groups.find((g) => g.reports.some((r) => r.id === selectedId)) ??
+    groups.find((g) => g.building.id === expanded) ??
+    groups[0];
+  const selected = selectedGroup?.reports.find((r) => r.id === selectedId) ?? selectedGroup?.reports[0];
+  const openBuilding = groups.some((g) => g.building.id === expanded) ? expanded : (selectedGroup?.building.id ?? null);
+  const openCount = reports.filter((r) => r.status !== "cozuldu" && r.status !== "geri_cekildi").length;
+
+  const set = (patch: Partial<MapFilters>) => setFilters((f) => ({ ...f, ...patch }));
+
+  function selectBuilding(id: number) {
+    setExpanded(id);
+    const group = groups.find((g) => g.building.id === id);
+    if (group) setSelectedId(group.reports[0].id);
+  }
+
+  async function toggleSupport(report: MapReport) {
+    const had = votes.has(report.id);
+    setVoteBusy(true);
+    setVoteError(null);
+    const supabase = createClient();
+    const { error } = had
+      ? await supabase.from("report_votes").delete().eq("report_id", report.id).eq("user_id", userId)
+      : await supabase.from("report_votes").insert({ report_id: report.id, user_id: userId });
+    setVoteBusy(false);
+    if (error) {
+      setVoteError("Desteğin kaydedilemedi. Bağlantını kontrol edip yeniden dene.");
+      return;
+    }
+    setVotes((prev) => {
+      const next = new Set(prev);
+      if (had) next.delete(report.id);
+      else next.add(report.id);
+      return next;
+    });
+    setReports((prev) =>
+      prev.map((r) => (r.id === report.id ? { ...r, voteCount: Math.max(r.voteCount + (had ? -1 : 1), 0) } : r)),
+    );
+  }
+
+  return (
+    <main id="icerik" className={`${s.root} ${s.mapPage}`}>
+      <div className={s.mapCanvas} aria-label="Kampüs haritası">
+        <MapCanvas groups={groups} selectedBuildingId={selectedGroup?.building.id ?? null} onSelect={selectBuilding} />
+      </div>
+
+      <Glass className={`${s.mapLeft} ${s.stack}`}>
+        <div className={s.row}>
+          <span className={s.icon}>
+            <BuildingsIcon size={24} aria-hidden="true" />
+          </span>
+          <div>
+            <h1 className="text-base font-semibold">Çözüm Kampüs</h1>
+            <p className={s.muted}>Sakarya Üniversitesi, {openCount} açık bildirim</p>
+          </div>
+        </div>
+        <label className="relative">
+          <MagnifyingGlassIcon className="absolute left-3 top-2.5 text-muted" size={20} aria-hidden="true" />
+          <span className="sr-only">Bina, kat ya da sorun ara</span>
+          <input
+            className={`${s.input} !pl-10`}
+            type="search"
+            placeholder="Bina, kat ya da sorun ara"
+            value={filters.query}
+            onChange={(e) => set({ query: e.target.value })}
+          />
+        </label>
+        <Chips
+          label="Harita filtreleri"
+          options={[...QUICK_FILTERS]}
+          value={filters.filter}
+          onChange={(v) => set({ filter: v as QuickFilter })}
+        />
+        <div className="grid grid-cols-2 gap-2">
+          <select
+            aria-label="Kategori"
+            className={s.input}
+            value={filters.category}
+            onChange={(e) => set({ category: e.target.value })}
+          >
+            <option value="">Tüm kategoriler</option>
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {categoryLabel(c)}
+              </option>
+            ))}
+          </select>
+          <select
+            aria-label="Durum"
+            className={s.input}
+            value={filters.status}
+            onChange={(e) => set({ status: e.target.value as StatusTone | "" })}
+          >
+            {STATUS_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <h2 className={`${s.small} mb-1 px-2 font-semibold`}>Binalara göre · {visible.length} bildirim</h2>
+          {!groups.length && (
+            <p className="p-3" role="status">
+              Bu filtrelere uygun bildirim yok.
+            </p>
+          )}
+          {groups.map(({ building, reports: items }) => {
+            const urgent = items.filter((r) => r.urgency === "acil").length;
+            const open = openBuilding === building.id;
+            return (
+              <div key={building.id}>
+                <button
+                  type="button"
+                  className={`${s.item} !p-2`}
+                  aria-expanded={open}
+                  onClick={() => (open ? setExpanded(-1) : selectBuilding(building.id))}
+                >
+                  <span className={s.itemBody}>
+                    <span className="font-medium">{building.name}</span>
+                    <span className={s.small}>
+                      {items.length} bildirim{urgent > 0 && `, ${urgent} acil`}
+                    </span>
+                  </span>
+                  <span aria-hidden="true">{open ? "⌃" : "⌄"}</span>
+                </button>
+                {open && (
+                  <div className="pl-2">
+                    {items.map((r) => (
+                      <button
+                        key={r.id}
+                        type="button"
+                        className={`${s.item} !p-2`}
+                        aria-pressed={selected?.id === r.id}
+                        onClick={() => setSelectedId(r.id)}
+                      >
+                        <span
+                          className={s.dot}
+                          style={{
+                            background:
+                              r.urgency === "acil" ? "#b91c1c" : r.status === "cozuldu" ? "#166534" : undefined,
+                          }}
+                        />
+                        <span className={s.itemBody}>
+                          <span>{r.title}</span>
+                          <span className={s.small}>
+                            {[statusMeta(r.status).label, floorLabel(r.floor), `${r.voteCount} kişi`, relativeTime(r.createdAt)]
+                              .filter(Boolean)
+                              .join(", ")}
+                          </span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </Glass>
+
+      <Glass className={s.mapRight}>
+        {selected && selectedGroup ? (
+          <>
+            <MapReportDetail
+              key={selected.id}
+              report={selected}
+              buildingName={selectedGroup.building.name}
+              unitName={selected.unitId != null ? (unitNames[selected.unitId] ?? "") : "Yönlendirme bekleniyor"}
+              supported={votes.has(selected.id)}
+              supportBusy={voteBusy}
+              isMine={selected.reporterId === userId}
+              onSupport={() => toggleSupport(selected)}
+            />
+            {voteError && (
+              <p role="alert" className="m-2 rounded-lg bg-[#FEF2F2] p-3 text-sm text-danger">
+                {voteError}
+              </p>
+            )}
+          </>
+        ) : (
+          <p className="p-4 text-muted">Filtrelerini değiştirerek haritadan bir bildirim seç.</p>
+        )}
+      </Glass>
+
+      <div className={s.emergency}>
+        <button
+          type="button"
+          className="btn-red t flex items-center gap-2 rounded-lg bg-danger px-3 py-2 font-semibold text-white"
+          onClick={() => setEmergency((v) => !v)}
+          aria-expanded={emergency}
+        >
+          <WarningCircleIcon size={20} aria-hidden="true" />
+          Acil durum
+        </button>
+        {emergency && (
+          <Glass className="mt-2 max-w-72 p-4">
+            <p>Can güvenliği riski varsa 112 Acil Çağrı Merkezi’ni ara.</p>
+            <a className="mt-2 inline-block font-semibold text-danger underline" href="tel:112">
+              112’yi ara
+            </a>
+          </Glass>
+        )}
+      </div>
+      <Glass className={s.legend}>
+        <span className="text-danger">● Acil</span> · <span className="text-amber-700">● İşlemde</span> ·{" "}
+        <span className="text-green-800">● Çözüldü</span>
+      </Glass>
+    </main>
+  );
+}

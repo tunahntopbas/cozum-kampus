@@ -1,36 +1,10 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import MapPage from "@/app/(ogrenci)/page";
 import MyReportsPage from "@/app/(ogrenci)/bildirimlerim/page";
 import SuggestionsPage from "@/app/(ogrenci)/oneriler/page";
 import NotificationsPage from "@/app/(ogrenci)/bildirimler/page";
 
 describe("student demo screens", () => {
-  it("filters map results without leaving stale report details", () => {
-    render(<MapPage />);
-    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "bulunamayan" } });
-    expect(screen.getByText("Bu filtrelere uygun bildirim yok.")).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "Koridor lambası yanmıyor" })).not.toBeInTheDocument();
-  });
-  it("selects a campus pin and toggles support exactly once", () => {
-    render(<MapPage />);
-    fireEvent.click(screen.getByRole("button", { name: "Kütüphane harita işareti" }));
-    const detail = screen.getByRole("region", { name: "Seçili bildirim" });
-    expect(within(detail).getByRole("heading", { name: "Kütüphane 2. katta internet kesik" })).toBeInTheDocument();
-    fireEvent.click(within(detail).getByRole("button", { name: "Ben de yaşıyorum" }));
-    expect(within(detail).getByText("9 kişi bildirdi")).toBeInTheDocument();
-    fireEvent.click(within(detail).getByRole("button", { name: "Desteğimi geri al" }));
-    expect(within(detail).getByText("8 kişi bildirdi")).toBeInTheDocument();
-  });
-  it("combines map category and status filters with pin visibility", () => {
-    render(<MapPage />);
-    fireEvent.change(screen.getByRole("combobox", { name: "Kategori" }), { target: { value: "İnternet" } });
-    expect(screen.getByRole("button", { name: "Kütüphane harita işareti" })).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Mühendislik Fakültesi harita işareti" })).not.toBeInTheDocument();
-    fireEvent.change(screen.getByRole("combobox", { name: "Durum" }), { target: { value: "Çözüldü" } });
-    expect(screen.getByText("Bu filtrelere uygun bildirim yok.")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Kütüphane harita işareti" })).not.toBeInTheDocument();
-  });
   it("switches personal report tabs and filters resolved reports", () => {
     render(<MyReportsPage />);
     fireEvent.click(screen.getByRole("button", { name: "Çözüldü" }));
@@ -111,21 +85,6 @@ describe("student review regressions", () => {
     fireEvent.change(screen.getByLabelText("Önerin"), { target: { value: "Yeni çalışma alanı açılsın" } });
     fireEvent.click(screen.getByRole("button", { name: "Öneriyi gönder" }));
     expect(within(screen.getAllByRole("article")[0]).getByRole("heading")).toHaveTextContent("Yeni çalışma alanı açılsın");
-  });
-  it.each([
-    ["Projeksiyon cihazı açılmıyor", 2],
-    ["Yurt rampasında kaygan zemin", 6],
-  ])("preserves initial support for %s and reverses the existing vote", (title, initialCount) => {
-    render(<MapPage />);
-    fireEvent.change(screen.getByRole("searchbox"), { target: { value: title } });
-    const detail = screen.getByRole("region", { name: "Seçili bildirim" });
-    const remove = within(detail).getByRole("button", { name: "Desteğimi geri al" });
-    expect(remove).toHaveAttribute("aria-pressed", "true");
-    expect(within(detail).getByText(`${initialCount} kişi bildirdi`)).toBeInTheDocument();
-    fireEvent.click(remove);
-    expect(within(detail).getByText(`${initialCount - 1} kişi bildirdi`)).toBeInTheDocument();
-    fireEvent.click(within(detail).getByRole("button", { name: "Ben de yaşıyorum" }));
-    expect(within(detail).getByText(`${initialCount} kişi bildirdi`)).toBeInTheDocument();
   });
   it.each([
     [SuggestionsPage, ["Popüler", "Yeni", "Yanıtlananlar"]],

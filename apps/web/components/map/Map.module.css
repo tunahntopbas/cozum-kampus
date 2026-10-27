@@ -1,0 +1,4 @@
+.pin { position:relative; width:40px; height:40px; border:2px solid var(--color-ink); border-radius:50%; background:white; color:var(--color-ink); font-weight:600; cursor:pointer; }
+.pin[aria-pressed=true] { background:var(--color-ink); color:white; outline:2px solid var(--color-ink); outline-offset:4px; }
+.pin:focus-visible { outline:2px solid var(--color-accent); outline-offset:3px; }
+.cover { width:100%; height:160px; object-fit:cover; border-radius:8px; display:block; }
