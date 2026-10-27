@@ -436,6 +436,6 @@ Hatlar yalnızca Interfaces bloklarındaki adlar ve biçimler üzerinden konuşu
 
 - [x] **Step 1:** `Dockerfile`: `python:3.12-slim`, uv ile `uv sync --frozen --no-dev`, `CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}`. Yerelde dene: `docker build -t cozum-ai services/ai && docker run -p 8000:8000 --env-file .env cozum-ai`, `curl localhost:8000/health` → `{"status":"ok"}`.
 - [x] **Step 2:** `web.yml`: `apps/web/**` değişince; pnpm kur, `pnpm install --frozen-lockfile`, `lint`, `tsc --noEmit`, `test`, `build` (build için `NEXT_PUBLIC_*` sahte değerlerle). `ai.yml`: `services/ai/**` değişince; `astral-sh/setup-uv`, `uv run ruff check .`, `uv run pytest -q`.
-- [ ] **Step 3:** Push et, iki workflow yeşil. Render ve Vercel'de ortam değişkenlerini panele gir; `ALLOWED_ORIGIN` = Vercel alan adı, Vercel'de `NEXT_PUBLIC_AI_API_URL` = Render adresi.
+- [x] **Step 3:** Push et, iki workflow yeşil. Render ve Vercel'de ortam değişkenlerini panele gir; `ALLOWED_ORIGIN` = Vercel alan adı, Vercel'de `NEXT_PUBLIC_AI_API_URL` = Render adresi.
 - [ ] **Step 4:** Canlıda Task 9 Step 5 senaryo 1 ve 2'yi tekrarla. Supabase Auth > URL Configuration'a Vercel alan adını ekle.
 - [x] **Step 5:** Commit: `ci: add GitHub Actions, Dockerfile and Render blueprint`
