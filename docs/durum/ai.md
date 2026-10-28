@@ -10,8 +10,7 @@ AI hattı (Task 3, 4, 5) kod olarak tamam. Model sağlayıcısı DeepSeek'ten Ge
 
 ## Sıradaki adım
 
-2. `hat/ai` -> `main` PR aç.
-3. Üç hat `main`e girince Task 9 (`docs/durum/entegrasyon.md`).
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

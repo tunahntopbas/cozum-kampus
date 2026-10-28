@@ -12,8 +12,7 @@ Kapsam: Plan 3 (proje rehberi P0 madde 5: `/personel` iş listesi, çözüm foto
 
 ## Sıradaki adım
 
-1. `hat/personel-gecmis` PR'ı CI yeşil olunca kullanıcı onayıyla `main`e birleştir.
-2. Plan 4: yönetim paneli (`/yonetim`, `/yonetim/bildirimler`, `/yonetim/birimler`, `/yonetim/kampus-sesi` hâlâ `components/admin-demo`). Malzeme taleplerini onaylama ekranı da burada (yönetim `material_requests` okuyabiliyor; güncelleme politikası henüz yok).
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

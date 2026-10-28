@@ -10,9 +10,7 @@ Kapsam: Plan 2'nin ilk parçası (`/` kampüs haritası gerçek veriyle). Plan 2
 
 ## Sıradaki adım
 
-1. PR'ı aç, CI yeşil olunca kullanıcı onayıyla `main`e birleştir. `docs/durum/README.md` tablosuna "Harita" satırı eklenmeli (hat dalında README'ye dokunulmadı).
-2. Vercel'de yayın sonrası canlıda `/` kontrolü (worker dosyası `public/`a build sırasında kopyalanıyor).
-3. Sonraki Plan 2 işleri: `/bildirimlerim` gerçek veri + Realtime, bildirim detayında gerçek olay geçmişi (`report_events`).
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

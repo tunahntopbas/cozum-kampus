@@ -99,8 +99,9 @@ export default function KvkkPage() {
 
       <Section title="Saklama süresi">
         <p>
-          Bildirimler ve öneriler hizmet kalitesi raporları için akademik yıl boyunca saklanır, sonra anonimleştirilir. Hesabını
-          silmek istersen kişisel verilerin silinir, açtığın bildirimler anonim olarak kalır.
+          Bildirimler ve öneriler hizmet kalitesi raporları için bir yıl saklanır, sonra senden ayrılarak anonim kalır. Uygulama
+          içi bildirimler bir yıl, yapay zeka işlem kayıtları 90 gün sonra silinir. Hesabını Hesabım sayfasından silebilirsin;
+          kişisel verilerin silinir, açtığın bildirimler anonim olarak kalır.
         </p>
       </Section>
 
