@@ -8,6 +8,7 @@ import { floorLabel, relativeTime, timeline, type MapReport } from "@/lib/campus
 import { categoryLabel, urgencyLabel } from "@/lib/labels";
 import s from "@/components/student-demo/StudentDemo.module.css";
 import css from "./Map.module.css";
+import { RouteLine } from "@/components/ui/RouteLine";
 
 type Props = {
   report: MapReport;
@@ -46,6 +47,7 @@ export function MapReportDetail({ report, buildingName, unitName, supported, sup
             <span className={s.badge}>Aciliyet {urgencyLabel(report.urgency).toLocaleLowerCase("tr")}</span>
           </div>
         </div>
+        <RouteLine status={report.status} />
         {report.aiSummary && (
           <div className={s.summary}>
             <h3 className={s.small}>Yapay zeka özeti</h3>

@@ -118,7 +118,7 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
   }
 
   return (
-    <main id="icerik" className={`${s.root} ${s.mapPage}`} data-show={pane}>
+    <main id="icerik" className={`map-page ${s.root} ${s.mapPage}`} data-show={pane}>
       <PaneBar
         className={s.mapBar}
         labels={[

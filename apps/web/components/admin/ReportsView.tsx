@@ -16,6 +16,7 @@ import type { AdminData, PanelReport } from "./types";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { MagnifyingGlass as MagnifyingGlassIcon_ } from "@phosphor-icons/react";
 import { Panes } from "@/components/layout/Panes";
+import { RouteLine } from "@/components/ui/RouteLine";
 
 export type StaffMember = { id: string; name: string; unitId: number | null };
 export type ReportNote = { reportId: number; body: string; createdAt: string; author: string };
@@ -121,6 +122,7 @@ export function ReportsView({
                       <span className="mono text-xs text-muted">{relativeTime(r.createdAt, now)}</span>
                       <span className={s.reportMeta}>
                         <span className={s.small}>{r.unitId != null ? unitName.get(r.unitId) : "Yönlendirilmedi"}</span>
+                        <RouteLine status={r.status} compact />
                         <Badge>{statusMeta(r.status).label}</Badge>
                         {isOverdue(r, now) && <Badge>Gecikmiş</Badge>}
                         {data.unverified.includes(r.id) && <Badge>Doğrulanmadı</Badge>}
@@ -237,6 +239,7 @@ function ReportDetail({
           {unverified && <Badge>Doğrulanmadı</Badge>}
           {report.isHidden && <Badge>Yayında değil</Badge>}
         </div>
+        <RouteLine key={`${report.id}-${report.status}`} status={report.status} />
         <div className={`${s.note} ${s.row} text-sm`}>
           <p className="min-w-0 flex-1">
             {report.isHidden

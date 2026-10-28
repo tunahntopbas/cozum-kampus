@@ -16,6 +16,7 @@ import type { MyReportItem } from "./types";
 import { TrayIcon } from "@phosphor-icons/react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Panes } from "@/components/layout/Panes";
+import { RouteLine } from "@/components/ui/RouteLine";
 
 type Props = {
   userId: string;
@@ -199,6 +200,7 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
                       .join(", ")}
                   </span>
                   <span className={s.row}>
+                    <RouteLine status={r.status} compact />
                     <StatusPill status={r.status} />
                     {r.urgency === "acil" && <span className="text-xs font-semibold text-danger">Acil</span>}
                   </span>

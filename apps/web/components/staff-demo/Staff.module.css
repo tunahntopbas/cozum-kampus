@@ -22,3 +22,6 @@
 @keyframes blur-in { from { opacity:0; filter:blur(8px); transform:translateY(6px); } to { opacity:1; filter:none; transform:none; } }
 
 @media(max-width:960px){.stat strong{font-size:24px;line-height:30px}}
+
+@supports (animation-timeline: view()) { .job, .request, .table tbody tr { animation: row-in linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; } }
+@keyframes row-in { from { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(3px); } }
