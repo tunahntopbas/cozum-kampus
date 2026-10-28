@@ -40,7 +40,7 @@ describe("LoginForm password sign in", () => {
   it("rejects non-school e-mails without calling Supabase", () => {
     render(<LoginForm />);
     fill("a@gmail.com", "x");
-    expect(screen.getByText("Okul e-posta adresinle giriş yapabilirsin.")).toBeInTheDocument();
+    expect(screen.getByText("Yalnızca @sakarya.edu.tr uzantılı adresle giriş yapabilirsin.")).toBeInTheDocument();
     expect(auth.signInWithPassword).not.toHaveBeenCalled();
   });
 

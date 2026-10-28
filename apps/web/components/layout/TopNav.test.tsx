@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 
 let pathname = "/";
 vi.mock("next/navigation", () => ({ usePathname: () => pathname }));
+vi.mock("./PanelSwitch", () => ({ PanelSwitch: () => null }));
 
 import { TopNav } from "./TopNav";
 

@@ -31,7 +31,7 @@ export function LoginForm() {
   function checkEmail(): boolean {
     setMessage(null);
     if (isAllowedEmail(email)) return true;
-    setMessage("Okul e-posta adresinle giriş yapabilirsin.");
+    setMessage("Yalnızca @sakarya.edu.tr uzantılı adresle giriş yapabilirsin.");
     return false;
   }
 
@@ -89,7 +89,7 @@ export function LoginForm() {
         className={inputClass}
         type="email"
         autoComplete="email"
-        placeholder="ad.soyad@ogr.sakarya.edu.tr"
+        placeholder="ad.soyad@sakarya.edu.tr"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required

@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { homeFor, requiredRole, type Role } from "@/lib/auth";
+import { homeFor, requiredRole, STUDENT_PANEL_COOKIE, type Role } from "@/lib/auth";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase/env";
 
 export async function proxy(request: NextRequest) {
@@ -41,7 +41,8 @@ export async function proxy(request: NextRequest) {
   const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
   const role = (profile?.role ?? "student") as Role;
   if (!roles.includes(role)) return redirectTo(new URL(homeFor(role), request.url));
-  if (pathname === "/" && homeFor(role) !== "/") return redirectTo(new URL(homeFor(role), request.url));
+  const adminViewsStudent = role === "admin" && request.cookies.get(STUDENT_PANEL_COOKIE)?.value === "1";
+  if (pathname === "/" && homeFor(role) !== "/" && !adminViewsStudent) return redirectTo(new URL(homeFor(role), request.url));
 
   return response;
 }
