@@ -6,12 +6,11 @@ Sorumlu: tunahan
 
 ## Son durum
 
-Web hattı (Task 6, 7, 8) tamam. Task 7 gerçek Supabase ile elle doğrulandı (demo öğrenci ve personel hesapları). Task 8 EXIF kontrolü Task 9 sayfasıyla yapılacak. Sıradaki: `hat/web` için PR, sonra Birleşme hattı (Task 9).
+Uygulama canlıda (https://cozum-kampus.vercel.app), üç panel uçtan uca doğrulandı. Vercel fonksiyonları Seul'de (`icn1`), Supabase ile aynı bölgede. Hesap silme açıldı; proxy ve sayfalar oturumu JWT'den yerelde doğruluyor.
 
 ## Sıradaki adım
 
-2. `hat/web` -> `main` PR aç.
-3. DB ve AI hatları da `main`e girince Task 9'a geç (`docs/durum/entegrasyon.md`).
+1. Sunumdan sonra anahtarları yenile: Gemini `LLM_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `DEMO_PASSWORD`, demo hesabın şifresi (Vercel, Render, `.env`, `apps/web/.env.local`).
 
 ## Yapılanlar
 
@@ -23,6 +22,14 @@ Web hattı (Task 6, 7, 8) tamam. Task 7 gerçek Supabase ile elle doğrulandı (
 - 2026-10-27 `/giris` e-posta + şifre ile giriş (varsayılan) + e-posta koduyla giriş (ikincil). Test: `app/giris/LoginForm.test.tsx`. Testler 30/30.
 - 2026-10-27 Task 7 elle doğrulama: öğrenci `/yonetim` isteyince girişten sonra `/`'e döndü; `/hesap` profili Supabase'den gösterdi; çıkış çalıştı; personel `/personel`'e girdi. Düzeltme: `createServerClient` başında `await connection()` (Supabase auth oturum yüklerken `Date.now()` çağırıyor, Cache Components bunu ön-render'da hata sayıyordu).
 - 2026-10-27 Task 8: `lib/image.ts` (`fitWithin`, `isSupportedImageType`, `prepareImage`: 1600 px'e küçültme + canvas ile yeniden kodlama, EXIF silinir), `lib/upload.ts` (`uploadReportImage`, bucket `report-media`, yol `{userId}/{uuid}.jpg`). Testler 26/26.
+- 2026-10-28 PR #21: küfür filtresi (`lib/profanity.ts` + DB trigger `0015`); gönder butonu analiz bitene kadar bekliyor.
+- 2026-10-28 PR #23: yalnızca `@sakarya.edu.tr` ile giriş (`0016`), admin için `PanelSwitch` (öğrenci/personel/yönetim).
+- 2026-10-28 PR #24: `vercel.json` `regions: ["icn1"]`; doğrulandı, prod deploy `icn1`'de.
+- 2026-10-28 PR #25: öneri formunda kategori tahmini (`guessCategory`), mobil düzen düzeltmeleri, `/kvkk` sayfası.
+- 2026-10-28 PR #26/#27: panel geçişi tam sayfa yüklemeyle; durum bildirimleri kişinin kendi işlemlerinde de geliyor (`0017`). AI tarafında kota dolunca yedek modele geçiş.
+- 2026-10-28 Vercel `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS=sakarya.edu.tr` (tüm ortamlar) ve prod yeniden deploy.
+- 2026-10-28 Hesap silme: `public.delete_my_account()` (`0018`, yalnız öğrenci; bildirim ve öneriler anonim kalır, oy/bildirim/tercihler silinir), `/hesap` iki adımlı onay butonu (`DeleteAccountButton`). Personel/yönetici hesapları yönetimce kapatılır.
+- 2026-10-28 Hız: proxy ve sayfalar `getUser()` yerine `getClaims()` (ES256 JWT yerelde doğrulanır, auth sunucusuna gidiş yok). Rol `0019` ile `app_metadata.role`'e kopyalanıyor; proxy rolü token'dan okuyor, yoksa `profiles`'a soruyor. Ölçüm öncesi prod: ilk bayt ~650 ms, sayfa 1.3 sn (HTML akışı).
 
 ## Engeller
 
@@ -30,6 +37,9 @@ Web hattı (Task 6, 7, 8) tamam. Task 7 gerçek Supabase ile elle doğrulandı (
 - Env yokken tüm sayfalar 500 verir (bilinçli, sessizce kimlik doğrulamasız çalışmasın diye). `apps/web/.env.local` = kök `.env` içindeki `NEXT_PUBLIC_*` satırları.
 
 ## Alınan kararlar
+
+- Hesap silme yalnız öğrenciler için: personel/yönetici hesapları atama ve not geçmişine bağlı (NOT NULL), bu yüzden yönetim kapatır.
+- Rol JWT'de yalnız yönlendirme için kullanılır; yetkinin kaynağı `profiles.role` ve RLS. Rol değişince token yenilenene kadar (≤1 saat) eski panel görünebilir, veriye erişim RLS'den dolayı değişmez.
 
 (Plandan sapmalar ve nedenleri)
 

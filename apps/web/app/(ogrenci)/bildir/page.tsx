@@ -4,14 +4,12 @@ import { PageContent } from "@/components/layout/PageContent";
 import { PageHeader } from "@/components/layout/PageHeader";
 import type { QrPlace } from "@/components/report/LocationPicker";
 import { ReportComposer } from "@/components/report/ReportComposer";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 
 async function Composer({ searchParams }: { searchParams: PageProps<"/bildir">["searchParams"] }) {
   const { yer } = await searchParams;
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   const qrCode = typeof yer === "string" ? yer : null;

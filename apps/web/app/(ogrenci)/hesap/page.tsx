@@ -5,15 +5,14 @@ import { PageContent } from "@/components/layout/PageContent";
 import { PageHeader } from "@/components/layout/PageHeader";
 import type { Role } from "@/lib/auth";
 import { initials, roleLabel } from "@/lib/labels";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 import { ProfileForm } from "./ProfileForm";
+import { DeleteAccountButton } from "./DeleteAccountButton";
 import { SignOutButton } from "./SignOutButton";
 
 async function Account() {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   const [{ data: profile }, reports, votes, resolved] = await Promise.all([
@@ -82,15 +81,13 @@ async function Account() {
               </Link>
             </p>
           </div>
-          {/* Deletion needs the service key on the AI service; planned with the account endpoints. */}
-          <button
-            type="button"
-            disabled
-            title="Yakında"
-            className="flex-none rounded-lg border border-[#FECACA] bg-white px-3 py-2 text-sm font-semibold text-[#991B1B] disabled:opacity-60"
-          >
-            Hesabımı ve verilerimi sil
-          </button>
+          {profile?.role === "student" ? (
+            <DeleteAccountButton />
+          ) : (
+            <p className="max-w-56 flex-none text-xs text-muted">
+              Personel ve yönetici hesapları yönetim tarafından kapatılır.
+            </p>
+          )}
         </section>
       </div>
     </div>

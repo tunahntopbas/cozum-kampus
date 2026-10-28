@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { homeFor, isAllowedEmail, requiredRole } from "./auth";
+import { homeFor, isAllowedEmail, requiredRole, roleFromClaims } from "./auth";
 
 const D = "ogr.sakarya.edu.tr,sakarya.edu.tr";
 
@@ -72,5 +72,17 @@ describe("homeFor", () => {
     expect(homeFor("admin")).toBe("/yonetim");
     expect(homeFor("student")).toBe("/");
     expect(homeFor("security")).toBe("/");
+  });
+});
+
+describe("roleFromClaims", () => {
+  it("reads the role the database copies into app_metadata", () => {
+    expect(roleFromClaims({ app_metadata: { role: "admin" } })).toBe("admin");
+    expect(roleFromClaims({ app_metadata: { role: "staff" } })).toBe("staff");
+  });
+  it("returns null when the token predates the claim or carries junk", () => {
+    expect(roleFromClaims({})).toBeNull();
+    expect(roleFromClaims({ app_metadata: { role: "root" } })).toBeNull();
+    expect(roleFromClaims(null)).toBeNull();
   });
 });

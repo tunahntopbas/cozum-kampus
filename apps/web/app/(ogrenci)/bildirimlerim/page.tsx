@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { MyReportsView } from "@/components/my-reports/MyReportsView";
 import type { MyReportItem, ReportPhotos } from "@/components/my-reports/types";
 import { toMapReport, type ReportRow } from "@/lib/campus";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 import s from "@/components/student-demo/StudentDemo.module.css";
 
 const SIGNED_URL_TTL_S = 60 * 60;
@@ -15,9 +15,7 @@ const REPORT_COLUMNS =
 async function MyReports({ searchParams }: { searchParams: PageProps<"/bildirimlerim">["searchParams"] }) {
   const { yeni } = await searchParams;
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   const [mineRes, votesRes, buildings, units, prefs] = await Promise.all([

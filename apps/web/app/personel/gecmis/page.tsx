@@ -5,7 +5,7 @@ import { floorLabel } from "@/lib/campus";
 import type { ReportEvent } from "@/lib/my-reports";
 import { completionVerdict, jobMinutes } from "@/lib/staff";
 import { statusMeta, type ReportStatus } from "@/lib/status";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 
 const SIGNED_URL_TTL_S = 60 * 60;
 
@@ -18,9 +18,7 @@ function stepLabel(e: ReportEvent): string | null {
 
 async function History() {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   // RLS limits staff to their unit's reports.
