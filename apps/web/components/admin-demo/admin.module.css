@@ -64,3 +64,7 @@ textarea.input { resize: vertical; min-height: 100px; }
 
 @supports (animation-timeline: view()) { .listButton { animation: row-in linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; } }
 @keyframes row-in { from { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(3px); } }
+
+.kpis { background:none !important; border:0 !important; box-shadow:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; display:flex !important; flex-wrap:wrap; gap:8px 40px; border-radius:0; overflow:visible; }
+.kpi { border:0 !important; margin:0 !important; padding:0 !important; flex-direction:column-reverse; gap:0; }
+

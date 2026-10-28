@@ -22,6 +22,7 @@ import s from "@/components/student-demo/StudentDemo.module.css";
 import { MapCanvas } from "./MapCanvas";
 import { MapReportDetail } from "./MapReportDetail";
 import { PaneBar, usePhonePane } from "@/components/layout/Panes";
+import { FilterMore } from "@/components/ui/FilterMore";
 
 const STATUS_OPTIONS: { value: StatusTone | ""; label: string }[] = [
   { value: "", label: "Tüm durumlar" },
@@ -39,7 +40,12 @@ type Props = {
 };
 
 export function CampusMapView({ userId, buildings, reports: initialReports, unitNames, votedIds }: Props) {
-  const [filters, setFilters] = useState<MapFilters>({ query: "", filter: "Tümü", category: "", status: "" });
+  const [filters, setFilters] = useState<MapFilters>({
+    query: "",
+    filter: "Tümü",
+    category: "",
+    status: "",
+  });
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const { pane, setPane, jump } = usePhonePane("list");
   // undefined follows the selection automatically; null explicitly closes the accordion.
@@ -85,7 +91,11 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
     groups[0];
   const selected = selectedGroup?.reports.find((r) => r.id === selectedId) ?? selectedGroup?.reports[0];
   const openBuilding =
-    expanded === null ? null : groups.some((g) => g.building.id === expanded) ? expanded : (selectedGroup?.building.id ?? null);
+    expanded === null
+      ? null
+      : groups.some((g) => g.building.id === expanded)
+        ? expanded
+        : (selectedGroup?.building.id ?? null);
   const openCount = reports.filter((r) => r.status !== "cozuldu" && r.status !== "geri_cekildi").length;
 
   const set = (patch: Partial<MapFilters>) => setFilters((f) => ({ ...f, ...patch }));
@@ -167,33 +177,42 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
           value={filters.filter}
           onChange={(v) => set({ filter: v as QuickFilter })}
         />
-        <div className="grid grid-cols-2 gap-2">
-          <select
-            aria-label="Kategori"
-            className={s.input}
-            value={filters.category}
-            onChange={(e) => set({ category: e.target.value })}
-          >
-            <option value="">Tüm kategoriler</option>
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {categoryLabel(c)}
-              </option>
-            ))}
-          </select>
-          <select
-            aria-label="Durum"
-            className={s.input}
-            value={filters.status}
-            onChange={(e) => set({ status: e.target.value as StatusTone | "" })}
-          >
-            {STATUS_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <FilterMore
+          summary={[
+            filters.category ? categoryLabel(filters.category) : "",
+            filters.status ? (STATUS_OPTIONS.find((o) => o.value === filters.status)?.label ?? "") : "",
+          ]
+            .filter(Boolean)
+            .join(", ")}
+        >
+          <div className="grid grid-cols-2 gap-2">
+            <select
+              aria-label="Kategori"
+              className={s.input}
+              value={filters.category}
+              onChange={(e) => set({ category: e.target.value })}
+            >
+              <option value="">Tüm kategoriler</option>
+              {CATEGORIES.map((c) => (
+                <option key={c} value={c}>
+                  {categoryLabel(c)}
+                </option>
+              ))}
+            </select>
+            <select
+              aria-label="Durum"
+              className={s.input}
+              value={filters.status}
+              onChange={(e) => set({ status: e.target.value as StatusTone | "" })}
+            >
+              {STATUS_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </FilterMore>
         <div>
           <h2 className={`${s.small} mb-1 px-2 font-semibold`}>Binalara göre · {visible.length} bildirim</h2>
           {!groups.length && (
@@ -243,7 +262,12 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
                         <span className={s.itemBody}>
                           <span>{r.title}</span>
                           <span className={s.small}>
-                            {[statusMeta(r.status).label, floorLabel(r.floor), `${r.voteCount} kişi`, relativeTime(r.createdAt)]
+                            {[
+                              statusMeta(r.status).label,
+                              floorLabel(r.floor),
+                              `${r.voteCount} kişi`,
+                              relativeTime(r.createdAt),
+                            ]
                               .filter(Boolean)
                               .join(", ")}
                           </span>
@@ -258,7 +282,7 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
         </div>
       </Glass>
 
-      <Glass className={s.mapRight} data-pane="detail">
+      <Glass className={s.mapRight} data-pane="detail" data-empty={selected && selectedGroup ? undefined : ""}>
         {selected && selectedGroup ? (
           <>
             <MapReportDetail

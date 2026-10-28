@@ -68,3 +68,5 @@
 
 @supports (animation-timeline: view()) { .item, .suggestion { animation: row-in linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; } }
 @keyframes row-in { from { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(3px); } }
+
+@media(min-width:961px){ .mapRight[data-empty] { opacity:0; transform:translateX(24px); pointer-events:none; } .mapRight { transition:opacity 360ms var(--ease-out-soft), transform 520ms var(--ease-spring); } }

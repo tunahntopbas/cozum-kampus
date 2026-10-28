@@ -1,6 +1,7 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { X } from "@phosphor-icons/react";
 
 const PHONE = "(max-width: 960px)";
 const isPhone = () => typeof window !== "undefined" && window.matchMedia(PHONE).matches;
@@ -111,4 +112,46 @@ export function usePhonePane(initial: string) {
     nudge();
   };
   return { pane, setPane, jump };
+}
+
+/**
+ * List with a sliding detail sheet: the list takes the full width, and tapping a row (`openOn`)
+ * slides its detail in from the right (desktop) or up from the bottom (phone).
+ * Children are the existing list and detail columns, in that order; nothing inside them changes.
+ */
+export function SheetPanes({
+  className,
+  openOn,
+  label,
+  children,
+}: {
+  className?: string;
+  openOn: string;
+  label: string;
+  children: ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  function onClickCapture(e: MouseEvent<HTMLDivElement>) {
+    const target = e.target as HTMLElement;
+    const list = e.currentTarget.firstElementChild;
+    if (list?.contains(target) && target.closest(openOn)) setTimeout(() => setOpen(true), 0);
+  }
+
+  return (
+    <div className={`sheet-panes ${className ?? ""}`} data-sheet={open ? "open" : "closed"} onClickCapture={onClickCapture}>
+      {children}
+      <button type="button" className="sheet-close" aria-label={`${label} kapat`} onClick={() => setOpen(false)}>
+        <X size={18} weight="bold" aria-hidden />
+      </button>
+      <div className="sheet-scrim" aria-hidden onClick={() => setOpen(false)} />
+    </div>
+  );
 }

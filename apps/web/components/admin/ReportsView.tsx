@@ -15,15 +15,27 @@ import { createClient } from "@/lib/supabase/client";
 import type { AdminData, PanelReport } from "./types";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { MagnifyingGlass as MagnifyingGlassIcon_ } from "@phosphor-icons/react";
-import { Panes } from "@/components/layout/Panes";
+import { SheetPanes } from "@/components/layout/Panes";
 import { RouteLine } from "@/components/ui/RouteLine";
+import { FilterMore } from "@/components/ui/FilterMore";
 
 export type StaffMember = { id: string; name: string; unitId: number | null };
-export type ReportNote = { reportId: number; body: string; createdAt: string; author: string };
+export type ReportNote = {
+  reportId: number;
+  body: string;
+  createdAt: string;
+  author: string;
+};
 
 const STATUSES: ReportStatus[] = ["alindi", "yonlendirildi", "atandi", "islemde", "yeniden_acildi", "cozuldu"];
 const URGENCIES: Urgency[] = ["dusuk", "orta", "acil"];
-const DATE = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" });
+const DATE = new Intl.DateTimeFormat("tr-TR", {
+  day: "numeric",
+  month: "short",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "Europe/Istanbul",
+});
 
 export function ReportsView({
   data,
@@ -65,33 +77,39 @@ export function ReportsView({
             setMessage("");
           }}
         />
-        <Filters
-          label="Durum filtresi"
-          options={[...ADMIN_FILTERS]}
-          value={filter}
-          onChange={(value) => {
-            setFilter(value as AdminFilter);
-            setMessage("");
-          }}
-        />
-        <select
-          className={`${s.input} !w-auto max-w-full`}
-          aria-label="Birim filtresi"
-          value={unitId ?? ""}
-          onChange={(e) => setUnitId(e.target.value ? Number(e.target.value) : null)}
+        <FilterMore
+          summary={[filter !== ADMIN_FILTERS[0] ? filter : "", unitId != null ? (unitName.get(unitId) ?? "") : ""]
+            .filter(Boolean)
+            .join(", ")}
         >
-          <option value="">Tüm birimler</option>
-          {data.units.map((u) => (
-            <option key={u.id} value={u.id}>
-              {u.name}
-            </option>
-          ))}
-        </select>
+          <Filters
+            label="Durum filtresi"
+            options={[...ADMIN_FILTERS]}
+            value={filter}
+            onChange={(value) => {
+              setFilter(value as AdminFilter);
+              setMessage("");
+            }}
+          />
+          <select
+            className={`${s.input} !w-auto max-w-full`}
+            aria-label="Birim filtresi"
+            value={unitId ?? ""}
+            onChange={(e) => setUnitId(e.target.value ? Number(e.target.value) : null)}
+          >
+            <option value="">Tüm birimler</option>
+            {data.units.map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.name}
+              </option>
+            ))}
+          </select>
+        </FilterMore>
       </Glass>
       <p role="status" className={s.small}>
         {message || `${visible.length} bildirim gösteriliyor`}
       </p>
-      <Panes className={s.split} labels={["Liste", "Detay"]} jumpOn={`.${s.listButton}`}>
+      <SheetPanes className={s.split} openOn={`.${s.listButton}`} label="Bildirim detayını">
         <Glass className={s.list}>
           <section aria-label="Bildirim listesi">
             <div className={`${s.reportRow} px-3 py-2 text-xs text-muted`} aria-hidden>
@@ -118,12 +136,11 @@ export function ReportsView({
                         <strong>{r.title}</strong>
                         <span className={s.small}>{r.place || "Konum belirtilmemiş"}</span>
                       </span>
-                      <Badge>{urgencyLabel(r.urgency)}</Badge>
+                      <span>{r.urgency === "acil" && <Badge>{urgencyLabel(r.urgency)}</Badge>}</span>
                       <span className="mono text-xs text-muted">{relativeTime(r.createdAt, now)}</span>
                       <span className={s.reportMeta}>
                         <span className={s.small}>{r.unitId != null ? unitName.get(r.unitId) : "Yönlendirilmedi"}</span>
                         <RouteLine status={r.status} compact />
-                        <Badge>{statusMeta(r.status).label}</Badge>
                         {isOverdue(r, now) && <Badge>Gecikmiş</Badge>}
                         {data.unverified.includes(r.id) && <Badge>Doğrulanmadı</Badge>}
                         {r.isHidden && <Badge>Yayında değil</Badge>}
@@ -133,7 +150,11 @@ export function ReportsView({
                 ))}
               </ol>
             ) : (
-              <EmptyState icon={<MagnifyingGlassIcon_ size={22} />} title="Eşleşen bildirim bulunamadı." hint="Aramayı kısalt ya da filtreleri Tümü yap." />
+              <EmptyState
+                icon={<MagnifyingGlassIcon_ size={22} />}
+                title="Eşleşen bildirim bulunamadı."
+                hint="Aramayı kısalt ya da filtreleri Tümü yap."
+              />
             )}
           </section>
         </Glass>
@@ -153,7 +174,7 @@ export function ReportsView({
             <p className={s.muted}>Detay görmek için filtreleri değiştirin.</p>
           </Glass>
         )}
-      </Panes>
+      </SheetPanes>
     </>
   );
 }
@@ -259,7 +280,8 @@ function ReportDetail({
         {report.description && <p className="text-sm">{report.description}</p>}
         {unverified && (
           <p className={`${s.note} text-sm`}>
-            Personel işi tamamladı ama yapay zeka çözüm fotoğrafını doğrulayamadı. Durumu “Yeniden açıldı” yaparak birime geri gönderebilirsin.
+            Personel işi tamamladı ama yapay zeka çözüm fotoğrafını doğrulayamadı. Durumu “Yeniden açıldı” yaparak
+            birime geri gönderebilirsin.
           </p>
         )}
         <form className={s.stack} onSubmit={save}>
@@ -326,7 +348,11 @@ function ReportDetail({
           <p id="admin-note-hint" className={s.small}>
             Öğrenciye görünmez; yönetim ve ilgili birim görür.
           </p>
-          {error && <p role="alert" className="text-sm text-danger">{error}</p>}
+          {error && (
+            <p role="alert" className="text-sm text-danger">
+              {error}
+            </p>
+          )}
           <Button type="submit" disabled={busy}>
             {busy ? "Kaydediliyor" : "Değişiklikleri kaydet"}
           </Button>
