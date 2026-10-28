@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { STUDENT_PANEL_COOKIE } from "@/lib/auth";
@@ -38,11 +37,11 @@ export function PanelSwitch() {
   return (
     <div role="group" aria-label="Panel" className="flex items-center gap-0.5 rounded-lg border border-hairline bg-white p-0.5">
       {PANELS.map((p) => (
-        <Link
+        // A full page load, not a client-side Link: the router cache can hold the proxy's earlier
+        // redirect back to /yonetim from before the cookie existed.
+        <a
           key={p.key}
           href={p.href}
-          // A prefetch made before the cookie is set caches the proxy's redirect back to /yonetim.
-          prefetch={false}
           aria-current={active === p.key ? "page" : undefined}
           onClick={() => {
             document.cookie = `${STUDENT_PANEL_COOKIE}=${p.key === "student" ? "1" : ""}; path=/; max-age=${p.key === "student" ? 86400 : 0}`;
@@ -50,7 +49,7 @@ export function PanelSwitch() {
           className={`t rounded-md px-2.5 py-1.5 text-xs font-semibold ${active === p.key ? "bg-ink text-white" : "text-muted hover:bg-tint"}`}
         >
           {p.label}
-        </Link>
+        </a>
       ))}
     </div>
   );
