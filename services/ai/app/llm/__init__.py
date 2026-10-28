@@ -16,4 +16,5 @@ def get_llm() -> LLMProvider:
         model=s.llm_model,
         use_json_mode=s.llm_json_mode,
         reasoning_effort=s.llm_reasoning_effort or None,
+        fallback_models=[m.strip() for m in s.llm_fallback_models.split(",") if m.strip()],
     )

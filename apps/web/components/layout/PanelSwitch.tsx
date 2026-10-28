@@ -41,6 +41,8 @@ export function PanelSwitch() {
         <Link
           key={p.key}
           href={p.href}
+          // A prefetch made before the cookie is set caches the proxy's redirect back to /yonetim.
+          prefetch={false}
           aria-current={active === p.key ? "page" : undefined}
           onClick={() => {
             document.cookie = `${STUDENT_PANEL_COOKIE}=${p.key === "student" ? "1" : ""}; path=/; max-age=${p.key === "student" ? 86400 : 0}`;
