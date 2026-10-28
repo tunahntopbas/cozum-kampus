@@ -4,7 +4,6 @@ import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Chips, TabPanels, Tabs } from "@/components/student-demo/Common";
 import { Glass } from "@/components/ui/Glass";
-import { StatusPill } from "@/components/ui/StatusPill";
 import { floorLabel, relativeTime } from "@/lib/campus";
 import { prepareImage } from "@/lib/image";
 import { MY_FILTERS, MY_TABS, filterMyReports, myStats, type MyFilter, type MyTab } from "@/lib/my-reports";
@@ -15,6 +14,8 @@ import { MyReportDetail } from "./MyReportDetail";
 import type { MyReportItem } from "./types";
 import { TrayIcon } from "@phosphor-icons/react";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { SheetPanes } from "@/components/layout/Panes";
+import { RouteLine } from "@/components/ui/RouteLine";
 
 type Props = {
   userId: string;
@@ -27,7 +28,16 @@ type Props = {
   newId: number | null;
 };
 
-export function MyReportsView({ userId, mine, supported, buildingNames, unitNames, mutedIds, prefTypes, newId }: Props) {
+export function MyReportsView({
+  userId,
+  mine,
+  supported,
+  buildingNames,
+  unitNames,
+  mutedIds,
+  prefTypes,
+  newId,
+}: Props) {
   const router = useRouter();
   const tabsId = useId();
   const [tab, setTab] = useState<MyTab>("Açtıklarım");
@@ -52,7 +62,12 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
         .channel(`bildirimlerim-${userId}-${crypto.randomUUID()}`)
         .on(
           "postgres_changes",
-          { event: "UPDATE", schema: "public", table: "reports", filter: `reporter_id=eq.${userId}` },
+          {
+            event: "UPDATE",
+            schema: "public",
+            table: "reports",
+            filter: `reporter_id=eq.${userId}`,
+          },
           () => router.refresh(),
         )
         .on("postgres_changes", { event: "INSERT", schema: "public", table: "report_events" }, () => router.refresh())
@@ -87,7 +102,9 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
 
   function withdraw(id: number) {
     run(async () => {
-      const { data, error } = await createClient().rpc("withdraw_report", { rid: id });
+      const { data, error } = await createClient().rpc("withdraw_report", {
+        rid: id,
+      });
       if (error || !data) return "Bildirim geri çekilemedi. Çözülmüş ya da zaten geri çekilmiş olabilir.";
       return null;
     });
@@ -99,7 +116,12 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
       const path = await uploadReportImage(userId, await prepareImage(file));
       const { error } = await supabase.from("report_media").insert({ report_id: id, kind: "ek", storage_path: path });
       if (error) return "Fotoğraf bildirime eklenemedi.";
-      await supabase.from("report_events").insert({ report_id: id, type: "ek_fotograf", actor_id: userId, payload: {} });
+      await supabase.from("report_events").insert({
+        report_id: id,
+        type: "ek_fotograf",
+        actor_id: userId,
+        payload: {},
+      });
       return null;
     });
   }
@@ -118,12 +140,6 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
     }
   }
 
-  const statCards: [string, number, string][] = [
-    ["Açık bildirim", stats.open, stats.urgentOpen ? `${stats.urgentOpen} tanesi acil` : "Acil bildirim yok"],
-    ["Çözülen", stats.resolvedThisMonth, "Bu ay"],
-    ["Desteklediklerin", stats.supported, "Ben de yaşıyorum dediklerin"],
-  ];
-
   return (
     <>
       {newId != null && mine.some((r) => r.id === newId) && (
@@ -131,16 +147,31 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
           Bildirimin alındı (#{newId}). Durumu değiştikçe burada göreceksin.
         </p>
       )}
-      <div className={s.stats}>
-        {statCards.map(([title, count, note]) => (
-          <div className={s.stat} key={title}>
-            <p className={s.muted}>{title}</p>
-            <strong className="mono">{count}</strong>
-            <p className={s.small}>{note}</p>
-          </div>
-        ))}
-      </div>
-      <div className={s.reportsColumns}>
+      <p className="lede">
+        <b>{stats.open}</b> açık bildirimin var
+        {stats.urgentOpen ? (
+          <>
+            , <span className="lede-hot">{stats.urgentOpen} tanesi acil</span>.
+          </>
+        ) : (
+          <>
+            . <span>Acil bildirim yok</span>.
+          </>
+        )}{" "}
+        Bu ay <b>{stats.resolvedThisMonth}</b> bildirimin çözüldü
+        {stats.supported ? (
+          <>
+            , <b>{stats.supported}</b> bildirimi destekledin
+          </>
+        ) : null}
+        .
+      </p>
+      <SheetPanes
+        className={s.reportsColumns}
+        openOn={`.${s.item}`}
+        label="Bildirim detayını"
+        defaultOpen={newId != null && mine.some((r) => r.id === newId)}
+      >
         <Glass className={`${s.panel} !p-4`}>
           <Tabs
             id={tabsId}
@@ -198,7 +229,7 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
                       .join(", ")}
                   </span>
                   <span className={s.row}>
-                    <StatusPill status={r.status} />
+                    <RouteLine status={r.status} compact />
                     {r.urgency === "acil" && <span className="text-xs font-semibold text-danger">Acil</span>}
                   </span>
                 </span>
@@ -230,7 +261,7 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
             <p className={s.muted}>Görüntülenecek bildirim yok. Başka bir filtre seçebilirsin.</p>
           )}
         </Glass>
-      </div>
+      </SheetPanes>
     </>
   );
 }

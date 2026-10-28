@@ -10,6 +10,7 @@ import { categoryLabel, urgencyLabel } from "@/lib/labels";
 import { eventTimeline, isOpen } from "@/lib/my-reports";
 import s from "@/components/student-demo/StudentDemo.module.css";
 import type { MyReportItem } from "./types";
+import { RouteLine } from "@/components/ui/RouteLine";
 
 type Props = {
   report: MyReportItem;
@@ -55,6 +56,7 @@ export function MyReportDetail({ report, buildingName, unitName, own, notify, bu
           <span className={s.badge}>{categoryLabel(report.category)}</span>
           <span className={s.badge}>Aciliyet {urgencyLabel(report.urgency).toLocaleLowerCase("tr")}</span>
         </div>
+        <RouteLine key={`${report.id}-${report.status}`} status={report.status} />
       </div>
 
       {own && (

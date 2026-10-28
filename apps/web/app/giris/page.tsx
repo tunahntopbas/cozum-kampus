@@ -1,55 +1,49 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { RouteMark } from "@/components/layout/Dock";
 import { LoginForm } from "./LoginForm";
+import s from "./giris.module.css";
 
-// The path every report takes: the one real sequence in the product, used as the login screen's signature.
+// The path every report takes: the one real sequence in the product, drawn as the login screen's signature.
 const JOURNEY = [
-  ["Alındı", "Fotoğraf ve konumla bildirirsin."],
-  ["Yönlendirildi", "Yapay zeka doğru birime iletir."],
-  ["İşlemde", "Birim personeli işe başlar."],
-  ["Çözüldü", "Çözüm fotoğrafı doğrulanır, haber alırsın."],
-];
+  ["Alındı", "Fotoğrafla bildirirsin.", 2.1, 96],
+  ["Yönlendirildi", "Doğru birime gider.", 32.1, 34],
+  ["İşlemde", "Personel sahaya çıkar.", 60.7, 86],
+  ["Çözüldü", "Haber sana gelir.", 83.9, 24],
+] as const;
 
 export default function LoginPage() {
   return (
-    <div className="app grid min-h-screen w-full bg-white lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-      <section className="relative hidden flex-col justify-between bg-ink px-14 py-12 text-white lg:flex">
-        <span className="inline-flex items-center gap-2.5 text-[15px] font-semibold">
-          <span aria-hidden className="grid h-8 w-8 place-items-center rounded-md bg-white text-[13px] text-ink">
-            ÇK
-          </span>
+    <div className={`app ${s.page}`}>
+      <section className={s.hero}>
+        <span className={s.brand}>
+          <RouteMark size={32} />
           Çözüm Kampüs
         </span>
-        <div className="flex max-w-lg flex-col gap-12">
-          <h1 className="text-[52px] leading-[1.05] font-semibold tracking-[-0.03em] text-white">
-            Gördüğün sorunu bildir. Çözülene kadar takip et.
-          </h1>
-          <ol aria-label="Bir bildirimin yolu" className="flex flex-col">
-            {JOURNEY.map(([step, text], i) => (
-              <li key={step} className="grid grid-cols-[20px_minmax(0,1fr)] gap-x-4">
-                <span className="flex flex-col items-center" aria-hidden>
-                  <span className={`mt-1.5 h-2.5 w-2.5 rounded-full ${i === JOURNEY.length - 1 ? "bg-[#4ade80]" : "bg-white"}`} />
-                  {i < JOURNEY.length - 1 && <span className="w-px flex-1 bg-white/25" />}
-                </span>
-                <span className="flex flex-col gap-0.5 pb-6">
-                  <span className="text-[15px] font-semibold">{step}</span>
-                  <span className="text-sm text-white/65">{text}</span>
-                </span>
+        <h1 className={s.title}>Gördüğün sorunu bildir. Çözülene kadar takip et.</h1>
+        <div className={s.route}>
+          <svg className={s.path} viewBox="0 0 560 120" preserveAspectRatio="none" aria-hidden>
+            <path d="M12 96 C 90 96, 110 34, 180 34 S 280 86, 340 86 S 420 24, 470 24" />
+          </svg>
+          <ol aria-label="Bir bildirimin yolu" className={s.steps}>
+            {JOURNEY.map(([step, text, x, y], i) => (
+              <li
+                key={step}
+                className={s.step}
+                style={{ left: `${x}%`, top: `${(y / 120) * 100}%`, animationDelay: `${600 + i * 480}ms` }}
+              >
+                <span className={`${s.node} ${i === JOURNEY.length - 1 ? s.nodeDone : ""}`} aria-hidden />
+                <span className={s.stepName}>{step}</span>
+                <span className={s.stepText}>{text}</span>
               </li>
             ))}
           </ol>
         </div>
-        <p className="text-sm text-white/55">Sakarya Üniversitesi, Esentepe Kampüsü</p>
+        <p className={s.foot}>Sakarya Üniversitesi, Esentepe Kampüsü</p>
       </section>
-      <main id="icerik" className="flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-[380px]">
-          <span className="mb-10 inline-flex items-center gap-2 font-semibold text-ink lg:hidden">
-            <span aria-hidden className="grid h-8 w-8 place-items-center rounded-md bg-ink text-[13px] text-white">
-              ÇK
-            </span>
-            Çözüm Kampüs
-          </span>
-          <h2 className="text-[28px] leading-tight font-semibold tracking-[-0.02em] text-ink">Giriş yap</h2>
+      <main id="icerik" className={s.main}>
+        <div className={s.card}>
+          <h2 className="text-[30px] leading-tight font-semibold text-ink">Giriş yap</h2>
           <p className="mt-2 text-[15px] text-muted">@sakarya.edu.tr e-posta adresinle devam et.</p>
           <Suspense>
             <LoginForm />

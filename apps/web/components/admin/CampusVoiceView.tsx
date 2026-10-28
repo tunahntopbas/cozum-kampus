@@ -12,6 +12,7 @@ import { AiRequestError, draftReply, type DraftInput } from "@/lib/ai";
 import { createClient } from "@/lib/supabase/client";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Lightbulb as LightbulbIcon_ } from "@phosphor-icons/react";
+import { SheetPanes } from "@/components/layout/Panes";
 
 type SuggestionStatus = DraftInput["status"];
 
@@ -67,7 +68,7 @@ export function CampusVoiceView({ suggestions }: { suggestions: AdminSuggestion[
       <p role="status" className={s.small}>
         {message}
       </p>
-      <div className={`${s.split} ${s.voiceSplit}`}>
+      <SheetPanes className={`${s.split} ${s.voiceSplit}`} openOn={`.${s.listButton}`} label="Öneri yanıtını">
         <Glass className={s.list}>
           <section aria-label="Öneri listesi">
             <div className={`${s.row} p-2`}>
@@ -116,7 +117,7 @@ export function CampusVoiceView({ suggestions }: { suggestions: AdminSuggestion[
             <p className={s.muted}>Yanıt yazmak için başka bir filtre seçin.</p>
           </Glass>
         )}
-      </div>
+      </SheetPanes>
     </>
   );
 }

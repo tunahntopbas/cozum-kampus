@@ -16,7 +16,7 @@ type Props = {
 };
 
 const tile =
-  "tile t flex h-36 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-[#AEBBD2] bg-transparent text-ink";
+  "tile t flex h-36 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-[#b4c2bb] bg-transparent text-ink";
 
 export function PhotoPicker({ photos, uploading, aiLabel, onAdd, onRemove }: Props) {
   const cameraRef = useRef<HTMLInputElement>(null);

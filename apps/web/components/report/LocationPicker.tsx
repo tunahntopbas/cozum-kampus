@@ -118,8 +118,8 @@ export function LocationPicker({ buildings, value, qrPlace, onChange, onUnlockQr
           </g>
           {(value.buildingId != null || value.lat != null || qrPlace) && (
             <g transform="translate(330 46)">
-              <circle r="18" fill="#1F5FD6" opacity="0.18" />
-              <circle r="7" fill="#1F5FD6" stroke="#FFFFFF" strokeWidth="3" />
+              <circle r="18" fill="var(--color-accent)" opacity="0.18" />
+              <circle r="7" fill="var(--color-accent)" stroke="#FFFFFF" strokeWidth="3" />
             </g>
           )}
         </svg>

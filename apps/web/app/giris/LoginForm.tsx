@@ -8,7 +8,7 @@ import { safeNext } from "@/lib/safe-next";
 import { createClient } from "@/lib/supabase/client";
 
 const inputClass =
-  "mt-2 h-11 w-full rounded-lg border border-input-border bg-white px-3.5 text-[15px] text-ink placeholder:text-muted/70 transition-colors hover:border-[#b9c3d3] focus:border-ink focus:outline-none";
+  "mt-2 h-12 w-full rounded-xl border border-input-border bg-white px-4 text-[15px] text-ink placeholder:text-muted/70 transition-[border-color,box-shadow] duration-200 hover:border-[#aebdb4] focus:border-accent focus:shadow-[0_0_0_4px_rgba(47,85,228,0.14)] focus:outline-none";
 const linkClass = "w-full rounded-lg text-sm text-accent focus-ring";
 
 type Step = "password" | "otp-email" | "otp-code";
@@ -117,7 +117,7 @@ export function LoginForm() {
           />
         </label>
         {feedback}
-        <Button type="submit" className="h-11 w-full" disabled={busy}>
+        <Button type="submit" className="h-12 w-full" disabled={busy}>
           Giriş yap
         </Button>
         <button type="button" onClick={() => go("otp-email")} className={linkClass}>
@@ -132,7 +132,7 @@ export function LoginForm() {
       <form onSubmit={sendCode} className="mt-6 space-y-4">
         {emailField}
         {feedback}
-        <Button type="submit" className="h-11 w-full" disabled={busy}>
+        <Button type="submit" className="h-12 w-full" disabled={busy}>
           Kod gönder
         </Button>
         <button type="button" onClick={() => go("password")} className={linkClass}>
@@ -157,7 +157,7 @@ export function LoginForm() {
         />
       </label>
       {feedback}
-      <Button type="submit" className="h-11 w-full" disabled={busy}>
+      <Button type="submit" className="h-12 w-full" disabled={busy}>
         Giriş yap
       </Button>
       <button type="button" onClick={() => go("otp-email")} className={linkClass}>
