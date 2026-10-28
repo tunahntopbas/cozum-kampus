@@ -32,9 +32,13 @@ class OpenAICompatProvider:
         use_json_mode: bool = True,
         max_tokens: int = 2048,
         reasoning_effort: str | None = None,
+        fallback_models: list[str] | None = None,
     ):
         self.client = client
         self.model = model
+        # Free-tier quotas are per model; when one is used up, later calls go straight to the next.
+        self.models = [model, *(fallback_models or [])]
+        self._current = 0
         self.use_json_mode = use_json_mode
         self.max_tokens = max_tokens
         self.reasoning_effort = reasoning_effort
@@ -51,7 +55,6 @@ class OpenAICompatProvider:
         for b64 in image_b64 or []:
             content.append({"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{b64}"}})
         kwargs: dict = {
-            "model": self.model,
             "max_tokens": self.max_tokens,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": content}],
         }
@@ -60,11 +63,20 @@ class OpenAICompatProvider:
         if self.reasoning_effort:
             kwargs["reasoning_effort"] = self.reasoning_effort
 
-        for _ in range(ATTEMPTS):
+        attempts = 0
+        while attempts < ATTEMPTS:
             try:
-                r = await self.client.chat.completions.create(**kwargs)
-            except openai.OpenAIError:
+                r = await self.client.chat.completions.create(**kwargs, model=self.models[self._current])
+            except openai.RateLimitError:
+                if self._current + 1 < len(self.models):
+                    self._current += 1
+                    continue
+                attempts += 1
                 continue
+            except openai.OpenAIError:
+                attempts += 1
+                continue
+            attempts += 1
             parsed = _parse(r.choices[0].message.content or "", extract=not self.use_json_mode)
             if parsed is not None:
                 return parsed

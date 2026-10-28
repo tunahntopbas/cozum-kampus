@@ -84,3 +84,21 @@ async def test_reasoning_effort_sent_only_when_set():
     p, c = make(['{"a": 1}'])
     await call(p)
     assert "reasoning_effort" not in c.calls[0]
+
+
+def _rate_limited():
+    req = httpx.Request("POST", "https://llm.example")
+    return openai.RateLimitError("quota", response=httpx.Response(429, request=req), body=None)
+
+
+async def test_moves_to_fallback_model_when_quota_is_exhausted():
+    p, c = make([_rate_limited(), '{"a": 1}'], fallback_models=["gemini-lite"])
+    assert await call(p) == {"a": 1}
+    assert [k["model"] for k in c.calls] == ["gemini-test", "gemini-lite"]
+
+
+async def test_remembers_exhausted_model():
+    p, c = make([_rate_limited(), '{"a": 1}', '{"b": 2}'], fallback_models=["gemini-lite"])
+    await call(p)
+    await call(p)
+    assert [k["model"] for k in c.calls] == ["gemini-test", "gemini-lite", "gemini-lite"]

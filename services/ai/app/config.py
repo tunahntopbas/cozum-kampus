@@ -21,6 +21,8 @@ class Settings(BaseSettings):
     llm_api_key: str
     llm_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
     llm_model: str = "gemini-3.5-flash"
+    # Comma-separated models tried in order when the current one hits its quota (HTTP 429).
+    llm_fallback_models: str = ""
     llm_reasoning_effort: str | None = "low"
     llm_json_mode: bool = True
     llm_timeout_s: float = 12
