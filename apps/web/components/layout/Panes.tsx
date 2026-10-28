@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type MouseEvent, type Rea
 import { X } from "@phosphor-icons/react";
 
 const PHONE = "(max-width: 960px)";
-const isPhone = () => typeof window !== "undefined" && window.matchMedia(PHONE).matches;
+const isPhone = () => typeof window !== "undefined" && !!window.matchMedia?.(PHONE).matches;
 
 // Hidden panes keep their state; a map inside one needs a resize nudge when it shows again.
 function nudge() {
@@ -123,14 +123,16 @@ export function SheetPanes({
   className,
   openOn,
   label,
+  defaultOpen = false,
   children,
 }: {
   className?: string;
   openOn: string;
   label: string;
+  defaultOpen?: boolean;
   children: ReactNode;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
 
   useEffect(() => {
     if (!open) return;

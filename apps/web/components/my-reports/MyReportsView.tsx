@@ -166,7 +166,12 @@ export function MyReportsView({
         ) : null}
         .
       </p>
-      <SheetPanes className={s.reportsColumns} openOn={`.${s.item}`} label="Bildirim detayını">
+      <SheetPanes
+        className={s.reportsColumns}
+        openOn={`.${s.item}`}
+        label="Bildirim detayını"
+        defaultOpen={newId != null && mine.some((r) => r.id === newId)}
+      >
         <Glass className={`${s.panel} !p-4`}>
           <Tabs
             id={tabsId}
