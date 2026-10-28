@@ -64,6 +64,10 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
   );
   const photoPaths = photos.map((p) => p.path).join("|");
   const hasInput = Boolean(photoPaths || text.trim());
+  // Sending mid-analysis would file the report unrouted and hidden, so wait for the verdict.
+  const inputKey = `${photoPaths}\n${text}`;
+  const [analysedKey, setAnalysedKey] = useState<string | null>(null);
+  const analysing = hasInput && (analysisState === "loading" || analysedKey !== inputKey);
 
   // Re-analyse whenever the photos or (after a pause) the text change.
   useEffect(() => {
@@ -93,6 +97,7 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
         setMessage(e instanceof AiRequestError ? (AI_ERRORS[e.status] ?? null) : null);
       }
       setAnalysisState("done");
+      setAnalysedKey(`${photoPaths}\n${text}`);
     }, TEXT_DEBOUNCE_MS);
     return () => clearTimeout(timer);
     // Location is sent as context only; moving the pin does not need a new analysis.
@@ -256,11 +261,11 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
             </div>
             <button
               type="submit"
-              disabled={submitting || uploading}
+              disabled={submitting || uploading || analysing}
               className="btn-ink t flex items-center justify-center gap-2 rounded-lg border-0 bg-ink px-3 py-2 text-base font-semibold text-white disabled:opacity-50"
             >
               <PaperPlaneTilt size={20} weight="fill" aria-hidden />
-              {submitting ? "Gönderiliyor" : "Bildirimi gönder"}
+              {submitting ? "Gönderiliyor" : analysing ? "Analiz bekleniyor" : "Bildirimi gönder"}
             </button>
           </div>
         </div>
