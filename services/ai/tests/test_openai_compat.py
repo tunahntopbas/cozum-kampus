@@ -1,3 +1,4 @@
+import asyncio
 from types import SimpleNamespace
 
 import httpx
@@ -102,3 +103,26 @@ async def test_remembers_exhausted_model():
     await call(p)
     await call(p)
     assert [k["model"] for k in c.calls] == ["gemini-test", "gemini-lite", "gemini-lite"]
+
+
+class SlowFirst(FakeCompletions):
+    """The first call never answers in time; later calls answer at once."""
+
+    async def create(self, **kwargs):
+        if not self.calls:
+            self.calls.append(kwargs)
+            await asyncio.sleep(10)
+        return await super().create(**kwargs)
+
+
+async def test_slow_model_hands_the_call_to_the_next_one():
+    completions = SlowFirst(['{"a": 1}', '{"b": 2}'])
+    client = SimpleNamespace(chat=SimpleNamespace(completions=completions))
+    p = OpenAICompatProvider(
+        client, model="gemini-test", fallback_models=["gemini-lite"], attempt_timeout_s=0.05
+    )
+    assert await call(p) == {"a": 1}
+    assert [k["model"] for k in completions.calls] == ["gemini-test", "gemini-lite"]
+    # A slow answer is not a used-up quota: the next call starts from the main model again.
+    await call(p)
+    assert completions.calls[-1]["model"] == "gemini-test"

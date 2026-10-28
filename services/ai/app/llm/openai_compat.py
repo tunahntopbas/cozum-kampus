@@ -1,3 +1,4 @@
+import asyncio
 import json
 
 import openai
@@ -33,6 +34,7 @@ class OpenAICompatProvider:
         max_tokens: int = 2048,
         reasoning_effort: str | None = None,
         fallback_models: list[str] | None = None,
+        attempt_timeout_s: float | None = None,
     ):
         self.client = client
         self.model = model
@@ -42,6 +44,8 @@ class OpenAICompatProvider:
         self.use_json_mode = use_json_mode
         self.max_tokens = max_tokens
         self.reasoning_effort = reasoning_effort
+        # A model that has not answered by then hands this call to the next one (free-tier latency: 5-25 s).
+        self.attempt_timeout_s = attempt_timeout_s
 
     async def complete_json(
         self,
@@ -64,12 +68,24 @@ class OpenAICompatProvider:
             kwargs["reasoning_effort"] = self.reasoning_effort
 
         attempts = 0
+        index = self._current
         while attempts < ATTEMPTS:
+            has_next = index + 1 < len(self.models)
             try:
-                r = await self.client.chat.completions.create(**kwargs, model=self.models[self._current])
+                request = self.client.chat.completions.create(**kwargs, model=self.models[index])
+                timeout = self.attempt_timeout_s if has_next else None
+                r = await asyncio.wait_for(request, timeout=timeout)
+            except TimeoutError:
+                # Slow, not out of quota: move on for this call only.
+                if has_next:
+                    index += 1
+                    continue
+                attempts += 1
+                continue
             except openai.RateLimitError:
-                if self._current + 1 < len(self.models):
-                    self._current += 1
+                if has_next:
+                    index += 1
+                    self._current = max(self._current, index)
                     continue
                 attempts += 1
                 continue

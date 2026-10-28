@@ -61,6 +61,9 @@ export function buildReportInsert(
   };
 }
 
+export const AI_UNCHECKED_MESSAGE =
+  "Yapay zeka içeriği denetleyemedi. Denetlenmeyen bildirim gönderilmez; birazdan yeniden dene.";
+
 export function canSubmit(
   a: ReportAnalysis | null,
   form: ReportForm,
@@ -74,8 +77,11 @@ export function canSubmit(
   if (hasProfanity(form.text)) {
     return { ok: false, message: PROFANITY_MESSAGE };
   }
-  // When the AI service is down the report is still filed, hidden from the campus until an admin publishes it.
-  if (a && a.ai_pending === false && (a.moderation?.ok !== true || a.moderation.reasons.length > 0)) {
+  // Nothing unchecked goes out: if the AI could not answer, the student retries instead of filing it blind.
+  if (!a || a.ai_pending !== false) {
+    return { ok: false, message: AI_UNCHECKED_MESSAGE };
+  }
+  if (a.moderation?.ok !== true || a.moderation.reasons.length > 0) {
     return {
       ok: false,
       message: "Bu içerik paylaşılamıyor. Fotoğrafın ve açıklamanın kampüsteki sorunu gösterdiğinden emin ol.",

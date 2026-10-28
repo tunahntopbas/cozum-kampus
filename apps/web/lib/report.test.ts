@@ -87,10 +87,13 @@ describe("canSubmit", () => {
     });
   });
 
-  it("files a report without a finished analysis; it is stored hidden until an admin publishes it", () => {
-    expect(canSubmit(null, FORM).ok).toBe(true);
-    expect(canSubmit({ ...A, ai_pending: true }, FORM).ok).toBe(true);
-    expect(buildReportInsert(FORM, { ...A, ai_pending: true }, "u-1", UNITS)).toMatchObject({ is_hidden: true });
+  it("never sends a report the AI has not checked", () => {
+    const blocked = {
+      ok: false,
+      message: "Yapay zeka içeriği denetleyemedi. Denetlenmeyen bildirim gönderilmez; birazdan yeniden dene.",
+    };
+    expect(canSubmit(null, FORM)).toEqual(blocked);
+    expect(canSubmit({ ...A, ai_pending: true }, FORM)).toEqual(blocked);
   });
 });
 

@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     llm_reasoning_effort: str | None = "low"
     llm_json_mode: bool = True
     llm_timeout_s: float = 12
+    # Per-model budget before a call moves to the next fallback model.
+    llm_attempt_timeout_s: float = 8
     allowed_origin: str = "http://localhost:3100"
     ai_rate_limit_per_min: int = 10
 
