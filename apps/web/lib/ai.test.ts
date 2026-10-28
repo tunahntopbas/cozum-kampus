@@ -25,6 +25,18 @@ describe("analyzeReport", () => {
     expect(r.category).toBe("diger");
   });
 
+  it("waits out a slow photo analysis that the AI service itself still allows (its LLM timeout is 25 s)", async () => {
+    vi.useFakeTimers();
+    try {
+      const slow = () => new Promise<Response>((resolve) => setTimeout(() => resolve(Response.json(OK)), 24_000));
+      const pending = analyzeReport(input, "t", { fetchImpl: slow as typeof fetch });
+      await vi.advanceTimersByTimeAsync(24_000);
+      expect((await pending).ai_pending).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("returns pending analysis on 503", async () => {
     const r = await analyzeReport(input, "t", { fetchImpl: async () => new Response("", { status: 503 }) });
     expect(r.ai_pending).toBe(true);

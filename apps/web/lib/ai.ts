@@ -24,7 +24,9 @@ export type AnalyzeInput = {
 
 type Options = { timeoutMs?: number; fetchImpl?: typeof fetch; baseUrl?: string };
 
-const DEFAULT_TIMEOUT_MS = 15_000;
+// Longer than the AI service's own LLM timeout (LLM_TIMEOUT_S=25): a photo analysis can take ~15 s, and giving up
+// first would file the report unmoderated even though the service was about to answer.
+const DEFAULT_TIMEOUT_MS = 30_000;
 
 export class AiRequestError extends Error {
   constructor(public status: number) {
