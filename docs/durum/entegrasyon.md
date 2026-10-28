@@ -10,10 +10,7 @@ Render ve Vercel üretim dağıtımları tamam. Canlı şifreli giriş, QR konum
 
 ## Sıradaki adım
 
-1. Supabase Auth URL Configuration'a `https://cozum-kampus.vercel.app/auth/callback` ekle; Site URL'yi üretim adresine ayarla (MCP bu ayarı sunmuyor; panel veya yetkili Management API gerekli).
-2. Canlı sitede fotoğraflı bildirim senaryosunu da tamamla. Metinli canlı bildirim #15 doğrulandı.
-3. ~~Girişten sonra `next` yönlendirmesi~~ İncelendi (2026-10-28): canlıda şifreyle giriş `/bildir?yer=M1-K2-WC`'ye döndü, kod doğru. E-posta koduyla girişte Supabase, `emailRedirectTo` izinli listede yoksa Site URL'ye (ana sayfa) döner; bağlantı `?next=` içerdiği için Redirect URLs'e joker adres eklenmeli: `https://cozum-kampus.vercel.app/**` ve `http://localhost:3100/**`.
-4. Plan 1'in son kod incelemesini yap, ardından Plan 2 (harita, bildirim detayı, Bildirimlerim, Realtime). Tasarımlar `docs/tasarim/`.
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

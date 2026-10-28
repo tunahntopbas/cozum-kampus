@@ -10,7 +10,7 @@ Task 2 tamam. Supabase projesi `cozumkampus` (ref `owvzlonnpiuigrstsean`, bölge
 
 ## Sıradaki adım
 
-`hat/db` -> `main` PR.
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

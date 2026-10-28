@@ -12,10 +12,7 @@ Tasarım: `docs/superpowers/specs/2026-10-27-frontend-design.md` ve `docs/tasari
 
 ## Sıradaki adım
 
-1. Frontend PR'ını incele ve birleştir; kullanıcı onayı olmadan main'e merge etme.
-2. Vercel üretim yayınından sonra aynı rol ve dar ekran kontrollerini tekrarla.
-3. Kullanıcı görsel incelemesinden sonra demo adapter'larını gerçek Supabase/AI bağlantılarına sırayla geçir. Gerçek GIS, Realtime ve backend eksikleri bu teslimde tamamlanmadı.
-4. Entegrasyon planında bekleyen Supabase Auth URL ayarı, fotoğraflı canlı test ve giriş sonrası next yönlendirme incelemesini ele al.
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

@@ -29,11 +29,12 @@ Uygulama canlıda (https://cozum-kampus.vercel.app), üç panel uçtan uca doğr
 - 2026-10-28 PR #26/#27: panel geçişi tam sayfa yüklemeyle; durum bildirimleri kişinin kendi işlemlerinde de geliyor (`0017`). AI tarafında kota dolunca yedek modele geçiş.
 - 2026-10-28 Vercel `NEXT_PUBLIC_ALLOWED_EMAIL_DOMAINS=sakarya.edu.tr` (tüm ortamlar) ve prod yeniden deploy.
 - 2026-10-28 Hesap silme: `public.delete_my_account()` (`0018`, yalnız öğrenci; bildirim ve öneriler anonim kalır, oy/bildirim/tercihler silinir), `/hesap` iki adımlı onay butonu (`DeleteAccountButton`). Personel/yönetici hesapları yönetimce kapatılır.
-- 2026-10-28 Hız: proxy ve sayfalar `getUser()` yerine `getClaims()` (ES256 JWT yerelde doğrulanır, auth sunucusuna gidiş yok). Rol `0019` ile `app_metadata.role`'e kopyalanıyor; proxy rolü token'dan okuyor, yoksa `profiles`'a soruyor. Ölçüm öncesi prod: ilk bayt ~650 ms, sayfa 1.3 sn (HTML akışı).
+- 2026-10-28 Hız: proxy ve sayfalar `getUser()` yerine `getClaims()` (ES256 JWT yerelde doğrulanır, auth sunucusuna gidiş yok). Rol `0019` ile `app_metadata.role`'e kopyalanıyor; proxy rolü token'dan okuyor, yoksa `profiles`'a soruyor. Prod ölçüm (oturumlu, Türkiye'den): ilk bayt ~650 ms -> ~480 ms, sayfa ~1.35 sn -> ~1.05 sn (sıcak ~0.7 sn). Kalan süre Türkiye-Seul mesafesi (~300 ms gidiş-dönüş).
+- 2026-10-28 EXIF canlı doğrulama: GPS ve kamera etiketli JPEG `/bildir`'e yüklendi; Storage'a giden dosyada 0 EXIF etiketi, GPS yok. Test dosyası silindi, AI isteği kesildi (kota harcanmadı).
+- 2026-10-28 KVKK saklama: `private.apply_retention()` (`0020`) her gece 03:30 pg_cron ile; bir yılı geçen bildirim ve öneriler sahibinden ayrılır, uygulama bildirimleri bir yılda, `ai_runs` 90 günde silinir. `/kvkk` "Saklama süresi" metni buna göre güncellendi.
 
 ## Engeller
 
-- Task 8 elle doğrulaması (EXIF silindi mi, `exiftool`): Task 9 sayfası ve Supabase gerekli.
 - Env yokken tüm sayfalar 500 verir (bilinçli, sessizce kimlik doğrulamasız çalışmasın diye). `apps/web/.env.local` = kök `.env` içindeki `NEXT_PUBLIC_*` satırları.
 
 ## Alınan kararlar

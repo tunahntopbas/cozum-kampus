@@ -10,9 +10,7 @@ Yönetim panelinin dört ekranı da gerçek veriyle çalışıyor: Genel bakış
 
 ## Sıradaki adım
 
-1. `hat/yonetim-2` PR'ı CI yeşil olunca kullanıcı onayıyla `main`e birleşir.
-2. Birleşmeden sonra Render'da AI servisinin yeni sürümü yayında mı kontrol et (`/ai/draft-reply`); otomatik dağıtım yoksa elle deploy tetiklenmeli. Üretimde taslak düğmesi o zamana kadar "taslak yazamadı" der.
-3. Kalanlar: öğrenci tarafı `/oneriler` hâlâ demo (öneri ekleme, oy, yönetim yanıtını gösterme); bildirim merkezi `/bildirimler` demo (yönetim yanıtı `notifications` tablosuna `oneri_yaniti` olarak yazılıyor). Bildirim birleştirme ve yapay zeka haftalık özeti.
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

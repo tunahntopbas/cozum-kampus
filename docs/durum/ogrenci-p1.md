@@ -10,9 +10,7 @@ Kapsam: P1 kalanlar, öğrenci tarafı `/oneriler` ve `/bildirimler`.
 
 ## Sıradaki adım
 
-1. PR'ı birleştir.
-2. Proje bittikten sonra hep birlikte uçtan uca deneme ("debug modu").
-3. En son: API anahtarlarını ve demo şifresini değiştir, Render'ı uyandır.
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 

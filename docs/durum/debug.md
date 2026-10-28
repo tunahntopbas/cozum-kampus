@@ -19,9 +19,7 @@ Codex'in denetiminde bulunan "uygunsuz fotoğraflı bildirim yayımlandı" hatas
 
 ## Sıradaki adım
 
-1. `hat/moderasyon` PR'ı birleşir; Render AI'ı ve Vercel web'i otomatik yayınlar.
-2. Demo verisini temizle: Codex test kayıtları (#20 gibi), QA bildirimleri, test oyları.
-3. En son: anahtarlar, demo şifresi, Render'ı uyandır.
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Uçtan uca test (2026-10-28)
 

@@ -10,8 +10,7 @@ Kapsam: Plan 2'nin ikinci parçası (proje rehberi P0 madde 4: `/bildirimlerim` 
 
 ## Sıradaki adım
 
-1. PR'ı aç, CI yeşil olunca kullanıcı onayıyla `main`e birleştir. `docs/durum/README.md` tablosuna "Harita" ve "Bildirimlerim" satırları eklenmeli (hat dallarında README'ye dokunulmadı).
-2. Plan 3 (personel ekranları): personel durumu değiştirirken `report_events`'e `{ type: "durum", payload: { to: <status> } }` yazmalı; zaman çizelgesi saatleri buradan gelir. Çözüm fotoğrafı `report_media.kind = 'sonra'`.
+Tamamlandı, `main`de. Bu hatta açık iş yok; genel açık işler [README.md](README.md)'de.
 
 ## Yapılanlar
 
