@@ -34,7 +34,7 @@ export function TopNav() {
             className={`ghost t flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium ${active ? "bg-tint text-ink" : "text-muted"}`}
           >
             <IconCmp size={16} weight={active ? "fill" : "regular"} aria-hidden />
-            {label}
+            <span className="max-sm:sr-only">{label}</span>
           </Link>
         );
       })}

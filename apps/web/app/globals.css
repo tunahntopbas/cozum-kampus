@@ -160,7 +160,10 @@
       padding-top: 0;
     }
     .cols {
-      grid-template-columns: 1fr !important;
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+    .cols > * {
+      min-width: 0;
     }
   }
 }
