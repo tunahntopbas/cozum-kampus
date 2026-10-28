@@ -22,3 +22,19 @@ Codex'in denetiminde bulunan "uygunsuz fotoğraflı bildirim yayımlandı" hatas
 1. `hat/moderasyon` PR'ı birleşir; Render AI'ı ve Vercel web'i otomatik yayınlar.
 2. Demo verisini temizle: Codex test kayıtları (#20 gibi), QA bildirimleri, test oyları.
 3. En son: anahtarlar, demo şifresi, Render'ı uyandır.
+
+## Uçtan uca test (2026-10-28)
+
+Demo verisi silindi, akış baştan elle (Playwright) denendi.
+
+- Öğrenci: bildirim (foto + metin + bina) AI analiziyle yönlendirildi ve haritada çıktı; küfürlü metin hem bildirimde hem öneride engellendi (istemci + DB trigger, PR #21); öneri yayınlandı; geri çekme, sessize alma, hesap kaydetme çalışıyor.
+- Yönetim: "Yayında değil" filtresi, yayınla, birim/aciliyet/teknisyen/durum/iç not kaydı; Birimler ekranı; malzeme talebi "Hazırla" (stok yetersizse "Hazır" kilitli); Kampüs sesi AI taslağı ve yanıt yayınlama.
+- Personel: işe başla, çözüm fotoğrafı (AI doğrulamadı, "Yine de tamamla"), geçmiş, malzeme talebi, devret penceresi, rota linki.
+- Öğrenci tarafında 5 bildirim geldi (atandı, işlemde, çözüldü, öneri yanıtı); yanıt öneri sayfasında görünüyor.
+
+Bulunan ve düzeltilen: analiz sürerken gönder basılınca bildirim gizli ve "Diğer" kategorisiyle düşüyordu; buton artık analiz bitene kadar "Analiz bekleniyor" (PR #21).
+
+Engeller:
+- Gemini ücretsiz kota: model başına günde 20 istek. `gemini-3.5-flash` doldu; yerel `.env` ve Render `LLM_MODEL` şimdilik `gemini-flash-lite-latest`. Demo için faturalandırma açılmalı ya da ücretli anahtar alınmalı; aksi halde analiz düşer ve bildirimler gizli kalır.
+- Lite model fotoğrafta yüz görünce içeriği reddediyor (kural gereği). Demo fotoğraflarında kişi olmasın.
+- Dev modunda `router.refresh()` 2-4 sn gecikiyor; prod'da sorun değil.
