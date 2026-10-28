@@ -29,3 +29,16 @@ export function dayGroup(iso: string, now: Date = new Date()): DayGroup {
   if (day === DAY.format(new Date(now.getTime() - 86_400_000))) return "Dün";
   return "Daha eski";
 }
+
+const CATEGORY_WORDS: [string, string[]][] = [
+  ["Kütüphane", ["kütüphane", "kitap", "çalışma salonu"]],
+  ["Yemekhane", ["yemek", "menü", "kafeterya", "kantin"]],
+  ["Ulaşım", ["servis", "ring", "otobüs", "ulaşım", "otopark", "durak", "bisiklet"]],
+  ["Akademik", ["ders", "sınav", "hoca", "kayıt", "not ", "bölüm", "akademik"]],
+];
+
+// Students only write the idea; the category used for filtering is inferred from its words.
+export function guessCategory(text: string): string {
+  const t = ` ${text.toLocaleLowerCase("tr")} `;
+  return CATEGORY_WORDS.find(([, words]) => words.some((w) => t.includes(w)))?.[0] ?? "Yaşam";
+}

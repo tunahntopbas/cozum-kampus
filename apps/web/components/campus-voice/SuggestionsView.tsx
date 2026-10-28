@@ -10,7 +10,7 @@ import { Glass } from "@/components/ui/Glass";
 import { Switch } from "@/components/ui/Switch";
 import { Chips, TabPanels, Tabs } from "@/components/student-demo/Common";
 import s from "@/components/student-demo/StudentDemo.module.css";
-import { findSimilar } from "@/lib/campus-voice";
+import { findSimilar, guessCategory } from "@/lib/campus-voice";
 import { createClient } from "@/lib/supabase/client";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { hasProfanity, PROFANITY_MESSAGE } from "@/lib/profanity";
@@ -36,7 +36,6 @@ export type CampusScorecard = {
 };
 
 const CATEGORIES = ["Kütüphane", "Yemekhane", "Ulaşım", "Akademik", "Yaşam"];
-const PLACES = ["Kampüs geneli", "Yurt", "Kütüphane", "Yemekhane", "Mühendislik Fakültesi"];
 const TABS = ["Popüler", "Yeni", "Yanıtlananlar"];
 const STATUS: Record<string, string> = {
   yeni: "Yeni",
@@ -78,8 +77,6 @@ export function SuggestionsView({
   const [tab, setTab] = useState("Popüler");
   const [filter, setFilter] = useState("Tümü");
   const [text, setText] = useState("");
-  const [category, setCategory] = useState("Yaşam");
-  const [place, setPlace] = useState(PLACES[0]);
   const [anonymous, setAnonymous] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -158,9 +155,9 @@ export function SuggestionsView({
         .insert({
           author_id: userId,
           is_anonymous: anonymous,
-          category,
+          category: guessCategory(body),
           title: body.length > 120 ? `${body.slice(0, 117)}…` : body,
-          body: place === PLACES[0] ? body : `${body}\nKonum: ${place}`,
+          body,
         });
       if (err) throw err;
     } catch {
@@ -257,24 +254,6 @@ export function SuggestionsView({
                     }}
                   />
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  <label className="sec">
-                    <span className={s.small}>Kategori</span>
-                    <select className={s.input} value={category} onChange={(e) => setCategory(e.target.value)}>
-                      {CATEGORIES.map((v) => (
-                        <option key={v}>{v}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="sec">
-                    <span className={s.small}>Konum</span>
-                    <select className={s.input} value={place} onChange={(e) => setPlace(e.target.value)}>
-                      {PLACES.map((v) => (
-                        <option key={v}>{v}</option>
-                      ))}
-                    </select>
-                  </label>
-                </div>
                 <p id="suggestion-length" className={`${s.small} mono text-right`}>
                   {text.length} / 400
                 </p>
