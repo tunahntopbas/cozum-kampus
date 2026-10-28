@@ -13,6 +13,7 @@ import s from "@/components/student-demo/StudentDemo.module.css";
 import { findSimilar } from "@/lib/campus-voice";
 import { createClient } from "@/lib/supabase/client";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { hasProfanity, PROFANITY_MESSAGE } from "@/lib/profanity";
 
 export type StudentSuggestion = {
   id: number;
@@ -142,6 +143,10 @@ export function SuggestionsView({
     const body = text.trim();
     if (!body) {
       setError("Lütfen önerini yaz.");
+      return;
+    }
+    if (hasProfanity(body)) {
+      setError(PROFANITY_MESSAGE);
       return;
     }
     submitting.current = true;
