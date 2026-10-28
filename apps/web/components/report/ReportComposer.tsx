@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { EyeSlash, PaperPlaneTilt, ShieldCheck } from "@phosphor-icons/react";
 import { Switch } from "@/components/ui/Switch";
-import { AiRequestError, analyzeReport, pendingAnalysis, type ReportAnalysis } from "@/lib/ai";
+import { AiRequestError, analyzeReport, type ReportAnalysis } from "@/lib/ai";
 import { prepareImage } from "@/lib/image";
 import { unitForCategory, type Category } from "@/lib/labels";
 import { canSubmit, type ReportForm } from "@/lib/report";
@@ -68,6 +68,11 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
   const inputKey = `${photoPaths}\n${text}`;
   const [analysedKey, setAnalysedKey] = useState<string | null>(null);
   const analysing = hasInput && (analysisState === "loading" || analysedKey !== inputKey);
+  const [retry, setRetry] = useState(0);
+  const unchecked = hasInput && !analysing && (!analysis || analysis.ai_pending);
+  const rejected =
+    hasInput && !analysing && !!analysis && !analysis.ai_pending &&
+    (analysis.moderation?.ok !== true || analysis.moderation.reasons.length > 0);
 
   // Re-analyse whenever the photos or (after a pause) the text change.
   useEffect(() => {
@@ -102,7 +107,7 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
     return () => clearTimeout(timer);
     // Location is sent as context only; moving the pin does not need a new analysis.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [photoPaths, text]);
+  }, [photoPaths, text, retry]);
 
   useEffect(() => () => stopDictation.current?.(), []);
 
@@ -185,14 +190,14 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
     };
     const current = hasInput ? analysis : null;
     const check = canSubmit(current, form);
-    if (!check.ok) {
-      setMessage(check.message);
+    if (!check.ok || !current) {
+      setMessage(check.ok ? null : check.message);
       return;
     }
     setSubmitting(true);
     setMessage(null);
     try {
-      const id = await submitReport(createClient(), form, current ?? pendingAnalysis(text), userId, unitIdBySlug);
+      const id = await submitReport(createClient(), form, current, userId, unitIdBySlug);
       router.push(`/bildirimlerim?yeni=${id}`);
     } catch {
       setMessage("Bildirim gönderilemedi. Bağlantını kontrol edip yeniden dene.");
@@ -241,7 +246,12 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
         {/* On phones the side column drops below the form, so the verdict is shown here, above the send button. */}
         {hasInput && (
           <div className="min-[961px]:hidden">
-            <AnalysisPanel state={analysisState} analysis={analysis} onCategoryChange={changeCategory} />
+            <AnalysisPanel
+              state={analysisState}
+              analysis={analysis}
+              onCategoryChange={changeCategory}
+              onRetry={() => setRetry((n) => n + 1)}
+            />
           </div>
         )}
 
@@ -268,11 +278,17 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
             </div>
             <button
               type="submit"
-              disabled={submitting || uploading || analysing}
+              disabled={submitting || uploading || analysing || unchecked || rejected}
               className="btn-ink t flex items-center justify-center gap-2 rounded-lg border-0 bg-ink px-3 py-2 text-base font-semibold text-white disabled:opacity-50"
             >
               <PaperPlaneTilt size={20} weight="fill" aria-hidden />
-              {submitting ? "Gönderiliyor" : analysing ? "Analiz bekleniyor" : "Bildirimi gönder"}
+              {submitting
+                ? "Gönderiliyor"
+                : analysing
+                  ? "Analiz bekleniyor"
+                  : rejected
+                    ? "Gönderilemez"
+                    : "Bildirimi gönder"}
             </button>
           </div>
         </div>
@@ -284,6 +300,7 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
             state={hasInput ? analysisState : "idle"}
             analysis={hasInput ? analysis : null}
             onCategoryChange={changeCategory}
+            onRetry={() => setRetry((n) => n + 1)}
           />
         </div>
         <SafetyCard location={securityLocation} />

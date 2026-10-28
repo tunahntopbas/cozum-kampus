@@ -26,18 +26,25 @@ function Row({ label, children, last }: { label: string; children: React.ReactNo
   );
 }
 
-function StatePill({ state, pending }: { state: AnalysisState; pending: boolean }) {
+function StatePill({ state, pending, rejected }: { state: AnalysisState; pending: boolean; rejected: boolean }) {
   if (state === "loading") return <span className="pill bg-status-islemde-bg text-status-islemde-fg">Analiz ediliyor</span>;
+  if (state === "done" && rejected) return <span className="pill bg-[#FEF2F2] text-danger">Reddedildi</span>;
   if (state === "done" && pending) return <span className="pill bg-status-alindi-bg text-status-alindi-fg">Bekleniyor</span>;
   if (state === "done") return <span className="pill bg-status-cozuldu-bg text-status-cozuldu-fg">Tamamlandı</span>;
   return null;
 }
 
-type Props = { state: AnalysisState; analysis: ReportAnalysis | null; onCategoryChange: (c: Category) => void };
+type Props = {
+  state: AnalysisState;
+  analysis: ReportAnalysis | null;
+  onCategoryChange: (c: Category) => void;
+  onRetry: () => void;
+};
 
-export function AnalysisPanel({ state, analysis, onCategoryChange }: Props) {
+export function AnalysisPanel({ state, analysis, onCategoryChange, onRetry }: Props) {
   const [editing, setEditing] = useState(false);
   const pending = Boolean(analysis?.ai_pending);
+  const rejected = Boolean(analysis && !pending && (analysis.moderation?.ok !== true || analysis.moderation.reasons.length > 0));
 
   return (
     <section aria-label="Yapay zeka analizi" aria-live="polite" className="glass flex flex-col gap-4 p-6">
@@ -48,7 +55,7 @@ export function AnalysisPanel({ state, analysis, onCategoryChange }: Props) {
           </span>
           <h2 className="text-xl font-semibold">Yapay zeka analizi</h2>
         </div>
-        <StatePill state={state} pending={pending} />
+        <StatePill state={state} pending={pending} rejected={state === "done" && rejected} />
       </div>
 
       {!analysis && (
@@ -59,8 +66,23 @@ export function AnalysisPanel({ state, analysis, onCategoryChange }: Props) {
         </p>
       )}
 
-      {analysis && pending && (
-        <p className="text-sm text-muted">İçerik denetimi tamamlanamadı. Bildirim henüz paylaşılamaz. Biraz bekleyip açıklamayı düzenleyerek yeniden dene.</p>
+      {analysis && pending && state === "done" && (
+        <div className="flex flex-col items-start gap-3">
+          <p className="text-sm text-muted">İçerik denetimi tamamlanamadı, bu yüzden bildirim gönderilemez.</p>
+          <button type="button" onClick={onRetry} className="rounded-lg border border-hairline px-3 py-2 text-sm font-semibold">
+            Yeniden analiz et
+          </button>
+        </div>
+      )}
+
+      {rejected && state === "done" && (
+        <div role="alert" className="flex flex-col gap-1 rounded-lg bg-[#FEF2F2] p-3 text-sm text-danger">
+          <p className="font-semibold">Bu bildirim gönderilemez.</p>
+          {analysis!.moderation.reasons.map((r) => (
+            <p key={r}>{r}</p>
+          ))}
+          <p>Fotoğrafın ve açıklamanın kampüsteki sorunu gösterdiğinden emin ol.</p>
+        </div>
       )}
 
       {analysis && (
