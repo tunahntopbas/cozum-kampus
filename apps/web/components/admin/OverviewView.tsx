@@ -15,6 +15,7 @@ import { isOpen } from "@/lib/my-reports";
 import type { AdminData } from "./types";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Sparkle as SparkleIcon_ } from "@phosphor-icons/react";
+import { Panes } from "@/components/layout/Panes";
 
 const PERIODS: [Period, string][] = [
   ["today", "Bugün"],
@@ -90,7 +91,7 @@ export function OverviewView({ data, now: nowProp }: { data: AdminData; now?: nu
           { label: "Doğrulanmadan kapatılan", value: kpis.unverified, hint: "Yapay zeka çözümü doğrulayamadı" },
         ]}
       />
-      <div className={s.split}>
+      <Panes className={s.split} labels={["Isı haritası", "Haftalık özet"]}>
         <Glass className={`${s.panel} ${s.stack}`}>
           <div>
             <h2>Isı haritası</h2>
@@ -143,7 +144,7 @@ export function OverviewView({ data, now: nowProp }: { data: AdminData; now?: nu
             <EmptyState icon={<SparkleIcon_ size={22} />} title="Bu hafta özetlenecek hareket yok." hint="Yeni bildirimler geldikçe özet kendiliğinden dolar." />
           )}
         </Glass>
-      </div>
+      </Panes>
       <Glass className={s.panel}>
         <h2>Birim performansı</h2>
         <p className={s.muted}>Süresinde çözüm oranı %80’in altındaki birimler kırmızı gösterilir.</p>

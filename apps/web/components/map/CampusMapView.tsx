@@ -21,6 +21,7 @@ import { createClient } from "@/lib/supabase/client";
 import s from "@/components/student-demo/StudentDemo.module.css";
 import { MapCanvas } from "./MapCanvas";
 import { MapReportDetail } from "./MapReportDetail";
+import { PaneBar, usePhonePane } from "@/components/layout/Panes";
 
 const STATUS_OPTIONS: { value: StatusTone | ""; label: string }[] = [
   { value: "", label: "Tüm durumlar" },
@@ -40,6 +41,7 @@ type Props = {
 export function CampusMapView({ userId, buildings, reports: initialReports, unitNames, votedIds }: Props) {
   const [filters, setFilters] = useState<MapFilters>({ query: "", filter: "Tümü", category: "", status: "" });
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const { pane, setPane, jump } = usePhonePane("list");
   // undefined follows the selection automatically; null explicitly closes the accordion.
   const [expanded, setExpanded] = useState<number | null | undefined>(undefined);
   const [localVotes, setLocalVotes] = useState({
@@ -116,12 +118,29 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
   }
 
   return (
-    <main id="icerik" className={`${s.root} ${s.mapPage}`}>
-      <div className={s.mapCanvas} aria-label="Kampüs haritası">
-        <MapCanvas groups={groups} selectedBuildingId={selectedGroup?.building.id ?? null} onSelect={selectBuilding} />
+    <main id="icerik" className={`${s.root} ${s.mapPage}`} data-show={pane}>
+      <PaneBar
+        className={s.mapBar}
+        labels={[
+          { id: "list", label: "Liste" },
+          { id: "map", label: "Harita" },
+          { id: "detail", label: "Detay" },
+        ]}
+        value={pane}
+        onChange={setPane}
+      />
+      <div className={s.mapCanvas} aria-label="Kampüs haritası" data-pane="map">
+        <MapCanvas
+          groups={groups}
+          selectedBuildingId={selectedGroup?.building.id ?? null}
+          onSelect={(id) => {
+            selectBuilding(id);
+            jump("detail");
+          }}
+        />
       </div>
 
-      <Glass className={`${s.mapLeft} ${s.stack}`}>
+      <Glass className={`${s.mapLeft} ${s.stack}`} data-pane="list">
         <div className={s.row}>
           <span className={s.icon}>
             <BuildingsIcon size={24} aria-hidden="true" />
@@ -209,7 +228,10 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
                         type="button"
                         className={`${s.item} !p-2`}
                         aria-pressed={selected?.id === r.id}
-                        onClick={() => setSelectedId(r.id)}
+                        onClick={() => {
+                          setSelectedId(r.id);
+                          jump("detail");
+                        }}
                       >
                         <span
                           className={s.dot}
@@ -236,7 +258,7 @@ export function CampusMapView({ userId, buildings, reports: initialReports, unit
         </div>
       </Glass>
 
-      <Glass className={s.mapRight}>
+      <Glass className={s.mapRight} data-pane="detail">
         {selected && selectedGroup ? (
           <>
             <MapReportDetail

@@ -15,6 +15,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { AdminData, PanelReport } from "./types";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { MagnifyingGlass as MagnifyingGlassIcon_ } from "@phosphor-icons/react";
+import { Panes } from "@/components/layout/Panes";
 
 export type StaffMember = { id: string; name: string; unitId: number | null };
 export type ReportNote = { reportId: number; body: string; createdAt: string; author: string };
@@ -89,7 +90,7 @@ export function ReportsView({
       <p role="status" className={s.small}>
         {message || `${visible.length} bildirim gösteriliyor`}
       </p>
-      <div className={s.split}>
+      <Panes className={s.split} labels={["Liste", "Detay"]} jumpOn={`.${s.listButton}`}>
         <Glass className={s.list}>
           <section aria-label="Bildirim listesi">
             <div className={`${s.reportRow} px-3 py-2 text-xs text-muted`} aria-hidden>
@@ -150,7 +151,7 @@ export function ReportsView({
             <p className={s.muted}>Detay görmek için filtreleri değiştirin.</p>
           </Glass>
         )}
-      </div>
+      </Panes>
     </>
   );
 }

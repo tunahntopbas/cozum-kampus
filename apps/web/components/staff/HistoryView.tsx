@@ -5,6 +5,7 @@ import { Photo, Pill, Stats } from "@/components/staff-demo/Shared";
 import s from "@/components/staff-demo/Staff.module.css";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ClockCounterClockwise as ClockCounterClockwiseIcon_ } from "@phosphor-icons/react";
+import { Panes } from "@/components/layout/Panes";
 
 export type HistoryRecord = {
   id: number;
@@ -103,7 +104,7 @@ export function HistoryView({ records, now: nowProp }: { records: HistoryRecord[
           </select>
         </label>
       </div>
-      <div className={`${s.wide} ${s.history}`}>
+      <Panes className={`${s.wide} ${s.history}`} labels={["İşler", "Detay"]} jumpOn="tbody button">
         <section className={`glass ${s.compact}`} aria-label="Tamamlanan işler">
           <div className={s.tableWrap}>
             <table className={s.table} aria-label="Geçmiş işler">
@@ -176,7 +177,7 @@ export function HistoryView({ records, now: nowProp }: { records: HistoryRecord[
             )}
           </section>
         )}
-      </div>
+      </Panes>
     </>
   );
 }

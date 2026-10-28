@@ -14,6 +14,7 @@ import { findSimilar, guessCategory } from "@/lib/campus-voice";
 import { createClient } from "@/lib/supabase/client";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { hasProfanity, PROFANITY_MESSAGE } from "@/lib/profanity";
+import { Panes } from "@/components/layout/Panes";
 
 export type StudentSuggestion = {
   id: number;
@@ -179,7 +180,7 @@ export function SuggestionsView({
     <div className={s.root}>
       <PageContent>
         <PageHeader title="Kampüsün sesi" description="Önerini yaz, diğer öğrencilerin önerilerine oy ver. Yönetim yanıtları herkese açık." />
-        <div className={s.columns}>
+        <Panes className={s.columns} labels={["Öneriler", "Öneri yaz"]}>
           <Glass className={`${s.panel} !p-4`}>
             <Tabs id={tabsId} label="Öneri sıralaması" options={TABS} value={tab} onChange={setTab} />
             <Chips label="Öneri kategorileri" options={["Tümü", ...CATEGORIES]} value={filter} onChange={setFilter} />
@@ -338,7 +339,7 @@ export function SuggestionsView({
               <p className={s.small}>Bildirim kayıtlarından hesaplanır.</p>
             </Glass>
           </div>
-        </div>
+        </Panes>
       </PageContent>
     </div>
   );

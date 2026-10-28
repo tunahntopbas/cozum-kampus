@@ -16,6 +16,7 @@ import s from "@/components/staff-demo/Staff.module.css";
 import type { StaffJob } from "./types";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { CheckCircle as CheckCircleIcon_ } from "@phosphor-icons/react";
+import { Panes } from "@/components/layout/Panes";
 
 type Props = {
   staffId: string;
@@ -148,7 +149,7 @@ export function StaffJobsView({ staffId, staffName, unitName, jobs, completedTod
           ["Bekleyen ilk iş", jobs[0] ? relativeTime(jobs[0].createdAt) : "Yok", "En eski açık bildirimden beri"],
         ]}
       />
-      <div className={s.jobs}>
+      <Panes className={s.jobs} labels={["Rota", "İş detayı"]} jumpOn={`.${s.job}`}>
         <div className={s.stack}>
           <section className={`glass ${s.compact}`} aria-label="Rota sırası">
             <div className={s.heading}>
@@ -359,7 +360,7 @@ export function StaffJobsView({ staffId, staffName, unitName, jobs, completedTod
             <p className={s.muted}>{message ?? "Seçili iş yok."}</p>
           </section>
         )}
-      </div>
+      </Panes>
     </>
   );
 }

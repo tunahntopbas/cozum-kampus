@@ -15,6 +15,7 @@ import { MyReportDetail } from "./MyReportDetail";
 import type { MyReportItem } from "./types";
 import { TrayIcon } from "@phosphor-icons/react";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Panes } from "@/components/layout/Panes";
 
 type Props = {
   userId: string;
@@ -140,7 +141,7 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
           </div>
         ))}
       </div>
-      <div className={s.reportsColumns}>
+      <Panes className={s.reportsColumns} labels={["Bildirimlerim", "Detay"]} jumpOn={`.${s.item}`}>
         <Glass className={`${s.panel} !p-4`}>
           <Tabs
             id={tabsId}
@@ -230,7 +231,7 @@ export function MyReportsView({ userId, mine, supported, buildingNames, unitName
             <p className={s.muted}>Görüntülenecek bildirim yok. Başka bir filtre seçebilirsin.</p>
           )}
         </Glass>
-      </div>
+      </Panes>
     </>
   );
 }

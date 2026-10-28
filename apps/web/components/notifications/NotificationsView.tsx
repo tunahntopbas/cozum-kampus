@@ -13,6 +13,7 @@ import s from "@/components/student-demo/StudentDemo.module.css";
 import { dayGroup, type DayGroup } from "@/lib/campus-voice";
 import { createClient } from "@/lib/supabase/client";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Panes } from "@/components/layout/Panes";
 
 export type AppNotification = {
   id: number;
@@ -128,7 +129,7 @@ export function NotificationsView({
     <div className={s.root}>
       <PageContent>
         <PageHeader title="Bildirimler" description="Bildirimlerinin durumu ve önerilerine gelen yönetim yanıtları burada toplanır." />
-        <div className={s.columns}>
+        <Panes className={s.columns} labels={["Bildirimler", "Ayarlar"]}>
           <Glass className={`${s.panel} !p-4`}>
             {readMessage && <p role="alert" className="text-danger">{readMessage}</p>}
             <div className={s.between}>
@@ -223,7 +224,7 @@ export function NotificationsView({
               </p>
             )}
           </Glass>
-        </div>
+        </Panes>
       </PageContent>
     </div>
   );

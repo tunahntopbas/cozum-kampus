@@ -42,7 +42,7 @@ export function Dock({ label, items, cta, trailing }: { label: string; items: Do
       <nav aria-label={label} className="dock">
         <span className="dock-mark">
           <RouteMark />
-          Çözüm Kampüs
+          <span className="dock-mark-text">Çözüm Kampüs</span>
         </span>
         <div ref={linksRef} className="dock-links">
           <span

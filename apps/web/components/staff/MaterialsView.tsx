@@ -8,6 +8,7 @@ import { REQUEST_COLUMNS, stockLevel, toRequest, type MaterialRequest, type Need
 import { createClient } from "@/lib/supabase/client";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Package as PackageIcon_, Sparkle as SparkleIcon_, ClipboardText as ClipboardTextIcon_ } from "@phosphor-icons/react";
+import { Panes } from "@/components/layout/Panes";
 
 const DATE = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Istanbul" });
 const REQUEST_STATUS: Record<string, [string, string]> = {
@@ -96,7 +97,7 @@ export function MaterialsView({
           ["Kritik stok", critical.length, critical[0]?.name ?? "Yok"],
         ]}
       />
-      <div className={s.wide}>
+      <Panes className={s.wide} labels={["Depo", "Taleplerim"]}>
         <section className={`glass ${s.compact}`} aria-label="Depo stoğu">
           <div className={s.heading}>
             <h2>Depo stoğu</h2>
@@ -244,7 +245,7 @@ export function MaterialsView({
             )}
           </section>
         </div>
-      </div>
+      </Panes>
       {message && (
         <p role="status" className={s.notice}>
           {message}
