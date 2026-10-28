@@ -15,6 +15,9 @@ export function isAllowedEmail(
   return allowed.includes(parts[1]);
 }
 
+// Set by the admin panel switcher so an admin can view the student map instead of bouncing to /yonetim.
+export const STUDENT_PANEL_COOKIE = "panel_ogrenci";
+
 function under(pathname: string, prefix: string): boolean {
   return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }

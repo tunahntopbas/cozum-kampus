@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Buildings, ListChecks, Megaphone, SquaresFour } from "@phosphor-icons/react";
 import { PageContent } from "@/components/layout/PageContent";
+import { PanelSwitch } from "@/components/layout/PanelSwitch";
 import styles from "./admin.module.css";
 
 const tabs = [
@@ -20,6 +21,8 @@ export function AdminShell({ children }: { children: ReactNode }) {
     <a className="skip" href="#icerik">Ana içeriğe geç</a>
     <nav aria-label="Yönetim gezinme" className={`topbar glass z-10 flex items-center gap-2 p-2 ${styles.nav}`}>
       {tabs.map(({ href, label, icon: Icon }) => <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined} className="ghost t text-muted"><Icon size={16} aria-hidden />{label}</Link>)}
+      <span className="ml-auto" />
+      <PanelSwitch />
     </nav>
     <PageContent>
       {children}

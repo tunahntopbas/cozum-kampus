@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { PanelSwitch } from "./PanelSwitch";
 import { Bell, Lightbulb, ListChecks, MapTrifold, Plus, UserCircle, type Icon } from "@phosphor-icons/react";
 
 const LINKS: { href: string; label: string; icon: Icon }[] = [
@@ -62,6 +63,7 @@ export function TopNav() {
       >
         <UserCircle size={24} aria-hidden />
       </Link>
+      <PanelSwitch />
     </nav>
   );
 }

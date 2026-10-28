@@ -49,7 +49,7 @@ export default function LoginPage() {
             Çözüm Kampüs
           </span>
           <h2 className="text-[28px] leading-tight font-semibold tracking-[-0.02em] text-ink">Giriş yap</h2>
-          <p className="mt-2 text-[15px] text-muted">Okul e-posta adresinle devam et.</p>
+          <p className="mt-2 text-[15px] text-muted">@sakarya.edu.tr e-posta adresinle devam et.</p>
           <Suspense>
             <LoginForm />
           </Suspense>
