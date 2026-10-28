@@ -35,3 +35,9 @@ export function homeFor(role: Role): string {
   if (role === "admin") return "/yonetim";
   return "/";
 }
+
+/** Role carried in the JWT (synced from profiles.role); null when absent so callers fall back to the database. */
+export function roleFromClaims(claims: { app_metadata?: object } | null | undefined): Role | null {
+  const role = (claims?.app_metadata as { role?: unknown } | undefined)?.role;
+  return ALL_ROLES.includes(role as Role) ? (role as Role) : null;
+}

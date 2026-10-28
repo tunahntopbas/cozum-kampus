@@ -1,6 +1,6 @@
 import { floorLabel, toMapReport, type MapBuilding, type ReportRow } from "@/lib/campus";
 import { unverifiedReportIds } from "@/lib/admin";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 import type { AdminData } from "@/components/admin/types";
 
 const REPORT_COLUMNS =
@@ -9,9 +9,7 @@ const REPORT_COLUMNS =
 // Admin reads every report through RLS; the panel works on the latest 500.
 export async function loadAdminData(): Promise<AdminData | null> {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   const [reports, buildings, units, events] = await Promise.all([

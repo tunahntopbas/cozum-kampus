@@ -3,13 +3,11 @@ import { PageSkeleton } from "@/components/ui/Skeleton";
 import { MaterialsView } from "@/components/staff/MaterialsView";
 import { isActiveJob, neededMaterials, REQUEST_COLUMNS, toRequest, type RequestRow, type StockItem } from "@/lib/staff";
 import type { ReportStatus } from "@/lib/status";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 
 async function Materials() {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   // RLS limits stock and reports to the staff member's unit, and requests to their own.

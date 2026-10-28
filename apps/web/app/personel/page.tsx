@@ -4,7 +4,7 @@ import { StaffJobsView } from "@/components/staff/StaffJobsView";
 import type { StaffJob } from "@/components/staff/types";
 import { floorLabel, toMapReport, type ReportRow } from "@/lib/campus";
 import { isActiveJob, isSameDay, sortJobs } from "@/lib/staff";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 
 const SIGNED_URL_TTL_S = 60 * 60;
 const REPORT_COLUMNS =
@@ -12,9 +12,7 @@ const REPORT_COLUMNS =
 
 async function Jobs() {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   // RLS limits staff to reports routed to their own unit (admin sees all).

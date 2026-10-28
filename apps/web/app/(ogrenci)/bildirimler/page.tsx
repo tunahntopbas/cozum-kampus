@@ -1,13 +1,11 @@
 import { Suspense } from "react";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { NotificationsView, type AppNotification } from "@/components/notifications/NotificationsView";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 
 async function Notifications() {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   const [notifications, prefs] = await Promise.all([

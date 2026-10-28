@@ -1,16 +1,14 @@
 import { Suspense } from "react";
 import { CampusMapView } from "@/components/map/CampusMapView";
 import { toMapReport, type MapBuilding, type ReportRow } from "@/lib/campus";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 
 // Signed photo URLs outlive a demo session; the page refetches them on every visit.
 const COVER_URL_TTL_S = 60 * 60;
 
 async function CampusMap() {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   const [buildings, reports, units, votes] = await Promise.all([

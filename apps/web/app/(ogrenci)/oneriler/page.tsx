@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { SuggestionsView, type CampusScorecard, type StudentSuggestion } from "@/components/campus-voice/SuggestionsView";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, getAuthUser } from "@/lib/supabase/server";
 
 const DAY_MS = 86_400_000;
 // The scorecard covers the last 30 days.
@@ -9,9 +9,7 @@ const monthAgo = () => new Date(Date.now() - 30 * DAY_MS).toISOString();
 
 async function Suggestions() {
   const supabase = await createServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const user = await getAuthUser(supabase);
   if (!user) return null;
 
   const since = monthAgo();

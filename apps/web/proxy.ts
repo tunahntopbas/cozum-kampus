@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { homeFor, requiredRole, STUDENT_PANEL_COOKIE, type Role } from "@/lib/auth";
+import { homeFor, requiredRole, roleFromClaims, STUDENT_PANEL_COOKIE, type Role } from "@/lib/auth";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/lib/supabase/env";
 
 export async function proxy(request: NextRequest) {
@@ -19,9 +19,9 @@ export async function proxy(request: NextRequest) {
   });
 
   // Refreshes the session cookie; must run before any redirect decision.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims verifies the JWT locally against the project's signing keys, so no auth round trip.
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
 
   const roles = requiredRole(pathname);
   if (!roles) return response;
@@ -32,14 +32,17 @@ export async function proxy(request: NextRequest) {
     return redirect;
   };
 
-  if (!user) {
+  if (!claims) {
     const login = new URL("/giris", request.url);
     login.searchParams.set("next", pathname + search);
     return redirectTo(login);
   }
 
-  const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-  const role = (profile?.role ?? "student") as Role;
+  let role = roleFromClaims(claims);
+  if (!role) {
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", claims.sub).single();
+    role = (profile?.role ?? "student") as Role;
+  }
   if (!roles.includes(role)) return redirectTo(new URL(homeFor(role), request.url));
   const adminViewsStudent = role === "admin" && request.cookies.get(STUDENT_PANEL_COOKIE)?.value === "1";
   if (pathname === "/" && homeFor(role) !== "/" && !adminViewsStudent) return redirectTo(new URL(homeFor(role), request.url));

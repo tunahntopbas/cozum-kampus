@@ -20,3 +20,10 @@ export async function createServerClient() {
     },
   });
 }
+
+/** The signed-in user from the locally verified JWT; avoids the auth server round trip of getUser(). */
+export async function getAuthUser(supabase: Awaited<ReturnType<typeof createServerClient>>) {
+  const { data } = await supabase.auth.getClaims();
+  const claims = data?.claims;
+  return claims ? { id: claims.sub, email: typeof claims.email === "string" ? claims.email : undefined } : null;
+}
