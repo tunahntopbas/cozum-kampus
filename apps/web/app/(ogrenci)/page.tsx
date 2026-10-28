@@ -50,7 +50,7 @@ export default function MapPage() {
   return (
     <Suspense
       fallback={
-        <div role="status" className="fixed inset-0 grid place-items-center bg-[#eef1f5] motion-safe:animate-pulse">
+        <div role="status" className="fixed inset-0 grid place-items-center bg-[#edf1ee] motion-safe:animate-pulse">
           <span className="rounded-full border border-hairline bg-white px-4 py-2 text-sm font-medium text-muted">Harita yükleniyor</span>
         </div>
       }

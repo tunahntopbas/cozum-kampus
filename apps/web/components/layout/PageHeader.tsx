@@ -1,8 +1,8 @@
 export function PageHeader({ title, description }: { title: string; description?: string }) {
   return (
-    <div className="flex flex-col gap-1">
-      <h1 className="text-[30px] leading-9 font-semibold">{title}</h1>
-      {description && <p className="text-base text-muted">{description}</p>}
+    <div className="flex flex-col gap-2">
+      <h1 className="text-[34px] leading-[1.05] font-semibold tracking-[-0.025em] sm:text-[44px]">{title}</h1>
+      {description && <p className="max-w-[60ch] text-base text-muted">{description}</p>}
     </div>
   );
 }

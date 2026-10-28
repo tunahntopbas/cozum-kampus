@@ -35,7 +35,7 @@ export function PanelSwitch() {
   const active = activePanel(pathname);
 
   return (
-    <div role="group" aria-label="Panel" className="flex items-center gap-0.5 rounded-lg border border-hairline bg-white p-0.5">
+    <div role="group" aria-label="Panel" className="flex items-center gap-0.5 rounded-[14px] bg-white/95 p-1 shadow-[0_6px_18px_-10px_rgba(18,48,43,0.6)]">
       {PANELS.map((p) => (
         // A full page load, not a client-side Link: the router cache can hold the proxy's earlier
         // redirect back to /yonetim from before the cookie existed.
@@ -46,7 +46,7 @@ export function PanelSwitch() {
           onClick={() => {
             document.cookie = `${STUDENT_PANEL_COOKIE}=${p.key === "student" ? "1" : ""}; path=/; max-age=${p.key === "student" ? 86400 : 0}`;
           }}
-          className={`t rounded-md px-2.5 py-1.5 text-xs font-semibold ${active === p.key ? "bg-ink text-white" : "text-muted hover:bg-tint"}`}
+          className={`t rounded-[10px] px-2.5 py-1.5 text-xs font-semibold ${active === p.key ? "bg-ink text-white" : "text-muted hover:bg-tint"}`}
         >
           {p.label}
         </a>

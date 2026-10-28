@@ -15,7 +15,7 @@ export function EmptyState({
 }) {
   return (
     <div role="status" className="flex flex-col items-center gap-3 px-6 py-12 text-center">
-      <span aria-hidden className="grid h-12 w-12 place-items-center rounded-full border border-hairline bg-[#f6f7f9] text-muted">
+      <span aria-hidden className="grid h-12 w-12 place-items-center rounded-full border border-hairline bg-[var(--color-map-bg)] text-muted">
         {icon}
       </span>
       <div className="flex max-w-xs flex-col gap-1">

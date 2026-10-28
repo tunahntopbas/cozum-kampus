@@ -1,48 +1,75 @@
 @import "tailwindcss";
 
+/*
+ * "Rota" design language.
+ * Pine ink and sage paper from the Esentepe hills, one cobalt signal for actions,
+ * and a faint contour map under every page. Status colors stay semantic.
+ */
 @theme {
-  --color-ink: #0f2a5c;
-  --color-ink-hover: #1b3f85;
-  --color-accent: #1f5fd6;
-  --color-muted: #566486;
-  --color-tint: #e8effa;
-  --color-tint-2: #eef3fb;
-  --color-hairline: #e4e8ef;
-  --color-input-border: #d5dce7;
-  --color-surface: #ffffff;
+  --color-ink: #12302b;
+  --color-ink-hover: #1d4a42;
+  --color-accent: #2f55e4;
+  --color-accent-hover: #2445c4;
+  --color-muted: #5a6a65;
+  --color-tint: #e3ebe5;
+  --color-tint-2: #edf2ee;
+  --color-hairline: #dde5df;
+  --color-input-border: #c9d4cd;
+  --color-surface: #fbfcfb;
   --color-surface-strong: #ffffff;
-  --color-map-bg: #f6f7f9;
-  --color-danger: #b91c1c;
-  --color-danger-hover: #991b1b;
-  --color-status-islemde-bg: #fef3c7;
-  --color-status-islemde-fg: #92400e;
-  --color-status-cozuldu-bg: #dcfce7;
-  --color-status-cozuldu-fg: #166534;
-  --color-status-alindi-bg: #e5e7eb;
-  --color-status-alindi-fg: #374151;
+  --color-map-bg: #eef2ee;
+  --color-danger: #c2361f;
+  --color-danger-hover: #a12a16;
+  --color-status-islemde-bg: #fcefd0;
+  --color-status-islemde-fg: #8a4b06;
+  --color-status-cozuldu-bg: #dcf3e4;
+  --color-status-cozuldu-fg: #13653a;
+  --color-status-alindi-bg: #e6eae7;
+  --color-status-alindi-fg: #3c4a45;
 
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display-face);
   --font-mono: var(--font-geist-mono);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @layer base {
   body {
-    background: var(--color-map-bg);
+    background-color: var(--color-map-bg);
+    background-image:
+      radial-gradient(1200px 600px at 85% -10%, rgba(47, 85, 228, 0.07), transparent 60%),
+      url("/contour.svg");
+    background-size: auto, 720px 640px;
+    background-attachment: fixed, fixed;
     color: var(--color-ink);
     font-family: var(--font-sans), system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1,
+  h2 {
+    font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
   em,
   i {
     font-style: normal;
   }
+  ::selection {
+    background: rgba(47, 85, 228, 0.18);
+  }
 }
 
-/* Panels are plain white planes on a flat page: a hairline edge and almost no shadow. Hierarchy comes from type. */
+/* Surfaces: a lit paper plane. Inner top highlight plus a long, faint pine shadow. */
 @utility glass {
-  background: #ffffff;
+  background: var(--color-surface);
   border: 1px solid var(--color-hairline);
-  box-shadow: 0 1px 2px rgba(15, 42, 92, 0.04);
-  border-radius: 12px;
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(18, 48, 43, 0.04),
+    0 18px 40px -28px rgba(18, 48, 43, 0.28);
 }
 
 @utility focus-ring {
@@ -52,7 +79,6 @@
   }
 }
 
-/* Shared classes ported from docs/tasarim/*.dc.html */
 @layer components {
   .app p,
   .app h1,
@@ -67,15 +93,18 @@
   }
   .mono {
     font-family: var(--font-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
   }
   .t {
     transition:
-      background-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 300ms cubic-bezier(0.22, 1, 0.36, 1);
+      background-color 280ms var(--ease-out-soft),
+      color 280ms var(--ease-out-soft),
+      box-shadow 280ms var(--ease-out-soft),
+      transform 280ms var(--ease-out-soft),
+      opacity 280ms var(--ease-out-soft);
   }
   .t:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
   .btn-ink:hover {
     background: var(--color-ink-hover) !important;
@@ -86,9 +115,13 @@
   .ghost:hover {
     background: var(--color-tint) !important;
   }
+  .tile,
+  .item {
+    transition: background-color 200ms var(--ease-out-soft);
+  }
   .tile:hover,
   .item:hover {
-    background: #f7fafe !important;
+    background: #f3f7f4 !important;
   }
   .field:focus-within {
     outline: 2px solid var(--color-accent);
@@ -98,20 +131,20 @@
     position: absolute;
     left: 16px;
     top: -48px;
-    z-index: 20;
+    z-index: 40;
     padding: 8px 12px;
     background: var(--color-ink);
     color: #ffffff;
     font-size: 14px;
     line-height: 20px;
     font-weight: 500;
-    border-radius: 8px;
+    border-radius: 10px;
   }
   .skip:focus {
     top: 16px;
   }
   .pill {
-    padding: 2px 8px;
+    padding: 3px 9px;
     border-radius: 9999px;
     font-size: 12px;
     line-height: 16px;
@@ -128,36 +161,28 @@
     flex-direction: column;
     gap: 8px;
   }
-  /* Full-width app bar instead of a floating pill. */
-  .topbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100% !important;
-    max-width: none !important;
-    justify-content: center;
-    min-height: 60px;
-    /* The glass utility sits in a later layer, so its edge and radius need overriding here. */
-    border-width: 0 0 1px !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-  }
+
+  /* Page body: clears the floating dock on top (desktop) or bottom (phone). */
   .content {
-    padding-top: 96px;
+    padding-top: 112px;
   }
+
+  /* One orchestrated entrance per page: the page's blocks rise in, in reading order. */
+  #icerik:not([class*="mapPage"]) > * {
+    animation: rise-in 560ms var(--ease-out-soft) both;
+  }
+  #icerik:not([class*="mapPage"]) > *:nth-child(2) { animation-delay: 60ms; }
+  #icerik:not([class*="mapPage"]) > *:nth-child(3) { animation-delay: 120ms; }
+  #icerik:not([class*="mapPage"]) > *:nth-child(4) { animation-delay: 180ms; }
+  #icerik:not([class*="mapPage"]) > *:nth-child(n + 5) { animation-delay: 240ms; }
+
   @media (max-width: 960px) {
     .stage {
       display: none;
     }
-    .topbar {
-      position: static;
-      transform: none;
-      margin: 0 !important;
-      flex-wrap: wrap;
-    }
     .content {
-      padding-top: 0;
+      padding-top: 72px;
+      padding-bottom: 112px;
     }
     .cols {
       grid-template-columns: minmax(0, 1fr) !important;
@@ -168,11 +193,257 @@
   }
 }
 
+/* ---------- Dock: the floating pine navigation shared by all three panels ---------- */
+@layer components {
+  .dock {
+    position: fixed;
+    z-index: 30;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 22px;
+    background: rgba(18, 48, 43, 0.94);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.08),
+      0 20px 40px -20px rgba(18, 48, 43, 0.55),
+      0 2px 6px rgba(18, 48, 43, 0.18);
+    color: #e7efe9;
+    animation: dock-in 700ms var(--ease-spring) both;
+    max-width: calc(100vw - 32px);
+  }
+  .dock-mark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px 0 8px;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    color: #ffffff;
+  }
+  .dock-links {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .dock-puck {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: 16px;
+    background: rgba(231, 239, 233, 0.13);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition:
+      transform 520ms var(--ease-spring),
+      width 520ms var(--ease-spring),
+      opacity 200ms ease;
+    pointer-events: none;
+  }
+  .dock-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(231, 239, 233, 0.66);
+    white-space: nowrap;
+    transition: color 240ms var(--ease-out-soft);
+  }
+  .dock-link:hover,
+  .dock-link[aria-current="page"] {
+    color: #ffffff;
+  }
+  .dock-icon {
+    width: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+  .dock-sep {
+    width: 1px;
+    height: 24px;
+    margin: 0 6px;
+    background: rgba(231, 239, 233, 0.16);
+  }
+  .dock-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 18px 0 14px;
+    border-radius: 16px;
+    background: var(--color-accent);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      0 8px 22px -8px rgba(47, 85, 228, 0.8);
+    transition:
+      background-color 240ms var(--ease-out-soft),
+      transform 240ms var(--ease-out-soft),
+      box-shadow 240ms var(--ease-out-soft);
+  }
+  .dock-cta:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+  }
+  .dock-cta svg {
+    transition: transform 420ms var(--ease-spring);
+  }
+  .dock-cta:hover svg {
+    transform: rotate(90deg);
+  }
+  .dock-cta:active {
+    transform: scale(0.96);
+  }
+  .dock-panel {
+    margin-left: 4px;
+  }
+  .dock-trailing {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 2px;
+    margin-left: 4px;
+  }
+  .dock-trailing .dock-link[aria-current="page"] {
+    background: rgba(231, 239, 233, 0.13);
+  }
+  .panel-top {
+    display: none;
+  }
+
+  /* Phone: the dock moves under the thumb. */
+  @media (max-width: 960px) {
+    .dock {
+      top: auto;
+      bottom: max(12px, env(safe-area-inset-bottom));
+      left: 12px;
+      right: 12px;
+      transform: none;
+      max-width: none;
+      justify-content: space-between;
+      padding: 6px;
+      border-radius: 24px;
+      animation-name: dock-in-up;
+    }
+    .dock-mark,
+    .dock-panel,
+    .dock-sep {
+      display: none;
+    }
+    .dock-links {
+      flex: 1;
+      justify-content: space-around;
+    }
+    .dock-link {
+      flex-direction: column;
+      gap: 3px;
+      height: 52px;
+      padding: 0 10px;
+      font-size: 10.5px;
+      font-weight: 600;
+      border-radius: 18px;
+    }
+    .dock-link:not(.dock-icon) .dock-label {
+      position: static;
+      width: auto;
+      height: auto;
+      clip: auto;
+      overflow: visible;
+      white-space: nowrap;
+    }
+    .dock-icon {
+      width: auto;
+      padding: 0 10px;
+    }
+    .dock-trailing {
+      margin-left: 2px;
+    }
+    .dock-trailing .dock-icon {
+      padding: 0 8px;
+    }
+    .dock-cta {
+      flex: none;
+      height: 52px;
+      width: 52px;
+      padding: 0;
+      justify-content: center;
+      border-radius: 18px;
+    }
+    .dock-cta .dock-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .panel-top {
+      display: flex;
+      position: fixed;
+      z-index: 30;
+      top: 12px;
+      right: 12px;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      animation: rise-in 560ms var(--ease-out-soft) both;
+    }
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes dock-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -18px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+@keyframes dock-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
   }
 }
