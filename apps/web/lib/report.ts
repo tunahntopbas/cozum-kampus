@@ -1,4 +1,5 @@
 import type { ReportAnalysis } from "./ai";
+import { hasProfanity, PROFANITY_MESSAGE } from "./profanity";
 
 export type ReportForm = {
   text: string;
@@ -69,6 +70,9 @@ export function canSubmit(
   }
   if (form.buildingId == null && form.lat == null) {
     return { ok: false, message: "Sorunun nerede olduğunu seç." };
+  }
+  if (hasProfanity(form.text)) {
+    return { ok: false, message: PROFANITY_MESSAGE };
   }
   // When the AI service is down the report is still filed, hidden from the campus until an admin publishes it.
   if (a && a.ai_pending === false && (a.moderation?.ok !== true || a.moderation.reasons.length > 0)) {

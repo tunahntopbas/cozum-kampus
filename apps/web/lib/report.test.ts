@@ -76,6 +76,10 @@ describe("canSubmit", () => {
     });
   });
 
+  it("blocks profanity before anything is sent", () => {
+    expect(canSubmit(A, { ...FORM, text: "amk lamba yanmıyor" }).ok).toBe(false);
+  });
+
   it("requires a location", () => {
     expect(canSubmit(A, { ...FORM, buildingId: null, lat: null })).toEqual({
       ok: false,
