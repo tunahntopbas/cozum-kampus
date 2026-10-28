@@ -52,6 +52,10 @@ describe("requiredRole", () => {
     expect(requiredRole("/auth/callback")).toBeNull();
   });
 
+  it("keeps the KVKK notice readable before sign in", () => {
+    expect(requiredRole("/kvkk")).toBeNull();
+  });
+
   it("requires any signed in role elsewhere", () => {
     expect(requiredRole("/")).toEqual(["student", "staff", "admin", "security"]);
     expect(requiredRole("/bildir")).toEqual(["student", "staff", "admin", "security"]);

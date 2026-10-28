@@ -238,6 +238,13 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
           onUseMyLocation={useMyLocation}
         />
 
+        {/* On phones the side column drops below the form, so the verdict is shown here, above the send button. */}
+        {hasInput && (
+          <div className="min-[961px]:hidden">
+            <AnalysisPanel state={analysisState} analysis={analysis} onCategoryChange={changeCategory} />
+          </div>
+        )}
+
         <div className="flex flex-col gap-4 border-t border-hairline pt-6">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-start gap-3">
@@ -272,11 +279,13 @@ export function ReportComposer({ userId, buildings, unitIdBySlug, qrPlace: initi
       </form>
 
       <div className="flex flex-col gap-4">
-        <AnalysisPanel
-          state={hasInput ? analysisState : "idle"}
-          analysis={hasInput ? analysis : null}
-          onCategoryChange={changeCategory}
-        />
+        <div className="max-[960px]:hidden">
+          <AnalysisPanel
+            state={hasInput ? analysisState : "idle"}
+            analysis={hasInput ? analysis : null}
+            onCategoryChange={changeCategory}
+          />
+        </div>
         <SafetyCard location={securityLocation} />
       </div>
     </div>

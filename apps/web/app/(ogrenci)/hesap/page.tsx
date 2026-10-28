@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { PageSkeleton } from "@/components/ui/Skeleton";
 import { PageContent } from "@/components/layout/PageContent";
@@ -75,7 +76,10 @@ async function Account() {
           <div>
             <h2 className="text-sm font-semibold">Hesabı sil</h2>
             <p className="text-xs text-muted">
-              Hesabın ve ona bağlı kişisel verilerin kalıcı olarak silinir. Açtığın bildirimler anonim olarak kalır.
+              Hesabın ve ona bağlı kişisel verilerin kalıcı olarak silinir. Açtığın bildirimler anonim olarak kalır.{" "}
+              <Link href="/kvkk" className="text-accent underline-offset-2 hover:underline focus-ring">
+                KVKK aydınlatma metni
+              </Link>
             </p>
           </div>
           {/* Deletion needs the service key on the AI service; planned with the account endpoints. */}

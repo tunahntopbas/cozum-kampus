@@ -23,7 +23,7 @@ function under(pathname: string, prefix: string): boolean {
 }
 
 export function requiredRole(pathname: string): Role[] | null {
-  if (under(pathname, "/giris") || under(pathname, "/auth")) return null;
+  if (under(pathname, "/giris") || under(pathname, "/auth") || under(pathname, "/kvkk")) return null;
   if (under(pathname, "/yonetim")) return ["admin"];
   if (under(pathname, "/personel")) return ["staff", "admin"];
   return ALL_ROLES;

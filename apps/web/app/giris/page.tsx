@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Suspense } from "react";
 import { LoginForm } from "./LoginForm";
 
@@ -53,6 +54,13 @@ export default function LoginPage() {
           <Suspense>
             <LoginForm />
           </Suspense>
+          <p className="mt-8 text-xs leading-5 text-muted">
+            Kişisel verilerinin nasıl işlendiğini{" "}
+            <Link href="/kvkk" className="text-accent underline-offset-2 hover:underline focus-ring">
+              KVKK aydınlatma metninde
+            </Link>{" "}
+            okuyabilirsin.
+          </p>
         </div>
       </main>
     </div>
